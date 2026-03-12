@@ -959,7 +959,7 @@ function getAiUnavailableCopy(reason: string | undefined) {
   }
 
   if (reason === "auth_required") {
-    return "AI 브리핑은 로그인한 사용자만 사용할 수 있습니다.";
+    return "로그인해 보세요. AI 브리핑을 바로 확인할 수 있어요.";
   }
 
   const normalized = reason.toLowerCase();
@@ -1618,10 +1618,10 @@ export function AnalysisPageClient({
             {!canUseAi ? (
               <div className="surface-card rounded-[20px] p-4">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                  AI 브리핑은 로그인한 사용자만 사용할 수 있어요.
+                  로그인해 보세요!
                 </div>
                 <p className="mt-1 break-keep text-[13px] leading-5 text-slate-500 dark:text-slate-300">
-                  Google 또는 Kakao 계정으로 로그인하면 차트 흐름과 기업 맥락을 AI가 짧게 정리해 줍니다.
+                  Google 또는 Kakao로 로그인하면 AI 브리핑을 바로 볼 수 있어요.
                 </p>
                 <div className="mt-3">
                   <AuthActions providers={aiProviders} />

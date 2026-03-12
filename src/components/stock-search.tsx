@@ -128,12 +128,18 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
   return (
     <div className={compact || inline ? "w-full" : "w-full max-w-3xl"}>
       <div
-        className={`glass-card relative rounded-[var(--radius-xl)] ${
-          inline ? "p-0.5" : compact ? "p-1" : "p-4 md:p-5"
+        className={`glass-card relative ${
+          inline
+            ? "rounded-[14px] p-0.5 md:rounded-[20px]"
+            : compact
+              ? "rounded-[16px] p-1 md:rounded-[24px]"
+              : "rounded-[20px] p-3 md:rounded-[32px] md:p-5"
         }`}
       >
         <div
-          className={`flex flex-col rounded-[22px] bg-[var(--surface-card)] sm:flex-row sm:items-center ${
+          className={`flex flex-col bg-[var(--surface-card)] sm:flex-row sm:items-center ${
+            inline ? "rounded-[12px] md:rounded-[18px]" : compact ? "rounded-[14px] md:rounded-[20px]" : "rounded-[16px] md:rounded-[24px]"
+          } ${
             inline ? "gap-1.5 p-1" : "gap-3 p-2"
           }`}
         >

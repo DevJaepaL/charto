@@ -7,10 +7,10 @@ import { StockAvatar } from "@/components/stock-avatar";
 import { formatCompactNumber, formatKoreanWon, formatPercent, formatPrice } from "@/lib/utils";
 import type { MarketRankMode, MarketRankingResponse } from "@/lib/types";
 
-const MODES: Array<{ value: MarketRankMode; label: string }> = [
-  { value: "value", label: "거래대금 상위" },
-  { value: "volume", label: "거래량 상위" },
-  { value: "marketCap", label: "시가총액 상위" },
+const MODES: Array<{ value: MarketRankMode; label: string; shortLabel: string }> = [
+  { value: "value", label: "거래대금 상위", shortLabel: "거래대금" },
+  { value: "volume", label: "거래량 상위", shortLabel: "거래량" },
+  { value: "marketCap", label: "시가총액 상위", shortLabel: "시가총액" },
 ];
 
 async function getRanking(mode: MarketRankMode) {
@@ -60,23 +60,23 @@ export function MarketPulsePanel() {
   const activePayload = payloads[activeMode];
 
   return (
-    <div className="soft-panel rounded-[18px] p-1.5 md:rounded-[20px] md:p-2.5">
+    <div className="soft-panel rounded-[16px] p-1 md:rounded-[20px] md:p-2.5">
       <div>
-        <div className="text-[12px] font-bold text-slate-800 dark:text-slate-100 md:text-[13px]">
+        <div className="text-[11px] font-bold text-slate-800 dark:text-slate-100 md:text-[13px]">
           <b>오늘 가장 많이 본 흐름</b>
         </div>
-        <p className="mt-0.5 text-[10px] leading-4 text-slate-500 dark:text-slate-300 md:text-[11px] md:leading-4.5">
+        <p className="mt-0.5 text-[9px] leading-3.5 text-slate-500 dark:text-slate-300 md:text-[11px] md:leading-4.5">
           거래대금, 거래량, 시가총액 기준 상위 종목을 빠르게 확인합니다.
         </p>
       </div>
-      <div className="mt-2 md:mt-2.5">
-        <div className="grid grid-cols-3 gap-1 rounded-[14px] bg-[var(--surface-card-strong)] p-0.5">
+      <div className="mt-1.5 md:mt-2.5">
+        <div className="grid grid-cols-3 gap-0.5 rounded-[10px] bg-[var(--surface-card-strong)] p-0.5">
           {MODES.map((mode) => {
             const active = mode.value === activeMode;
             return (
               <button
                 key={mode.value}
-                className={`brand-soft-hover min-w-0 rounded-[10px] px-1 py-1 text-center text-[9px] font-bold leading-3 md:px-1.5 md:py-1.5 md:text-[10px] ${
+                className={`brand-soft-hover min-w-0 rounded-[8px] px-0.5 py-0.5 text-center text-[7px] font-bold leading-3 md:px-1.5 md:py-1.5 md:text-[10px] ${
                   active
                     ? "brand-tab-active"
                     : "text-slate-500 dark:text-slate-300"
@@ -84,7 +84,8 @@ export function MarketPulsePanel() {
                 type="button"
                 onClick={() => setActiveMode(mode.value)}
               >
-                {mode.label}
+                <span className="md:hidden">{mode.shortLabel}</span>
+                <span className="hidden md:inline">{mode.label}</span>
               </button>
             );
           })}
@@ -106,11 +107,11 @@ export function MarketPulsePanel() {
       ) : null}
 
       {activePayload ? (
-        <div className="scrollbar-visible mt-2.5 max-h-[300px] space-y-1 overflow-y-auto pr-1.5 md:mt-3 md:max-h-[360px] md:space-y-1.5">
+        <div className="scrollbar-visible mt-2 max-h-[260px] space-y-1 overflow-y-auto pr-1 md:mt-3 md:max-h-[360px] md:space-y-1.5">
           {activePayload.items.map((item) => (
             <Link
               key={`${activeMode}-${item.stock.symbol}`}
-              className="surface-hover surface-card block overflow-hidden rounded-[13px] p-1.5 transition-colors md:rounded-[15px] md:p-2"
+              className="surface-hover surface-card block overflow-hidden rounded-[12px] p-1.25 transition-colors md:rounded-[15px] md:p-2"
               href={`/analyze/${item.stock.symbol}`}
             >
               <div className="flex items-start gap-2">
