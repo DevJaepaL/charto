@@ -129,18 +129,18 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
     <div className={compact || inline ? "w-full" : "w-full max-w-3xl"}>
       <div
         className={`glass-card relative rounded-[var(--radius-xl)] ${
-          inline ? "p-1" : compact ? "p-1" : "p-4 md:p-5"
+          inline ? "p-0.5" : compact ? "p-1" : "p-4 md:p-5"
         }`}
       >
         <div
           className={`flex flex-col rounded-[22px] bg-[var(--surface-card)] sm:flex-row sm:items-center ${
-            inline ? "gap-2 p-1.5" : "gap-3 p-2"
+            inline ? "gap-1.5 p-1" : "gap-3 p-2"
           }`}
         >
-          <div className={`flex min-w-0 flex-1 items-center ${inline ? "gap-2.5 px-2.5 py-1.5" : "gap-3 px-3 py-2"}`}>
+          <div className={`flex min-w-0 flex-1 items-center ${inline ? "gap-2 px-2 py-1" : "gap-3 px-3 py-2"}`}>
             <svg
               aria-hidden
-              className={`${inline ? "size-4.5" : "size-5"} shrink-0 text-slate-400 dark:text-slate-500`}
+              className={`${inline ? "size-4" : "size-5"} shrink-0 text-slate-400 dark:text-slate-500`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -152,7 +152,7 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
               aria-label="종목 검색"
               className={`w-full min-w-0 bg-transparent text-slate-900 outline-none placeholder:text-sm placeholder:text-slate-400 dark:text-slate-100 dark:placeholder:text-slate-500 md:placeholder:text-base ${
                 inline
-                  ? "text-sm placeholder:text-xs md:text-sm md:placeholder:text-sm"
+                  ? "text-[13px] placeholder:text-[11px] md:text-sm md:placeholder:text-sm"
                   : compact
                     ? "text-sm md:text-base"
                     : "text-base md:text-lg"
@@ -173,7 +173,7 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
           <button
             className={`brand-button shrink-0 whitespace-nowrap rounded-lg font-semibold ${
               inline
-                ? "px-3.5 py-2 text-xs sm:min-w-[72px]"
+                ? "px-3 py-1.5 text-[11px] sm:min-w-[64px]"
                 : "px-5 py-3 text-sm sm:min-w-[88px]"
             }`}
             type="button"

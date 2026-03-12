@@ -1,7 +1,6 @@
 "use client";
 
 import { type ReactNode, useEffect, useReducer, useRef, useState } from "react";
-import Link from "next/link";
 
 import {
   formatCompanyContextBrief,
@@ -268,11 +267,11 @@ function PerformanceChip({ label, value }: { label: string; value: number | null
   const toneClass = getQuoteTextToneClass(tone);
 
   return (
-    <div className="surface-card rounded-[14px] px-2.5 py-2.5 md:rounded-[16px] md:px-3">
+    <div className="surface-card rounded-[13px] px-2 py-2 md:rounded-[16px] md:px-3">
       <div className="text-[10px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-400">
         {label}
       </div>
-      <div className={`mt-1 text-[13px] font-extrabold tabular-nums md:text-[15px] ${toneClass}`}>
+      <div className={`mt-1 text-[12px] font-extrabold tabular-nums md:text-[15px] ${toneClass}`}>
         {value === null ? "-" : formatPercent(value)}
       </div>
     </div>
@@ -542,15 +541,15 @@ function PrimaryQuoteCard({
   const detailToneClass = getQuoteTextToneClass(detailTone);
 
   return (
-    <div className={`surface-card rounded-[16px] px-3 py-2.5 md:rounded-[18px] md:px-3.5 md:py-3 ${className ?? ""}`}>
+    <div className={`surface-card rounded-[15px] px-2.5 py-2 md:rounded-[18px] md:px-3.5 md:py-3 ${className ?? ""}`}>
       <div className="text-[11px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-300">현재가</div>
-      <div className="mt-2 flex items-start justify-between gap-3">
+      <div className="mt-1.5 flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <div className="break-keep text-base font-extrabold tracking-tight text-slate-950 tabular-nums dark:text-slate-50 md:text-xl">
+          <div className="break-keep text-[15px] font-extrabold tracking-tight text-slate-950 tabular-nums dark:text-slate-50 md:text-xl">
             {price}
           </div>
           {detail ? (
-            <div className={`mt-1 break-keep text-[11px] font-semibold tabular-nums ${detailToneClass}`}>
+            <div className={`mt-0.5 break-keep text-[10px] font-semibold tabular-nums md:text-[11px] ${detailToneClass}`}>
               {detail}
             </div>
           ) : null}
@@ -609,7 +608,7 @@ function RecommendationCard({
 
   return (
     <div
-      className={`relative z-20 min-w-0 rounded-[16px] border px-3 py-2.5 ${recommendation.cardClassName} md:rounded-[18px] md:px-3.5 md:py-3 ${className ?? ""}`}
+      className={`relative z-20 min-w-0 rounded-[15px] border px-2.5 py-2 ${recommendation.cardClassName} md:rounded-[18px] md:px-3.5 md:py-3 ${className ?? ""}`}
     >
       <div className="flex items-center justify-between gap-3">
         <div className="text-[11px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-300">
@@ -691,16 +690,16 @@ function RecommendationCard({
           ) : null}
         </div>
       </div>
-      <div className="mt-2 flex items-end justify-between gap-3">
-        <div className={`text-xl font-extrabold tracking-tight tabular-nums md:text-[1.75rem] ${recommendation.scoreClassName}`}>
+      <div className="mt-1.5 flex items-end justify-between gap-3">
+        <div className={`text-[1.05rem] font-extrabold tracking-tight tabular-nums md:text-[1.75rem] ${recommendation.scoreClassName}`}>
           {score}
         </div>
-        <div className={`shrink-0 rounded-[16px] px-2.5 py-1.5 text-right ${recommendation.badgeClassName}`}>
-          <div className="text-[11px] font-semibold">{recommendation.label}</div>
+        <div className={`shrink-0 rounded-[14px] px-2 py-1 text-right ${recommendation.badgeClassName}`}>
+          <div className="text-[10px] font-semibold md:text-[11px]">{recommendation.label}</div>
         </div>
       </div>
       {scoreDeltaText ? (
-        <div className={`mt-1 text-[11px] font-semibold ${scoreDeltaToneClass}`}>{scoreDeltaText}</div>
+        <div className={`mt-0.5 text-[10px] font-semibold md:text-[11px] ${scoreDeltaToneClass}`}>{scoreDeltaText}</div>
       ) : null}
     </div>
   );
@@ -1255,27 +1254,12 @@ export function AnalysisPageClient({
 
   return (
     <main className="mx-auto max-w-6xl px-4 pb-12 pt-4 md:px-7 md:pb-14 md:pt-6">
-      <div className="flex flex-col gap-4 md:gap-5">
-        <div className="flex items-center gap-2.5">
-          <Link
-            aria-label="홈으로 이동"
-            className="brand-outline-hover inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200/80 bg-[var(--surface-card)] text-slate-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300"
-            href="/"
-          >
-            <svg aria-hidden className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3 10.75 12 3l9 7.75M5.25 9.75V21h13.5V9.75M9.75 21v-6.75h4.5V21"
-              />
-            </svg>
-          </Link>
-          <div className="min-w-0 flex-1">
-            <StockSearch featured={featured} variant="inline" />
-          </div>
+      <div className="flex flex-col gap-3.5 md:gap-5">
+        <div className="min-w-0">
+          <StockSearch featured={featured} variant="inline" />
         </div>
 
-        <section className="glass-card relative z-10 overflow-visible rounded-[22px] p-3 md:rounded-[24px] md:p-4">
+        <section className="glass-card relative z-10 overflow-visible rounded-[20px] p-2.5 md:rounded-[24px] md:p-4">
           <div className="flex min-w-0 items-start gap-3">
             <StockAvatar size="lg" stock={stock} />
             <div className="min-w-0 flex-1">
@@ -1292,18 +1276,18 @@ export function AnalysisPageClient({
               </div>
             </div>
           </div>
-          <div className="mt-3 grid gap-3 xl:grid-cols-[minmax(0,1fr)_minmax(320px,340px)] xl:items-stretch">
-            <div className="surface-card h-full rounded-[18px] p-3 md:rounded-[20px] md:p-3.5">
+          <div className="mt-2.5 grid gap-2.5 xl:grid-cols-[minmax(0,1fr)_minmax(320px,340px)] xl:items-stretch">
+            <div className="surface-card h-full rounded-[16px] p-2.5 md:rounded-[20px] md:p-3.5">
               <div className="flex items-start gap-3">
                 <div
-                  className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-[16px] border md:h-14 md:w-14 md:rounded-[18px]"
+                  className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] border md:h-14 md:w-14 md:rounded-[18px]"
                   style={companyContextVisuals.headlineStyle}
                 >
                   <span
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-[12px] md:h-10 md:w-10 md:rounded-[14px]"
+                    className="inline-flex h-7 w-7 items-center justify-center rounded-[10px] md:h-10 md:w-10 md:rounded-[14px]"
                     style={companyContextVisuals.headlineIconStyle}
                   >
-                    <HeadlineIcon size={22} stroke={companyContextVisuals.sectorIconStroke} />
+                    <HeadlineIcon size={19} stroke={companyContextVisuals.sectorIconStroke} />
                   </span>
                 </div>
                 <div className="min-w-0 flex-1">
@@ -1312,7 +1296,7 @@ export function AnalysisPageClient({
                       <div className="text-[10px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
                         종목 정보
                       </div>
-                      <p className="mt-1 break-keep text-[13px] font-bold leading-5 text-slate-900 dark:text-slate-50 md:text-[15px]">
+                      <p className="mt-1 break-keep text-[12px] font-bold leading-4.5 text-slate-900 dark:text-slate-50 md:text-[15px] md:leading-5">
                         {companyContextHeadline}
                       </p>
                     </div>
@@ -1342,7 +1326,7 @@ export function AnalysisPageClient({
                       {companyContext.sector}
                     </div>
                   </div>
-                  <p className="mt-2 break-keep text-[12px] leading-5 text-slate-500 dark:text-slate-300 md:text-[13px]">
+                  <p className="mt-1.5 break-keep text-[11px] leading-4.5 text-slate-500 dark:text-slate-300 md:text-[13px] md:leading-5">
                     {companyContextBrief}
                   </p>
                 </div>
@@ -1375,15 +1359,15 @@ export function AnalysisPageClient({
               </div>
             </div>
           </div>
-            <div className="mt-3 surface-card rounded-[18px] p-3 md:mt-4 md:rounded-[20px] md:p-3.5">
+            <div className="mt-2.5 surface-card rounded-[16px] p-2.5 md:mt-4 md:rounded-[20px] md:p-3.5">
               <div className="text-[10px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
                 기업 포인트
               </div>
-              <p className="mt-2 break-keep text-[12px] leading-5 text-slate-600 dark:text-slate-300 md:text-[13px]">
+              <p className="mt-1.5 break-keep text-[11px] leading-4.5 text-slate-600 dark:text-slate-300 md:text-[13px] md:leading-5">
                 {companyContext.marketPosition}
               </p>
               {companyContext.cautionNote ? (
-                <div className="mt-2 rounded-[12px] border border-amber-200/90 bg-[rgba(251,191,36,0.12)] px-3 py-2 text-[11px] font-medium leading-5 text-amber-800 dark:border-amber-400/20 dark:bg-[rgba(217,119,6,0.16)] dark:text-amber-100">
+                <div className="mt-2 rounded-[12px] border border-amber-200/90 bg-[rgba(251,191,36,0.12)] px-2.5 py-2 text-[10px] font-medium leading-4.5 text-amber-800 dark:border-amber-400/20 dark:bg-[rgba(217,119,6,0.16)] dark:text-amber-100 md:px-3 md:text-[11px] md:leading-5">
                   {companyContext.cautionNote}
                 </div>
               ) : null}

@@ -60,23 +60,23 @@ export function MarketPulsePanel() {
   const activePayload = payloads[activeMode];
 
   return (
-    <div className="soft-panel rounded-[20px] p-2 md:rounded-[22px] md:p-3">
+    <div className="soft-panel rounded-[18px] p-1.5 md:rounded-[20px] md:p-2.5">
       <div>
-        <div className="text-[13px] font-bold text-slate-800 dark:text-slate-100 md:text-sm">
+        <div className="text-[12px] font-bold text-slate-800 dark:text-slate-100 md:text-[13px]">
           <b>오늘 가장 많이 본 흐름</b>
         </div>
-        <p className="mt-1 text-[11px] leading-4.5 text-slate-500 dark:text-slate-300 md:text-xs md:leading-5">
+        <p className="mt-0.5 text-[10px] leading-4 text-slate-500 dark:text-slate-300 md:text-[11px] md:leading-4.5">
           거래대금, 거래량, 시가총액 기준 상위 종목을 빠르게 확인합니다.
         </p>
       </div>
-      <div className="mt-2.5 md:mt-3">
-        <div className="grid grid-cols-3 gap-1 rounded-[16px] bg-[var(--surface-card-strong)] p-1">
+      <div className="mt-2 md:mt-2.5">
+        <div className="grid grid-cols-3 gap-1 rounded-[14px] bg-[var(--surface-card-strong)] p-0.5">
           {MODES.map((mode) => {
             const active = mode.value === activeMode;
             return (
               <button
                 key={mode.value}
-                className={`brand-soft-hover min-w-0 rounded-[12px] px-1.5 py-1 text-center text-[10px] font-bold leading-3.5 md:px-2 md:py-1.5 md:text-[11px] ${
+                className={`brand-soft-hover min-w-0 rounded-[10px] px-1 py-1 text-center text-[9px] font-bold leading-3 md:px-1.5 md:py-1.5 md:text-[10px] ${
                   active
                     ? "brand-tab-active"
                     : "text-slate-500 dark:text-slate-300"
@@ -98,42 +98,42 @@ export function MarketPulsePanel() {
       ) : null}
 
       {!error && !activePayload ? (
-        <div className="mt-4 space-y-3">
+        <div className="mt-3 space-y-2">
           {Array.from({ length: 6 }, (_, index) => (
-            <div key={index} className="h-[82px] animate-pulse rounded-[20px] surface-card" />
+            <div key={index} className="h-[64px] animate-pulse rounded-[16px] surface-card" />
           ))}
         </div>
       ) : null}
 
       {activePayload ? (
-        <div className="scrollbar-visible mt-3 max-h-[380px] space-y-1.5 overflow-y-auto pr-2 md:mt-4 md:max-h-[440px] md:space-y-2">
+        <div className="scrollbar-visible mt-2.5 max-h-[300px] space-y-1 overflow-y-auto pr-1.5 md:mt-3 md:max-h-[360px] md:space-y-1.5">
           {activePayload.items.map((item) => (
             <Link
               key={`${activeMode}-${item.stock.symbol}`}
-              className="surface-hover surface-card block overflow-hidden rounded-[15px] p-2 transition-colors md:rounded-[16px] md:p-2.5"
+              className="surface-hover surface-card block overflow-hidden rounded-[13px] p-1.5 transition-colors md:rounded-[15px] md:p-2"
               href={`/analyze/${item.stock.symbol}`}
             >
-              <div className="flex items-start gap-2.5">
-                <div className="flex h-6.5 w-6.5 shrink-0 items-center justify-center rounded-full bg-[rgba(var(--brand-rgb),0.1)] text-[10px] font-black text-[var(--brand-strong)] dark:bg-white/10 dark:text-slate-100">
+              <div className="flex items-start gap-2">
+                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[rgba(var(--brand-rgb),0.1)] text-[9px] font-black text-[var(--brand-strong)] dark:bg-white/10 dark:text-slate-100">
                   {item.rank}
                 </div>
                 <StockAvatar size="sm" stock={item.stock} />
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+                  <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-2">
                     <div className="min-w-0 flex-1 pr-1">
-                      <div className="surface-hover-text overflow-hidden text-[11px] font-semibold leading-4 text-slate-900 dark:text-slate-50 md:text-[12px] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
+                      <div className="surface-hover-text overflow-hidden text-[10px] font-semibold leading-3.5 text-slate-900 dark:text-slate-50 md:text-[11px] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
                         {item.stock.name}
                       </div>
-                      <div className="mt-1 truncate text-[10px] text-slate-500 dark:text-slate-400 md:text-[11px]">
+                      <div className="mt-0.5 truncate text-[9px] text-slate-500 dark:text-slate-400 md:text-[10px]">
                         {item.stock.symbol} · {item.stock.market}
                       </div>
                     </div>
-                    <div className="min-w-0 sm:min-w-[96px] sm:max-w-[112px] sm:text-right md:min-w-[104px]">
-                      <div className="surface-hover-text truncate text-[10px] font-bold tabular-nums text-slate-900 dark:text-slate-50 md:text-[12px]">
+                    <div className="min-w-0 sm:min-w-[90px] sm:max-w-[104px] sm:text-right md:min-w-[96px]">
+                      <div className="surface-hover-text truncate text-[9px] font-bold tabular-nums text-slate-900 dark:text-slate-50 md:text-[11px]">
                         {formatPrice(item.price)}
                       </div>
                       <div
-                        className={`mt-0.5 text-[10px] font-semibold tabular-nums md:text-[11px] ${
+                        className={`mt-0.5 text-[9px] font-semibold tabular-nums md:text-[10px] ${
                           item.changePercent > 0
                             ? "text-[var(--price-up)]"
                             : item.changePercent < 0
@@ -145,8 +145,8 @@ export function MarketPulsePanel() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-1.5 flex items-center gap-2 text-[10px] text-slate-500 dark:text-slate-300 md:text-[11px]">
-                    <span className="surface-pill max-w-full truncate rounded-full px-2 py-1 font-medium dark:border-white/10 dark:bg-white/6">
+                  <div className="mt-1 flex items-center gap-2 text-[9px] text-slate-500 dark:text-slate-300 md:text-[10px]">
+                    <span className="surface-pill max-w-full truncate rounded-full px-1.5 py-0.5 font-medium dark:border-white/10 dark:bg-white/6">
                       {activeMode === "volume"
                         ? `누적 거래량 ${formatCompactNumber(item.volume)}주`
                         : activeMode === "value"
