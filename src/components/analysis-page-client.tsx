@@ -1,6 +1,7 @@
 "use client";
 
 import { type ReactNode, useEffect, useReducer, useRef, useState } from "react";
+import { IconSparkles } from "@tabler/icons-react";
 
 import {
   formatCompanyContextBrief,
@@ -630,7 +631,7 @@ function RecommendationCard({
           <button
             aria-expanded={open}
             aria-label={open ? "추천 점수 설명 닫기" : "추천 점수 설명 보기"}
-            className="brand-outline-hover inline-flex h-4.5 w-4.5 items-center justify-center rounded-full border border-[var(--brand-soft-strong)] bg-white/96 text-[7px] font-black leading-none text-[var(--brand-strong)] dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-100"
+            className="brand-outline-hover inline-flex h-4 w-4 items-center justify-center rounded-full border border-[var(--brand-soft-strong)] bg-white/96 text-[var(--brand-strong)] dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-100"
             type="button"
             onClick={() => {
               setPinnedOpen((current) => !current);
@@ -641,7 +642,7 @@ function RecommendationCard({
               }
             }}
           >
-            ?
+            <IconSparkles size={10} stroke={2.2} />
           </button>
           {open ? (
             <div className="absolute right-0 top-full z-40 mt-2 w-[min(300px,calc(100vw-2.5rem))] rounded-[16px] border border-[var(--brand-soft-strong)] bg-[var(--surface-card)] px-3 py-3 text-[11px] leading-5 text-slate-600 shadow-[0_22px_60px_rgba(15,23,42,0.16)] dark:border-white/10 dark:bg-[var(--surface-1)] dark:text-slate-300 dark:shadow-[0_24px_64px_rgba(2,6,23,0.42)]">
@@ -1333,17 +1334,8 @@ export function AnalysisPageClient({
               </div>
             </div>
             <div className="grid min-w-0 auto-rows-fr gap-2 sm:grid-cols-2">
-              {recommendationSignal && recommendation ? (
-                <RecommendationCard
-                  className="h-full"
-                  recommendation={recommendation}
-                  score={recommendationSignal.score}
-                  signal={recommendationSignal}
-                  comparisonLabel={scoreComparisonLabel}
-                />
-              ) : null}
               <PrimaryQuoteCard
-                className="h-full"
+                className="order-1 h-full sm:order-2"
                 price={hasValidQuote && quote ? formatPrice(quote.currentPrice) : "-"}
                 detail={
                   hasValidQuote && quote
@@ -1352,7 +1344,16 @@ export function AnalysisPageClient({
                 }
                 detailTone={quoteTone}
               />
-              <div className="grid gap-1.5 sm:col-span-2 sm:grid-cols-3 sm:gap-2">
+              {recommendationSignal && recommendation ? (
+                <RecommendationCard
+                  className="order-2 h-full sm:order-1"
+                  recommendation={recommendation}
+                  score={recommendationSignal.score}
+                  signal={recommendationSignal}
+                  comparisonLabel={scoreComparisonLabel}
+                />
+              ) : null}
+              <div className="order-3 grid gap-1.5 sm:col-span-2 sm:grid-cols-3 sm:gap-2">
                 <PerformanceChip label="올해 수익률" value={ytdReturn} />
                 <PerformanceChip label="최근 1개월" value={monthlyReturn} />
                 <PerformanceChip label="최근 1주" value={weeklyReturn} />
