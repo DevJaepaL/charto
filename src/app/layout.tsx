@@ -53,7 +53,7 @@ export default function RootLayout({
       <body className={`${notoSansKr.variable} bg-[var(--surface-0)] text-[var(--text-main)] antialiased`}>
         <div className="app-shell flex min-h-screen flex-col">
           <div className="border-b border-amber-200/80 bg-amber-50/90 px-5 py-2 text-center text-[11px] font-medium text-amber-900 dark:border-amber-400/18 dark:bg-amber-500/10 dark:text-amber-100 md:px-8 md:text-xs">
-            초기 개발 버전으로 일부 기능은 아직 불안정할 수 있습니다.
+            초기 개발 버전으로 일부 기능이 불안정할 수 있습니다.
           </div>
           <div className="flex-1">{children}</div>
           <footer className="border-t border-slate-200/70 bg-[var(--surface-card)] px-5 pb-8 pt-4 text-xs text-slate-500 dark:border-white/10 dark:bg-[var(--surface-1)] dark:text-slate-400 md:px-8">
