@@ -3,6 +3,8 @@ import { promises as fs } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
+import { getCache } from "@vercel/functions";
+
 import type { Candle, CandleInterval, CandleRange, QuoteSnapshot } from "@/lib/types";
 import {
   candleLabelFromTimestamp,
@@ -34,6 +36,7 @@ let cachedToken:
     }
   | undefined;
 let inflightTokenRequest: Promise<string> | undefined;
+const runtimeTokenCache = getCache({ namespace: "charto-kis-token" });
 
 function getKisConfig() {
   const appKey = process.env.KIS_APP_KEY;
@@ -60,6 +63,10 @@ function getTokenCacheFile(baseUrl: string, appKey: string) {
 
   const keyHash = createHash("sha1").update(`${baseUrl}:${appKey}`).digest("hex").slice(0, 12);
   return path.join(os.tmpdir(), `charto-kis-token-${keyHash}.json`);
+}
+
+function getRuntimeTokenCacheKey(baseUrl: string, appKey: string) {
+  return createHash("sha1").update(`${baseUrl}:${appKey}`).digest("hex");
 }
 
 function isTokenValid(token: { accessToken: string; expiresAt: number }, now = Date.now()) {
@@ -116,6 +123,39 @@ async function readPersistedToken() {
   }
 }
 
+async function readRuntimeCachedToken() {
+  const { appKey, baseUrl } = getKisConfig();
+  const cacheKey = getRuntimeTokenCacheKey(baseUrl, appKey);
+
+  try {
+    const cached = (await runtimeTokenCache.get(cacheKey)) as
+      | {
+          accessToken?: string;
+          expiresAt?: number;
+          baseUrl?: string;
+        }
+      | null;
+
+    if (
+      !cached ||
+      typeof cached.accessToken !== "string" ||
+      typeof cached.expiresAt !== "number" ||
+      cached.baseUrl !== baseUrl
+    ) {
+      return null;
+    }
+
+    const token = {
+      accessToken: cached.accessToken,
+      expiresAt: cached.expiresAt,
+    };
+
+    return isTokenValid(token) ? token : null;
+  } catch {
+    return null;
+  }
+}
+
 async function writePersistedToken(token: { accessToken: string; expiresAt: number }) {
   const { appKey, baseUrl } = getKisConfig();
   const tokenFile = getTokenCacheFile(baseUrl, appKey);
@@ -135,6 +175,29 @@ async function writePersistedToken(token: { accessToken: string; expiresAt: numb
   }
 }
 
+async function writeRuntimeCachedToken(token: { accessToken: string; expiresAt: number }) {
+  const { appKey, baseUrl } = getKisConfig();
+  const cacheKey = getRuntimeTokenCacheKey(baseUrl, appKey);
+  const ttlSeconds = Math.max(60, Math.floor((token.expiresAt - Date.now()) / 1000));
+
+  try {
+    await runtimeTokenCache.set(
+      cacheKey,
+      {
+        accessToken: token.accessToken,
+        expiresAt: token.expiresAt,
+        baseUrl,
+      },
+      {
+        ttl: ttlSeconds,
+        name: "KIS access token",
+      },
+    );
+  } catch {
+    // Runtime cache is best-effort; other caches still exist.
+  }
+}
+
 async function clearPersistedToken() {
   const { appKey, baseUrl } = getKisConfig();
   const tokenFile = getTokenCacheFile(baseUrl, appKey);
@@ -146,10 +209,27 @@ async function clearPersistedToken() {
   }
 }
 
+async function clearRuntimeCachedToken() {
+  const { appKey, baseUrl } = getKisConfig();
+  const cacheKey = getRuntimeTokenCacheKey(baseUrl, appKey);
+
+  try {
+    await runtimeTokenCache.delete(cacheKey);
+  } catch {
+    // ignore cache deletion failures
+  }
+}
+
 async function getAccessToken() {
   const now = Date.now();
   if (cachedToken && isTokenValid(cachedToken, now)) {
     return cachedToken.accessToken;
+  }
+
+  const runtimeToken = await readRuntimeCachedToken();
+  if (runtimeToken) {
+    cachedToken = runtimeToken;
+    return runtimeToken.accessToken;
   }
 
   const persistedToken = await readPersistedToken();
@@ -179,6 +259,12 @@ async function getAccessToken() {
     });
 
     if (!response.ok) {
+      const runtimeFallbackToken = await readRuntimeCachedToken();
+      if (runtimeFallbackToken) {
+        cachedToken = runtimeFallbackToken;
+        return runtimeFallbackToken.accessToken;
+      }
+
       const fallbackToken = await readPersistedToken();
       if (fallbackToken) {
         cachedToken = fallbackToken;
@@ -199,7 +285,7 @@ async function getAccessToken() {
       expiresAt: resolveTokenExpiry(payload, now),
     };
 
-    await writePersistedToken(cachedToken);
+    await Promise.allSettled([writeRuntimeCachedToken(cachedToken), writePersistedToken(cachedToken)]);
     return payload.access_token;
   })().finally(() => {
     inflightTokenRequest = undefined;
@@ -263,7 +349,7 @@ export async function callKis<
   if ((!response.ok || payload.rt_cd !== "0") && authFailed) {
     cachedToken = undefined;
     inflightTokenRequest = undefined;
-    await clearPersistedToken();
+    await Promise.allSettled([clearRuntimeCachedToken(), clearPersistedToken()]);
 
     const retryToken = await getAccessToken();
     const retryResult = await requestKis<TOutput1, TOutput2>(retryToken, path, trId, params);
