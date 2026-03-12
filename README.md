@@ -17,9 +17,10 @@
 - 분봉, 일봉, 주봉 차트 조회
 - 5일선, 20일선, RSI, MACD, 볼린저 밴드 분석
 - 추천 점수와 핵심 근거 표시
-- AI 브리핑 제공
+- 로그인 사용자 대상 AI 브리핑 제공
 - Open DART 기반 업종/기업 맥락 보강
 - 거래대금, 거래량, 시가총액 상위 종목 확인(제공처 : <a href="https://apiportal.koreainvestment.com/intro">KIS Developer</a>)
+- 서비스 소개, 개인정보처리방침, 면책 고지, 문의 페이지 제공
 
 ## 실행 방법
 
@@ -38,6 +39,12 @@ pnpm dev
 - `GEMINI_API_KEY` 또는 `GEMINI_API_KEYS`
 - `GEMINI_MODEL`
 - `OPENDART_API_KEY`
+- `AUTH_SECRET`
+- `AUTH_GOOGLE_ID`
+- `AUTH_GOOGLE_SECRET`
+- `AUTH_KAKAO_ID`
+- `AUTH_KAKAO_SECRET`
+- `ADSENSE_PUBLISHER_ID`
 
 키가 없으면 일부 기능은 데모 모드로 동작합니다.
 `pnpm context:sync`를 실행하면 Open DART 업종 메타데이터를 미리 생성해 더 안정적으로 분류합니다.

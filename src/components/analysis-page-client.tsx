@@ -3,6 +3,7 @@
 import { type ReactNode, useEffect, useReducer, useRef, useState } from "react";
 import { IconSparkles } from "@tabler/icons-react";
 
+import { AuthActions } from "@/components/auth-actions";
 import {
   formatCompanyContextBrief,
   formatCompanyContextHeadline,
@@ -37,6 +38,9 @@ const RECOMMENDATION_INTERVAL = "1d";
 const RECOMMENDATION_RANGE = "1y";
 
 interface AnalysisPageClientProps {
+  aiProviders: Array<{ id: "google" | "kakao"; name: string }>;
+  aiUserName?: string | null;
+  isAiUserSignedIn: boolean;
   featured: StockLookupItem[];
   stock: StockLookupItem;
   initialTechnicalPayload: TechnicalResponse | null;
@@ -954,6 +958,10 @@ function getAiUnavailableCopy(reason: string | undefined) {
     return "Vercel 또는 로컬 환경에 GEMINI_API_KEY 또는 GEMINI_API_KEYS를 설정하면 AI 브리핑이 활성화됩니다.";
   }
 
+  if (reason === "auth_required") {
+    return "AI 브리핑은 로그인한 사용자만 사용할 수 있습니다.";
+  }
+
   const normalized = reason.toLowerCase();
   if (
     normalized.includes("quota") ||
@@ -972,6 +980,9 @@ function getAiUnavailableCopy(reason: string | undefined) {
 }
 
 export function AnalysisPageClient({
+  aiProviders,
+  aiUserName,
+  isAiUserSignedIn,
   featured,
   stock,
   initialTechnicalPayload,
@@ -1020,7 +1031,7 @@ export function AnalysisPageClient({
   const [recommendationSignal, setRecommendationSignal] = useState<SignalSummary | null>(
     initialRecommendationSignal,
   );
-  const [aiRequested, setAiRequested] = useState(shouldAutoFetchAi);
+  const [aiRequested, setAiRequested] = useState(isAiUserSignedIn ? shouldAutoFetchAi : false);
   const skipInitialDataFetch = useRef(Boolean(initialTechnicalPayload && !initialError));
   const isIntradayView = isIntradayInterval(interval);
 
@@ -1120,6 +1131,7 @@ export function AnalysisPageClient({
     : null;
   const isRefreshing = Boolean(technicalPayload) && currentSelectionKey !== loadedSelectionKey;
   const aiSummary = aiState.summary;
+  const canUseAi = isAiUserSignedIn;
   const sma5State = getAverageMetricState(technical?.currentPrice, technical?.sma5);
   const sma20State = getAverageMetricState(technical?.currentPrice, technical?.sma20);
   const rsiState = getRsiMetricState(technical?.rsi14);
@@ -1598,7 +1610,25 @@ export function AnalysisPageClient({
             </p>
           </div>
           <div className="mt-3 space-y-2.5 text-sm leading-6 text-slate-600 dark:text-slate-300 md:mt-4 md:space-y-3">
-            {!aiRequested ? (
+            {canUseAi ? (
+              <div className="surface-card rounded-[18px] p-3">
+                <AuthActions isSignedIn providers={aiProviders} userName={aiUserName} />
+              </div>
+            ) : null}
+            {!canUseAi ? (
+              <div className="surface-card rounded-[20px] p-4">
+                <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                  AI 브리핑은 로그인한 사용자만 사용할 수 있어요.
+                </div>
+                <p className="mt-1 break-keep text-[13px] leading-5 text-slate-500 dark:text-slate-300">
+                  Google 또는 Kakao 계정으로 로그인하면 차트 흐름과 기업 맥락을 AI가 짧게 정리해 줍니다.
+                </p>
+                <div className="mt-3">
+                  <AuthActions providers={aiProviders} />
+                </div>
+              </div>
+            ) : null}
+            {canUseAi && !aiRequested ? (
               <div className="surface-card rounded-[20px] p-4">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   AI 브리핑을 바로 생성할 수 있어요.

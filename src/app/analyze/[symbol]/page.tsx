@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { AnalysisPageClient } from "@/components/analysis-page-client";
 import { getGeminiApiKeyCount } from "@/lib/analysis/ai-summary";
+import { configuredAuthProviders, getServerAuthSession } from "@/lib/auth";
 import { getFeaturedStocks, getStockBySymbol } from "@/lib/stock-master";
 
 export const dynamic = "force-dynamic";
@@ -39,14 +40,19 @@ export default async function AnalyzePage({
     notFound();
   }
 
-  const shouldAutoFetchAi = getGeminiApiKeyCount() > 1;
+  const session = await getServerAuthSession();
+  const isAiUserSignedIn = Boolean(session?.user);
+  const shouldAutoFetchAi = isAiUserSignedIn && getGeminiApiKeyCount() > 1;
 
   return (
     <AnalysisPageClient
+      aiProviders={configuredAuthProviders.map(({ id, name }) => ({ id, name }))}
+      aiUserName={session?.user?.name}
       featured={getFeaturedStocks()}
       initialError={null}
       initialRecommendationSignal={null}
       initialTechnicalPayload={null}
+      isAiUserSignedIn={isAiUserSignedIn}
       shouldAutoFetchAi={shouldAutoFetchAi}
       stock={stock}
     />

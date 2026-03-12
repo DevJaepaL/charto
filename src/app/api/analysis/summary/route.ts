@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { generateAiSummary } from "@/lib/analysis/ai-summary";
+import { getServerAuthSession } from "@/lib/auth";
 
 const requestSchema = z.object({
   stock: z.object({
@@ -61,6 +62,11 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
+    const session = await getServerAuthSession();
+    if (!session?.user) {
+      return NextResponse.json({ error: "auth_required" }, { status: 401 });
+    }
+
     const body = requestSchema.parse(await request.json());
     const summary = await generateAiSummary(
       body.stock,

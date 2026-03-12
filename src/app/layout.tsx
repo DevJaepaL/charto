@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
+import Link from "next/link";
 import { Analytics } from "@vercel/analytics/next";
 
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -58,6 +59,20 @@ export default function RootLayout({
           <div className="flex-1">{children}</div>
           <footer className="border-t border-slate-200/70 bg-[var(--surface-card)] px-5 pb-8 pt-4 text-xs text-slate-500 dark:border-white/10 dark:bg-[var(--surface-1)] dark:text-slate-400 md:px-8">
             <div className="flex flex-col items-center justify-center gap-2.5 text-center">
+              <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] font-medium text-slate-500 dark:text-slate-300">
+                <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/about">
+                  서비스 소개
+                </Link>
+                <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/privacy">
+                  개인정보처리방침
+                </Link>
+                <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/disclaimer">
+                  면책 고지
+                </Link>
+                <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/contact">
+                  문의
+                </Link>
+              </div>
               <ThemeToggle />
               <span>© 2026 이재찬 All Rights Reserved.</span>
             </div>
