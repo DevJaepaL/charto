@@ -1,0 +1,51 @@
+{
+  "131970": {
+    "logoSrc": "/logos/official/131970.png",
+    "sourceUrl": "http://www.tesna.co.kr/img/top/logo_doosan.png",
+    "homepage": "http://www.tesna.co.kr/",
+    "fetchedAt": "2026-03-10T08:50:05.851Z",
+    "mimeType": "image/png"
+  },
+  "293490": {
+    "logoSrc": "/logos/official/293490.png",
+    "sourceUrl": "https://kakaogames.com/kakaogames.png",
+    "homepage": "https://kakaogames.com/",
+    "fetchedAt": "2026-03-10T08:50:05.982Z",
+    "mimeType": "image/png"
+  },
+  "035420": {
+    "logoSrc": "/logos/official/035420.png",
+    "sourceUrl": "https://www.navercorp.com/img/og/OG_TAG_1_Main.png",
+    "homepage": "https://www.navercorp.com/",
+    "fetchedAt": "2026-03-10T08:50:06.263Z",
+    "mimeType": "image/png"
+  },
+  "000660": {
+    "logoSrc": "/logos/official/000660.ico",
+    "sourceUrl": "https://mis-prod-koce-skhynixhomepage-cdn-01-ep.azureedge.net/img/favicon.ico",
+    "homepage": "https://www.skhynix.com/",
+    "fetchedAt": "2026-03-10T08:50:06.523Z",
+    "mimeType": "image/x-icon"
+  },
+  "000270": {
+    "logoSrc": "/logos/official/000270.svg",
+    "sourceUrl": "https://www.kia.com/etc.clientlibs/kwp-global/clientlibs/clientlib-site/resources/images/common/logo_w.svg",
+    "homepage": "https://www.kia.com/kr",
+    "fetchedAt": "2026-03-10T08:50:06.816Z",
+    "mimeType": "image/svg+xml"
+  },
+  "005930": {
+    "logoSrc": "/logos/official/005930.webp",
+    "sourceUrl": "https://images.samsung.com/kdp/_pub/icon-footer-dcxi.jpg",
+    "homepage": "https://www.samsung.com/sec/",
+    "fetchedAt": "2026-03-10T08:50:07.556Z",
+    "mimeType": "image/webp"
+  },
+  "005380": {
+    "logoSrc": "/logos/official/005380.webp",
+    "sourceUrl": "https://www.hyundai.com/static/images/logo_footer.png",
+    "homepage": "https://www.hyundai.com/kr/ko/e",
+    "fetchedAt": "2026-03-10T08:50:09.081Z",
+    "mimeType": "image/webp"
+  }
+}

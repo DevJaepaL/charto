@@ -1,0 +1,17 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="256" height="256" rx="72" fill="#F8FBFD"/>
+  <circle cx="44" cy="42" r="56" fill="#245787" fill-opacity="0.14"/>
+  <rect x="40" y="40" width="176" height="176" rx="56" fill="#245787"/>
+  <text
+    x="128"
+    y="138"
+    text-anchor="middle"
+    font-family="'SUIT Variable', sans-serif"
+    font-size="64"
+    font-weight="900"
+    letter-spacing="-0.08em"
+    fill="white"
+  >
+    CH
+  </text>
+</svg>
