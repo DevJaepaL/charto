@@ -1,4 +1,4 @@
-# Charto
+# CHARTO
 
 ![Charto 미리보기](./docs/charto-preview.png)
 
@@ -60,4 +60,4 @@ MIT License
 - AI 요약: [Google Gemini API](https://ai.google.dev/)
 - 아이콘: [Tabler Icons](https://tabler.io/icons) (MIT)
 - 기업 로고와 상표의 권리는 각 소유자에게 있습니다.
-- Copyright © 2026 이재찬 All Rights Reserved.
+- Copyright © 2026 DevJaepaL All Rights Reserved.
