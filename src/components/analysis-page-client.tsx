@@ -16,11 +16,8 @@ import { getCompanyContextVisuals } from "@/lib/company-context-visuals";
 import { StockChart } from "@/components/stock-chart";
 import { StockSearch } from "@/components/stock-search";
 import { StockAvatar } from "@/components/stock-avatar";
-import { INTRADAY_RANGE_OPTIONS, INTERVAL_OPTIONS } from "@/lib/constants";
 import type {
   AiSummary,
-  CandleInterval,
-  CandleRange,
   SignalSummary,
   StockLookupItem,
   TechnicalResponse,
@@ -31,12 +28,10 @@ import {
   formatPercent,
   formatPrice,
   formatSignedPrice,
-  isIntradayInterval,
 } from "@/lib/utils";
 
 const DEFAULT_INTERVAL = "1d";
 const DEFAULT_RANGE = "max";
-const DEFAULT_INTRADAY_RANGE = "1w";
 const RECOMMENDATION_INTERVAL = "1d";
 const RECOMMENDATION_RANGE = "1y";
 
@@ -779,45 +774,6 @@ function RecommendationCard({
   );
 }
 
-function SegmentTabs<T extends string>({
-  items,
-  value,
-  onChange,
-}: {
-  items: Array<{ value: T; label: string }>;
-  value: T;
-  onChange: (nextValue: T) => void;
-}) {
-  const mobileGridCols =
-    items.length <= 2 ? "grid-cols-2" : items.length <= 4 ? "grid-cols-4" : "grid-cols-3";
-
-  return (
-    <div className="max-w-full">
-      <div
-        className={`grid gap-0.75 rounded-[10px] bg-[var(--surface-card-strong)] p-0.5 dark:bg-white/[0.04] ${mobileGridCols} md:inline-flex md:min-w-full md:rounded-[12px]`}
-      >
-        {items.map((item) => {
-          const active = item.value === value;
-          return (
-            <button
-              key={item.value}
-                className={`min-w-0 rounded-[8px] px-1.5 py-1 text-[9px] font-semibold md:shrink-0 md:whitespace-nowrap md:px-2 md:text-[10px] ${
-                active
-                  ? "brand-tab-active"
-                  : "brand-soft-hover text-slate-500 dark:text-slate-300"
-              }`}
-              type="button"
-              onClick={() => onChange(item.value)}
-            >
-              {item.label}
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
 function AiInsightCard({
   label,
   text,
@@ -1069,8 +1025,6 @@ export function AnalysisPageClient({
   initialError,
   shouldAutoFetchAi,
 }: AnalysisPageClientProps) {
-  const [interval, setInterval] = useState<CandleInterval>(DEFAULT_INTERVAL);
-  const [range, setRange] = useState<CandleRange>(DEFAULT_RANGE);
   const [technicalPayload, setTechnicalPayload] = useState<TechnicalResponse | null>(
     initialTechnicalPayload,
   );
@@ -1114,7 +1068,6 @@ export function AnalysisPageClient({
   const [minIntroReady, setMinIntroReady] = useState(false);
   const [revealPhase, setRevealPhase] = useState(0);
   const skipInitialDataFetch = useRef(Boolean(initialTechnicalPayload && !initialError));
-  const isIntradayView = isIntradayInterval(interval);
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -1125,7 +1078,7 @@ export function AnalysisPageClient({
   }, []);
 
   useEffect(() => {
-    if (skipInitialDataFetch.current && interval === DEFAULT_INTERVAL && range === DEFAULT_RANGE) {
+    if (skipInitialDataFetch.current) {
       skipInitialDataFetch.current = false;
       return;
     }
@@ -1133,7 +1086,7 @@ export function AnalysisPageClient({
     const controller = new AbortController();
 
     fetchJson<TechnicalResponse>(
-      `/api/analysis/technical?symbol=${stock.symbol}&interval=${interval}&range=${range}`,
+      `/api/analysis/technical?symbol=${stock.symbol}&interval=${DEFAULT_INTERVAL}&range=${DEFAULT_RANGE}`,
       { signal: controller.signal },
     )
       .then((technical) => {
@@ -1149,7 +1102,7 @@ export function AnalysisPageClient({
       })
 
     return () => controller.abort();
-  }, [interval, range, stock.symbol]);
+  }, [stock.symbol]);
 
   useEffect(() => {
     if (!technicalPayload || !aiRequested) {
@@ -1214,7 +1167,7 @@ export function AnalysisPageClient({
   const notice = candlesPayload?.notice ?? technicalPayload?.notice;
   const chartUnavailable = Boolean(candlesPayload?.chartUnavailable);
   const isInitialLoading = !candlesPayload && !error;
-  const currentSelectionKey = `${stock.symbol}:${interval}:${range}`;
+  const currentSelectionKey = `${stock.symbol}:${DEFAULT_INTERVAL}:${DEFAULT_RANGE}`;
   const loadedSelectionKey = technicalPayload
     ? `${stock.symbol}:${technicalPayload.interval}:${technicalPayload.range}`
     : null;
@@ -1577,10 +1530,13 @@ export function AnalysisPageClient({
               <div className="min-w-0">
                 <h2 className="text-[15px] font-bold text-slate-950 dark:text-slate-50 md:text-[17px]">가격 차트</h2>
                 <p className="mt-1 hidden break-keep text-xs leading-5 text-slate-500 dark:text-slate-300 md:block">
-                  최근 흐름부터 보고, 필요한 봉 간격만 바꿔 확인할 수 있습니다.
+                  일봉 기준으로 전체 흐름을 확인할 수 있습니다.
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
+                <div className="rounded-full bg-[var(--surface-pill)] px-1.75 py-0.5 text-[9px] font-semibold text-slate-600 dark:bg-white/[0.06] dark:text-slate-200">
+                  일봉
+                </div>
                 <div className="rounded-full bg-slate-100 px-1.75 py-0.5 text-[9px] font-semibold text-slate-600 dark:bg-white/[0.06] dark:text-slate-200">
                   {candlesPayload?.provider === "demo" ? "Demo" : "KIS"}
                 </div>
@@ -1623,44 +1579,12 @@ export function AnalysisPageClient({
             <div className="mt-2.5 grid gap-2">
               <div className="soft-panel rounded-[12px] p-1.5 md:rounded-[16px] md:p-2.5">
                 <div className="mb-1.5 text-[9px] font-semibold tracking-[0.12em] text-slate-500">
-                  캔들 간격
+                  표시 기준
                 </div>
-                <SegmentTabs
-                  items={INTERVAL_OPTIONS}
-                  value={interval}
-                  onChange={(nextInterval) => {
-                    setInterval(nextInterval);
-                    if (isIntradayInterval(nextInterval) && !["1d", "1w"].includes(range)) {
-                      setRange(DEFAULT_INTRADAY_RANGE);
-                    }
-                    if (!isIntradayInterval(nextInterval) && ["1d", "1w"].includes(range)) {
-                      setRange(DEFAULT_RANGE);
-                    }
-                  }}
-                />
+                <div className="rounded-[10px] border border-[var(--brand-soft-strong)] bg-[var(--brand-soft)] px-2.5 py-1.75 text-[10px] font-semibold text-[var(--brand-strong)] dark:border-white/10 dark:bg-white/6 dark:text-slate-100 md:rounded-[12px] md:py-2 md:text-[11px]">
+                  일봉 기준 전체 기간 차트를 제공합니다.
+                </div>
               </div>
-
-              {isIntradayView ? (
-                <div className="soft-panel rounded-[12px] p-1.5 md:rounded-[16px] md:p-2.5">
-                  <div className="mb-1.5 text-[9px] font-semibold tracking-[0.12em] text-slate-500">
-                    조회 범위
-                  </div>
-                  <SegmentTabs
-                    items={INTRADAY_RANGE_OPTIONS}
-                    value={range as (typeof INTRADAY_RANGE_OPTIONS)[number]["value"]}
-                    onChange={(nextRange) => setRange(nextRange as CandleRange)}
-                  />
-                </div>
-              ) : (
-                <div className="soft-panel rounded-[12px] p-1.5 md:rounded-[16px] md:p-2.5">
-                  <div className="mb-1.5 text-[9px] font-semibold tracking-[0.12em] text-slate-500">
-                    표시 기준
-                  </div>
-                  <div className="rounded-[10px] border border-[var(--brand-soft-strong)] bg-[var(--brand-soft)] px-2.5 py-1.75 text-[10px] font-semibold text-[var(--brand-strong)] dark:border-white/10 dark:bg-white/6 dark:text-slate-100 md:rounded-[12px] md:py-2 md:text-[11px]">
-                    일봉·주봉은 전체 기간 기준으로 보여줍니다.
-                  </div>
-                </div>
-              )}
 
               {notice ? (
                 <div
