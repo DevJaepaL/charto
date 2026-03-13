@@ -58,7 +58,7 @@ pnpm build
 
 ## 라이선스
 
-MIT License
+All Rights Reserved
 
 ## 출처 및 저작권
 
