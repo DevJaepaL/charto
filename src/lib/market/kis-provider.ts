@@ -28,6 +28,8 @@ type HistoricalPeriodCode = "D" | "W" | "M";
 
 const KIS_REAL_BASE_URL = "https://openapi.koreainvestment.com:9443";
 const KIS_VTS_BASE_URL = "https://openapivts.koreainvestment.com:29443";
+const KIS_TOKEN_TIMEOUT_MS = 8_000;
+const KIS_REQUEST_TIMEOUT_MS = 10_000;
 
 let cachedToken:
   | {
@@ -37,6 +39,31 @@ let cachedToken:
   | undefined;
 let inflightTokenRequest: Promise<string> | undefined;
 const runtimeTokenCache = getCache({ namespace: "charto-kis-token" });
+
+async function fetchWithTimeout(
+  input: RequestInfo | URL,
+  init: RequestInit,
+  timeoutMs: number,
+  timeoutMessage: string,
+) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(timeoutMessage), timeoutMs);
+
+  try {
+    return await fetch(input, {
+      ...init,
+      signal: controller.signal,
+    });
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error(timeoutMessage);
+    }
+
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
 
 function getKisConfig() {
   const appKey = process.env.KIS_APP_KEY;
@@ -244,19 +271,24 @@ async function getAccessToken() {
 
   const { appKey, appSecret, baseUrl } = getKisConfig();
   const request = (async () => {
-    const response = await fetch(`${baseUrl}/oauth2/tokenP`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        accept: "text/plain",
+    const response = await fetchWithTimeout(
+      `${baseUrl}/oauth2/tokenP`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          accept: "text/plain",
+        },
+        body: JSON.stringify({
+          grant_type: "client_credentials",
+          appkey: appKey,
+          appsecret: appSecret,
+        }),
+        cache: "no-store",
       },
-      body: JSON.stringify({
-        grant_type: "client_credentials",
-        appkey: appKey,
-        appsecret: appSecret,
-      }),
-      cache: "no-store",
-    });
+      KIS_TOKEN_TIMEOUT_MS,
+      "KIS 토큰 요청이 지연되고 있습니다.",
+    );
 
     if (!response.ok) {
       const runtimeFallbackToken = await readRuntimeCachedToken();
@@ -308,18 +340,23 @@ async function requestKis<TOutput1 = Record<string, string>, TOutput2 = Array<Re
     url.searchParams.set(key, value);
   });
 
-  const response = await fetch(url, {
-    headers: {
-      authorization: `Bearer ${token}`,
-      appkey: appKey,
-      appsecret: appSecret,
-      tr_id: trId,
-      custtype: "P",
-      accept: "application/json",
-      "content-type": "application/json; charset=utf-8",
+  const response = await fetchWithTimeout(
+    url,
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+        appkey: appKey,
+        appsecret: appSecret,
+        tr_id: trId,
+        custtype: "P",
+        accept: "application/json",
+        "content-type": "application/json; charset=utf-8",
+      },
+      cache: "no-store",
     },
-    cache: "no-store",
-  });
+    KIS_REQUEST_TIMEOUT_MS,
+    "KIS 시세 요청이 지연되고 있습니다.",
+  );
 
   const payload = (await response.json()) as KisSuccess<TOutput1, TOutput2>;
 

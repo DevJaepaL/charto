@@ -15,6 +15,7 @@ const DART_COMPANY_URL = "https://opendart.fss.or.kr/api/company.json";
 const DART_CORP_CODES_TTL_MS = 24 * 60 * 60 * 1000;
 const DART_COMPANY_INFO_TTL_MS = 24 * 60 * 60 * 1000;
 const DART_FAILURE_BACKOFF_MS = 10 * 60 * 1000;
+const DART_REQUEST_TIMEOUT_MS = 6_000;
 
 type DartCompanyResponse = {
   status?: string;
@@ -60,6 +61,31 @@ const companyInfoCache = new Map<string, { expiresAt: number; payload: DartCompa
 const companyInfoRequests = new Map<string, Promise<DartCompanyResponse | null>>();
 let dartLookupUnavailableUntil = 0;
 
+async function fetchWithTimeout(
+  input: RequestInfo | URL,
+  init: RequestInit,
+  timeoutMs: number,
+  timeoutMessage: string,
+) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(timeoutMessage), timeoutMs);
+
+  try {
+    return await fetch(input, {
+      ...init,
+      signal: controller.signal,
+    });
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error(timeoutMessage);
+    }
+
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 function extractXmlTagValue(block: string, tagName: string) {
   const match = block.match(new RegExp(`<${tagName}>([\\s\\S]*?)</${tagName}>`));
   return match?.[1]?.trim() ?? "";
@@ -102,9 +128,11 @@ async function fetchDartCorpCodes(apiKey: string) {
   }
 
   corpCodeRequest = (async () => {
-    const response = await fetch(
+    const response = await fetchWithTimeout(
       `${DART_CORP_CODE_URL}?crtfc_key=${encodeURIComponent(apiKey)}`,
       { next: { revalidate: 86_400 } },
+      DART_REQUEST_TIMEOUT_MS,
+      "DART corpCode 요청이 지연되고 있습니다.",
     );
 
     if (!response.ok) {
@@ -148,9 +176,11 @@ async function fetchDartCompanyInfo(apiKey: string, corpCode: string) {
   }
 
   const request = (async () => {
-    const response = await fetch(
+    const response = await fetchWithTimeout(
       `${DART_COMPANY_URL}?crtfc_key=${encodeURIComponent(apiKey)}&corp_code=${encodeURIComponent(corpCode)}`,
       { next: { revalidate: 86_400 } },
+      DART_REQUEST_TIMEOUT_MS,
+      "DART 기업 정보 요청이 지연되고 있습니다.",
     );
 
     if (!response.ok) {

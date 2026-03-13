@@ -6,6 +6,15 @@ import { loadMarketRanking } from "@/lib/market/rankings";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+async function withTimeout<T>(task: Promise<T>, timeoutMs: number, timeoutMessage: string) {
+  return await Promise.race([
+    task,
+    new Promise<T>((_, reject) => {
+      setTimeout(() => reject(new Error(timeoutMessage)), timeoutMs);
+    }),
+  ]);
+}
+
 export async function GET() {
   const result = {
     ok: true,
@@ -30,8 +39,13 @@ export async function GET() {
     },
   };
 
-  try {
-    const rankings = await loadMarketRanking("value");
+  const [rankingsResult, technicalResult] = await Promise.allSettled([
+    withTimeout(loadMarketRanking("value"), 8_000, "rankings timeout"),
+    withTimeout(loadTechnicalResponse("005930", "1d", "1mo"), 8_000, "technical timeout"),
+  ]);
+
+  if (rankingsResult.status === "fulfilled") {
+    const rankings = rankingsResult.value;
     result.checks.rankings = {
       ok: true,
       source: rankings.source,
@@ -39,14 +53,16 @@ export async function GET() {
       firstSymbol: rankings.items[0]?.stock.symbol ?? null,
       error: null,
     };
-  } catch (error) {
+  } else {
     result.ok = false;
     result.checks.rankings.error =
-      error instanceof Error ? error.message : "rankings check failed";
+      rankingsResult.reason instanceof Error
+        ? rankingsResult.reason.message
+        : "rankings check failed";
   }
 
-  try {
-    const technical = await loadTechnicalResponse("005930", "1d", "1mo");
+  if (technicalResult.status === "fulfilled") {
+    const technical = technicalResult.value;
     result.checks.technical = {
       ok: true,
       provider: technical.provider,
@@ -56,10 +72,12 @@ export async function GET() {
       candleCount: technical.candles.length,
       error: null,
     };
-  } catch (error) {
+  } else {
     result.ok = false;
     result.checks.technical.error =
-      error instanceof Error ? error.message : "technical check failed";
+      technicalResult.reason instanceof Error
+        ? technicalResult.reason.message
+        : "technical check failed";
   }
 
   return NextResponse.json(result);
