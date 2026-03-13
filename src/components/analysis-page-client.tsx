@@ -296,11 +296,11 @@ function PerformanceChip({ label, value }: { label: string; value: number | null
   const toneClass = getQuoteTextToneClass(tone);
 
   return (
-    <div className="surface-card rounded-[8px] px-1.5 py-1 md:rounded-[14px] md:px-2.5 md:py-2">
-      <div className="text-[7px] font-semibold tracking-[0.04em] text-slate-500 dark:text-slate-400 md:text-[9px]">
+    <div className="surface-card rounded-[8px] px-1.5 py-1.25 md:rounded-[14px] md:px-2.5 md:py-2.25">
+      <div className="text-[8px] font-semibold tracking-[0.04em] text-slate-500 dark:text-slate-400 md:text-[10px]">
         {label}
       </div>
-      <div className={`mt-0.5 text-[10px] font-extrabold tabular-nums md:mt-1 md:text-[14px] ${toneClass}`}>
+      <div className={`mt-0.75 text-[12px] font-extrabold tabular-nums md:mt-1 md:text-[15px] ${toneClass}`}>
         {value === null ? "-" : formatPercent(value)}
       </div>
     </div>
@@ -570,15 +570,15 @@ function PrimaryQuoteCard({
   const detailToneClass = getQuoteTextToneClass(detailTone);
 
   return (
-    <div className={`surface-card-strong rounded-[10px] px-2 py-1.75 md:rounded-[16px] md:px-3.5 md:py-3 ${className ?? ""}`}>
-      <div className="text-[8px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-300 md:text-[10px]">현재가</div>
+    <div className={`surface-card-strong rounded-[10px] px-2.5 py-2 md:rounded-[16px] md:px-3.5 md:py-3 ${className ?? ""}`}>
+      <div className="text-[9px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-300 md:text-[10px]">현재가</div>
       <div className="mt-1 flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <div className="break-keep text-[11px] font-extrabold tracking-tight text-slate-950 tabular-nums dark:text-slate-50 md:text-[18px]">
+          <div className="break-keep text-[14px] font-extrabold tracking-tight text-slate-950 tabular-nums dark:text-slate-50 md:text-[20px]">
             {price}
           </div>
           {detail ? (
-            <div className={`mt-0.25 break-keep text-[7px] font-semibold tabular-nums md:text-[10px] ${detailToneClass}`}>
+            <div className={`mt-0.5 break-keep text-[9px] font-semibold tabular-nums md:text-[11px] ${detailToneClass}`}>
               {detail}
             </div>
           ) : null}
@@ -673,15 +673,27 @@ function RecommendationCard({
 
   return (
     <div
-      className={`relative z-20 min-w-0 rounded-[10px] px-2 py-1.75 ${recommendation.cardClassName} md:rounded-[16px] md:px-3.5 md:py-3 ${className ?? ""}`}
+      className={`relative z-20 min-w-0 rounded-[10px] px-2.5 py-2 ${recommendation.cardClassName} md:rounded-[16px] md:px-3.5 md:py-3 ${className ?? ""}`}
     >
       <div className="flex items-center justify-between gap-3">
-        <div className="text-[8px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-300 md:text-[10px]">
+        <div className="text-[9px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-300 md:text-[10px]">
           추천 점수
         </div>
-        <div
+      </div>
+      <div className="mt-1 flex items-end justify-between gap-3 pr-8 md:pr-10">
+        <div className={`text-[1.12rem] font-extrabold tracking-tight tabular-nums md:text-[1.8rem] ${recommendation.scoreClassName}`}>
+          {score}
+        </div>
+        <div className={`shrink-0 rounded-[9px] px-2 py-0.75 text-right ${recommendation.badgeClassName}`}>
+          <div className="text-[10px] font-semibold md:text-[11px]">{recommendation.label}</div>
+        </div>
+      </div>
+      {scoreDeltaText ? (
+        <div className={`mt-0.5 pr-8 text-[9px] font-semibold md:pr-10 md:text-[11px] ${scoreDeltaToneClass}`}>{scoreDeltaText}</div>
+      ) : null}
+      <div
           ref={triggerRef}
-          className="relative shrink-0"
+          className="absolute bottom-2 right-2 shrink-0 md:bottom-3 md:right-3"
           onMouseEnter={() => {
             if (supportsHover()) {
               setHovered(true);
@@ -696,7 +708,7 @@ function RecommendationCard({
           <button
             aria-expanded={open}
             aria-label={open ? "추천 점수 설명 닫기" : "추천 점수 설명 보기"}
-            className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-[rgba(73,178,255,0.14)] text-sky-700 shadow-[0_6px_16px_rgba(73,178,255,0.18)] hover:bg-[rgba(73,178,255,0.22)] dark:bg-[rgba(73,178,255,0.18)] dark:text-sky-100 dark:shadow-[0_8px_18px_rgba(18,40,72,0.34)] dark:hover:bg-[rgba(73,178,255,0.26)] md:h-4.5 md:w-4.5"
+            className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[rgba(73,178,255,0.18)] text-sky-700 shadow-[0_10px_24px_rgba(73,178,255,0.24)] ring-1 ring-[rgba(73,178,255,0.18)] transition-colors hover:bg-[rgba(73,178,255,0.28)] dark:bg-[rgba(73,178,255,0.2)] dark:text-sky-100 dark:shadow-[0_12px_26px_rgba(18,40,72,0.34)] dark:ring-[rgba(157,196,255,0.16)] dark:hover:bg-[rgba(73,178,255,0.3)] md:h-8 md:w-8"
             type="button"
             onClick={() => {
               setPinnedOpen((current) => !current);
@@ -707,7 +719,7 @@ function RecommendationCard({
               }
             }}
           >
-            <IconSparkles size={9} stroke={2.15} />
+            <IconSparkles size={16} stroke={2.1} />
           </button>
           {open && tooltipStyle && typeof document !== "undefined"
             ? createPortal(
@@ -760,19 +772,7 @@ function RecommendationCard({
                 document.body,
               )
             : null}
-        </div>
       </div>
-      <div className="mt-1 flex items-end justify-between gap-3">
-        <div className={`text-[0.86rem] font-extrabold tracking-tight tabular-nums md:text-[1.4rem] ${recommendation.scoreClassName}`}>
-          {score}
-        </div>
-        <div className={`shrink-0 rounded-[8px] px-1.5 py-0.5 text-right ${recommendation.badgeClassName}`}>
-          <div className="text-[8px] font-semibold md:text-[10px]">{recommendation.label}</div>
-        </div>
-      </div>
-      {scoreDeltaText ? (
-        <div className={`mt-0.25 text-[7px] font-semibold md:text-[10px] ${scoreDeltaToneClass}`}>{scoreDeltaText}</div>
-      ) : null}
     </div>
   );
 }
@@ -1036,7 +1036,7 @@ function getAiUnavailableCopy(reason: string | undefined) {
   }
 
   if (reason === "auth_required") {
-    return "로그인해 보세요. AI 브리핑을 바로 확인할 수 있어요.";
+    return "로그인 기능 준비 중입니다. 현재 배포에서는 AI 브리핑 로그인을 아직 열어두지 않았습니다.";
   }
 
   const normalized = reason.toLowerCase();
@@ -1240,7 +1240,8 @@ export function AnalysisPageClient({
   }, [stock.symbol, loadedSelectionKey, isInitialLoading, minIntroReady]);
 
   const aiSummary = aiState.summary;
-  const canUseAi = isAiUserSignedIn;
+  const isAiAuthAvailable = aiProviders.length > 0;
+  const canUseAi = isAiAuthAvailable && isAiUserSignedIn;
   const sma5State = getAverageMetricState(technical?.currentPrice, technical?.sma5);
   const sma20State = getAverageMetricState(technical?.currentPrice, technical?.sma20);
   const rsiState = getRsiMetricState(technical?.rsi14);
@@ -1474,7 +1475,7 @@ export function AnalysisPageClient({
                       {companyContext.sector}
                     </div>
                   </div>
-                  <p className="mt-1.5 break-keep text-[10px] leading-4 text-slate-500 dark:text-slate-300 md:text-[12px] md:leading-5">
+                  <p className="mt-1.5 break-keep text-[11px] leading-4.5 text-slate-500 dark:text-slate-300 md:text-[13px] md:leading-5.5">
                     {companyContextBrief}
                   </p>
                 </div>
@@ -1763,13 +1764,23 @@ export function AnalysisPageClient({
                 <AuthActions isSignedIn providers={aiProviders} userName={aiUserName} />
               </div>
             ) : null}
-            {!canUseAi ? (
+            {!isAiAuthAvailable ? (
               <div className="surface-card rounded-[14px] p-3 md:rounded-[16px] md:p-3.5">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                  로그인해 보세요!
+                  로그인 기능 준비 중이에요
                 </div>
                 <p className="mt-1 break-keep text-[13px] leading-5 text-slate-500 dark:text-slate-300">
-                  Google 또는 Kakao로 로그인하면 AI 브리핑을 바로 볼 수 있어요.
+                  현재 배포에서는 Google / Kakao 로그인 연동을 아직 열어두지 않았어요. AI 브리핑은 로그인 기능이 준비되면 함께 사용할 수 있습니다.
+                </p>
+              </div>
+            ) : null}
+            {isAiAuthAvailable && !canUseAi ? (
+              <div className="surface-card rounded-[14px] p-3 md:rounded-[16px] md:p-3.5">
+                <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                  로그인 후 AI 브리핑을 볼 수 있어요
+                </div>
+                <p className="mt-1 break-keep text-[13px] leading-5 text-slate-500 dark:text-slate-300">
+                  아래 버튼으로 로그인하면 이 종목의 AI 브리핑을 바로 확인할 수 있어요.
                 </p>
                 <div className="mt-3">
                   <AuthActions providers={aiProviders} />

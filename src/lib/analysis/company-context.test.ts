@@ -21,6 +21,7 @@ function buildStock(name: string): StockLookupItem {
 describe("inferCompanyContext", () => {
   it.each([
     ["삼성전자", "반도체"],
+    ["뉴파워프라즈마", "반도체"],
     ["LS ELECTRIC", "전력·전선"],
     ["현대차", "자동차"],
     ["HD현대에너지솔루션", "태양광·신재생에너지"],
@@ -114,6 +115,46 @@ describe("official company context merge", () => {
 
     expect(official?.sector).toBe("엔터테인먼트");
     expect(official?.interpretWithCaution).toBe(true);
+  });
+
+  it("maps official industry code 29271 to semiconductor equipment instead of automotive", () => {
+    const stock = {
+      ...buildStock("뉴파워프라즈마"),
+      symbol: "144960",
+      market: "KOSDAQ" as const,
+    };
+    const official = buildOfficialContextFromIndustryCode(
+      stock,
+      inferInstrumentProfile(stock),
+      "29271",
+    );
+    const merged = mergeCompanyContexts(inferCompanyContext(stock), official);
+
+    expect(official?.sector).toBe("반도체");
+    expect(merged.sector).toBe("반도체");
+    expect(merged.marketPosition).toContain("업황");
+  });
+
+  it("maps broad official industry code 29 to machinery, not automotive", () => {
+    const stock = buildStock("가상의장비주");
+    const official = buildOfficialContextFromIndustryCode(
+      stock,
+      inferInstrumentProfile(stock),
+      "29210",
+    );
+
+    expect(official?.sector).toBe("기계·장비");
+  });
+
+  it("maps official industry code 30 to automotive", () => {
+    const stock = buildStock("가상의자동차주");
+    const official = buildOfficialContextFromIndustryCode(
+      stock,
+      inferInstrumentProfile(stock),
+      "30300",
+    );
+
+    expect(official?.sector).toBe("자동차");
   });
 
   it("prefers official context when inferred classification is low-confidence fallback", () => {

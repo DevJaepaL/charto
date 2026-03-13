@@ -115,6 +115,16 @@ function resolveTextColor(color: string, fallback: string) {
   return luminance > 0.64 ? fallback : color;
 }
 
+function isLightAccent(color: string) {
+  const rgb = hexToRgb(color);
+  if (!rgb) {
+    return false;
+  }
+
+  const luminance = (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b) / 255;
+  return luminance > 0.58;
+}
+
 function getContextVisual(context: CompanyContext) {
   return (
     CONTEXT_VISUAL_RULES.find((rule) => rule.match.test(context.sector))?.visual ??
@@ -127,6 +137,10 @@ export function getCompanyContextVisuals(stock: StockLookupItem, context: Compan
   const sector = getContextVisual(context);
   const brandText = resolveTextColor(brand.accent, brand.textColor);
   const sectorText = resolveTextColor(sector.accent, "#0F172A");
+  const lightAccent = isLightAccent(sector.accent);
+  const iconForeground = lightAccent ? "#0F172A" : sector.accent;
+  const iconSurface = "#FFFFFF";
+  const iconSurfaceDark = "rgba(255,255,255,0.96)";
   const brandLabel =
     context.group ? `${context.group} 그룹` : context.instrumentLabel !== "개별 종목" ? context.instrumentLabel : stock.market;
 
@@ -134,13 +148,15 @@ export function getCompanyContextVisuals(stock: StockLookupItem, context: Compan
     brandLabel,
     headlineIcon: sector.Icon,
     headlineStyle: {
-      borderColor: withAlpha(brand.accent, 0.24),
-      backgroundColor: brand.accentSoft,
-      color: brandText,
+      borderColor: withAlpha(sector.accent, 0.22),
+      backgroundColor: withAlpha(sector.accent, 0.12),
+      color: sectorText,
     } satisfies CSSProperties,
     headlineIconStyle: {
-      backgroundColor: withAlpha(brand.accent, 0.16),
-      color: brand.accent,
+      backgroundColor: iconSurface,
+      color: iconForeground,
+      border: `1px solid ${withAlpha(sector.accent, 0.12)}`,
+      boxShadow: `0 10px 22px ${withAlpha(sector.accent, 0.12)}`,
     } satisfies CSSProperties,
     groupChipStyle: {
       "--chip-border": withAlpha(brand.accent, 0.24),
@@ -159,10 +175,10 @@ export function getCompanyContextVisuals(stock: StockLookupItem, context: Compan
       "--chip-text-dark": "#F8FAFC",
     } satisfies CssVars,
     sectorIconStyle: {
-      "--chip-icon-bg": withAlpha(sector.accent, 0.16),
-      "--chip-icon-color": sector.accent,
-      "--chip-icon-bg-dark": withAlpha(sector.accent, 0.36),
-      "--chip-icon-color-dark": "#F8FAFC",
+      "--chip-icon-bg": iconSurface,
+      "--chip-icon-color": iconForeground,
+      "--chip-icon-bg-dark": iconSurfaceDark,
+      "--chip-icon-color-dark": iconForeground,
     } satisfies CssVars,
     sectorIconStroke: sector.iconStroke ?? 1.9,
     SectorIcon: sector.Icon,

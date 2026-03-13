@@ -19,7 +19,7 @@ export function AuthActions({
   if (!providers.length) {
     return (
       <div className="rounded-[18px] border border-slate-200/80 bg-[var(--surface-card)] px-4 py-3 text-[13px] leading-5 text-slate-500 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300">
-        현재 AI 분석은 테스트 중이에요. 기다려주세요.
+        로그인 기능 준비 중이에요. 현재 배포에서는 Google / Kakao 로그인을 아직 열어두지 않았습니다.
       </div>
     );
   }
