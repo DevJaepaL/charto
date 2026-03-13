@@ -51,10 +51,31 @@ interface AnalysisPageClientProps {
 
 async function fetchJson<T>(input: RequestInfo, init?: RequestInit) {
   const response = await fetch(input, init);
-  const payload = await response.json();
+  const responseText = await response.text();
+  let payload: unknown = null;
+
+  if (responseText) {
+    try {
+      payload = JSON.parse(responseText);
+    } catch {
+      payload = null;
+    }
+  }
 
   if (!response.ok) {
-    throw new Error(payload.error ?? "요청에 실패했습니다.");
+    const errorMessage =
+      payload &&
+      typeof payload === "object" &&
+      "error" in payload &&
+      typeof payload.error === "string"
+        ? payload.error
+        : `서버 응답을 확인해 주세요. (${response.status})`;
+
+    throw new Error(errorMessage);
+  }
+
+  if (!payload) {
+    throw new Error("서버 응답을 해석하지 못했습니다.");
   }
 
   return payload as T;
