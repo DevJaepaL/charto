@@ -34,6 +34,7 @@ import { getStockBrandProfile } from "@/lib/stock-branding";
 import type { CompanyContext, StockLookupItem } from "@/lib/types";
 
 type ContextIcon = ComponentType<{ size?: number; stroke?: number; className?: string }>;
+type CssVars = CSSProperties & Record<`--${string}`, string>;
 
 type ContextVisual = {
   Icon: ContextIcon;
@@ -142,19 +143,27 @@ export function getCompanyContextVisuals(stock: StockLookupItem, context: Compan
       color: brand.accent,
     } satisfies CSSProperties,
     groupChipStyle: {
-      borderColor: withAlpha(brand.accent, 0.24),
-      backgroundColor: brand.accentSoft,
-      color: brandText,
-    } satisfies CSSProperties,
+      "--chip-border": withAlpha(brand.accent, 0.24),
+      "--chip-bg": brand.accentSoft,
+      "--chip-text": brandText,
+      "--chip-border-dark": withAlpha(brand.accent, 0.38),
+      "--chip-bg-dark": withAlpha(brand.accent, 0.3),
+      "--chip-text-dark": "#F8FAFC",
+    } satisfies CssVars,
     sectorChipStyle: {
-      borderColor: withAlpha(sector.accent, 0.22),
-      backgroundColor: sector.soft,
-      color: sectorText,
-    } satisfies CSSProperties,
+      "--chip-border": withAlpha(sector.accent, 0.22),
+      "--chip-bg": sector.soft,
+      "--chip-text": sectorText,
+      "--chip-border-dark": withAlpha(sector.accent, 0.4),
+      "--chip-bg-dark": withAlpha(sector.accent, 0.28),
+      "--chip-text-dark": "#F8FAFC",
+    } satisfies CssVars,
     sectorIconStyle: {
-      backgroundColor: withAlpha(sector.accent, 0.16),
-      color: sector.accent,
-    } satisfies CSSProperties,
+      "--chip-icon-bg": withAlpha(sector.accent, 0.16),
+      "--chip-icon-color": sector.accent,
+      "--chip-icon-bg-dark": withAlpha(sector.accent, 0.36),
+      "--chip-icon-color-dark": "#F8FAFC",
+    } satisfies CssVars,
     sectorIconStroke: sector.iconStroke ?? 1.9,
     SectorIcon: sector.Icon,
   };

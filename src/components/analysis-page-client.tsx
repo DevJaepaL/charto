@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useEffect, useReducer, useRef, useState } from "react";
+import { type CSSProperties, type ReactNode, useEffect, useReducer, useRef, useState } from "react";
 import { IconSparkles } from "@tabler/icons-react";
 
 import { AuthActions } from "@/components/auth-actions";
@@ -1315,7 +1315,7 @@ export function AnalysisPageClient({
               <div className="flex items-start gap-3">
                 <div
                   className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] border md:h-14 md:w-14 md:rounded-[18px]"
-                  style={companyContextVisuals.headlineStyle}
+                  style={companyContextVisuals.headlineStyle as CSSProperties}
                 >
                   <span
                     className="inline-flex h-7 w-7 items-center justify-center rounded-[10px] md:h-10 md:w-10 md:rounded-[14px]"
@@ -1342,18 +1342,18 @@ export function AnalysisPageClient({
                   </div>
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     <div
-                      className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold dark:border-white/10 dark:bg-white/[0.04]"
-                      style={companyContextVisuals.groupChipStyle}
+                      className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold [border-color:var(--chip-border)] [background-color:var(--chip-bg)] [color:var(--chip-text)] dark:[border-color:var(--chip-border-dark)] dark:[background-color:var(--chip-bg-dark)] dark:[color:var(--chip-text-dark)]"
+                      style={companyContextVisuals.groupChipStyle as CSSProperties}
                     >
                       {companyContextVisuals.brandLabel}
                     </div>
                     <div
-                      className="inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[11px] font-semibold dark:border-white/10 dark:bg-white/[0.04]"
-                      style={companyContextVisuals.sectorChipStyle}
+                      className="inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[11px] font-semibold [border-color:var(--chip-border)] [background-color:var(--chip-bg)] [color:var(--chip-text)] dark:[border-color:var(--chip-border-dark)] dark:[background-color:var(--chip-bg-dark)] dark:[color:var(--chip-text-dark)]"
+                      style={companyContextVisuals.sectorChipStyle as CSSProperties}
                     >
                       <span
-                        className="inline-flex h-5 w-5 items-center justify-center rounded-full"
-                        style={companyContextVisuals.sectorIconStyle}
+                        className="inline-flex h-5 w-5 items-center justify-center rounded-full [background-color:var(--chip-icon-bg)] [color:var(--chip-icon-color)] dark:[background-color:var(--chip-icon-bg-dark)] dark:[color:var(--chip-icon-color-dark)]"
+                        style={companyContextVisuals.sectorIconStyle as CSSProperties}
                       >
                         <ContextSectorIcon size={13} stroke={companyContextVisuals.sectorIconStroke} />
                       </span>
