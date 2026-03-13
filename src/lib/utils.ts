@@ -45,6 +45,21 @@ export function formatKoreanWon(value: number | null | undefined) {
   return `${formatNumber(Math.round(value))}원`;
 }
 
+export function formatKoreanMarketCap(value: number | null | undefined) {
+  if (value === null || value === undefined || Number.isNaN(value)) {
+    return "-";
+  }
+
+  const absolute = Math.abs(value);
+  const sign = value < 0 ? "-" : "";
+
+  if (absolute >= 10_000) {
+    return `${sign}${(absolute / 10_000).toFixed(1).replace(/\.0$/, "")}조 원`;
+  }
+
+  return `${sign}${formatNumber(Math.round(absolute))}억 원`;
+}
+
 export function formatInteger(value: number | null | undefined, suffix = "") {
   if (value === null || value === undefined || Number.isNaN(value)) {
     return "-";

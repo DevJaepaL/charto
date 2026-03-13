@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 
 import { StockAvatar } from "@/components/stock-avatar";
-import { formatCompactNumber, formatKoreanWon, formatPercent, formatPrice } from "@/lib/utils";
+import { formatCompactNumber, formatKoreanMarketCap, formatPercent, formatPrice } from "@/lib/utils";
 import type { MarketRankMode, MarketRankingResponse } from "@/lib/types";
 
 const MODES: Array<{ value: MarketRankMode; label: string; shortLabel: string }> = [
@@ -217,7 +217,7 @@ export function MarketPulsePanel() {
                         ? `${formatCompactNumber(item.volume)}주`
                         : activeMode === "value"
                           ? `${formatCompactNumber(item.tradeValue)}원`
-                          : `${formatKoreanWon(item.marketCap ?? null)}`}
+                          : `${formatKoreanMarketCap(item.marketCap ?? null)}`}
                     </span>
                   </div>
                 </div>

@@ -1164,7 +1164,6 @@ export function AnalysisPageClient({
   const hasValidQuote = Boolean(quote && quote.currentPrice > 0);
   const signal = technicalPayload?.signal;
   const technical = technicalPayload?.technical;
-  const notice = candlesPayload?.notice ?? technicalPayload?.notice;
   const chartUnavailable = Boolean(candlesPayload?.chartUnavailable);
   const isInitialLoading = !candlesPayload && !error;
   const currentSelectionKey = `${stock.symbol}:${DEFAULT_INTERVAL}:${DEFAULT_RANGE}`;
