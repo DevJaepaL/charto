@@ -296,11 +296,11 @@ function PerformanceChip({ label, value }: { label: string; value: number | null
   const toneClass = getQuoteTextToneClass(tone);
 
   return (
-    <div className="surface-card rounded-[11px] px-2 py-1.5 md:rounded-[14px] md:px-2.5 md:py-2">
-      <div className="text-[9px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-400">
+    <div className="surface-card rounded-[8px] px-1.5 py-1 md:rounded-[14px] md:px-2.5 md:py-2">
+      <div className="text-[7px] font-semibold tracking-[0.04em] text-slate-500 dark:text-slate-400 md:text-[9px]">
         {label}
       </div>
-      <div className={`mt-1 text-[13px] font-extrabold tabular-nums md:text-[14px] ${toneClass}`}>
+      <div className={`mt-0.5 text-[10px] font-extrabold tabular-nums md:mt-1 md:text-[14px] ${toneClass}`}>
         {value === null ? "-" : formatPercent(value)}
       </div>
     </div>
@@ -570,15 +570,15 @@ function PrimaryQuoteCard({
   const detailToneClass = getQuoteTextToneClass(detailTone);
 
   return (
-    <div className={`surface-card-strong rounded-[14px] px-3 py-2.5 md:rounded-[16px] md:px-3.5 md:py-3 ${className ?? ""}`}>
-      <div className="text-[10px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-300">현재가</div>
+    <div className={`surface-card-strong rounded-[10px] px-2 py-1.75 md:rounded-[16px] md:px-3.5 md:py-3 ${className ?? ""}`}>
+      <div className="text-[8px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-300 md:text-[10px]">현재가</div>
       <div className="mt-1 flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <div className="break-keep text-[14px] font-extrabold tracking-tight text-slate-950 tabular-nums dark:text-slate-50 md:text-[18px]">
+          <div className="break-keep text-[11px] font-extrabold tracking-tight text-slate-950 tabular-nums dark:text-slate-50 md:text-[18px]">
             {price}
           </div>
           {detail ? (
-            <div className={`mt-0.5 break-keep text-[9px] font-semibold tabular-nums md:text-[10px] ${detailToneClass}`}>
+            <div className={`mt-0.25 break-keep text-[7px] font-semibold tabular-nums md:text-[10px] ${detailToneClass}`}>
               {detail}
             </div>
           ) : null}
@@ -673,10 +673,10 @@ function RecommendationCard({
 
   return (
     <div
-      className={`relative z-20 min-w-0 rounded-[14px] px-3 py-2.5 ${recommendation.cardClassName} md:rounded-[16px] md:px-3.5 md:py-3 ${className ?? ""}`}
+      className={`relative z-20 min-w-0 rounded-[10px] px-2 py-1.75 ${recommendation.cardClassName} md:rounded-[16px] md:px-3.5 md:py-3 ${className ?? ""}`}
     >
       <div className="flex items-center justify-between gap-3">
-        <div className="text-[10px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-300">
+        <div className="text-[8px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-300 md:text-[10px]">
           추천 점수
         </div>
         <div
@@ -696,7 +696,7 @@ function RecommendationCard({
           <button
             aria-expanded={open}
             aria-label={open ? "추천 점수 설명 닫기" : "추천 점수 설명 보기"}
-            className="inline-flex h-4.5 w-4.5 items-center justify-center rounded-full bg-[rgba(73,178,255,0.14)] text-sky-700 shadow-[0_6px_16px_rgba(73,178,255,0.18)] hover:bg-[rgba(73,178,255,0.22)] dark:bg-[rgba(73,178,255,0.18)] dark:text-sky-100 dark:shadow-[0_8px_18px_rgba(18,40,72,0.34)] dark:hover:bg-[rgba(73,178,255,0.26)]"
+            className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-[rgba(73,178,255,0.14)] text-sky-700 shadow-[0_6px_16px_rgba(73,178,255,0.18)] hover:bg-[rgba(73,178,255,0.22)] dark:bg-[rgba(73,178,255,0.18)] dark:text-sky-100 dark:shadow-[0_8px_18px_rgba(18,40,72,0.34)] dark:hover:bg-[rgba(73,178,255,0.26)] md:h-4.5 md:w-4.5"
             type="button"
             onClick={() => {
               setPinnedOpen((current) => !current);
@@ -707,7 +707,7 @@ function RecommendationCard({
               }
             }}
           >
-            <IconSparkles size={10} stroke={2.15} />
+            <IconSparkles size={9} stroke={2.15} />
           </button>
           {open && tooltipStyle && typeof document !== "undefined"
             ? createPortal(
@@ -762,16 +762,16 @@ function RecommendationCard({
             : null}
         </div>
       </div>
-      <div className="mt-1.5 flex items-end justify-between gap-3">
-        <div className={`text-[1rem] font-extrabold tracking-tight tabular-nums md:text-[1.4rem] ${recommendation.scoreClassName}`}>
+      <div className="mt-1 flex items-end justify-between gap-3">
+        <div className={`text-[0.86rem] font-extrabold tracking-tight tabular-nums md:text-[1.4rem] ${recommendation.scoreClassName}`}>
           {score}
         </div>
-        <div className={`shrink-0 rounded-[10px] px-2 py-0.5 text-right ${recommendation.badgeClassName}`}>
-          <div className="text-[9px] font-semibold md:text-[10px]">{recommendation.label}</div>
+        <div className={`shrink-0 rounded-[8px] px-1.5 py-0.5 text-right ${recommendation.badgeClassName}`}>
+          <div className="text-[8px] font-semibold md:text-[10px]">{recommendation.label}</div>
         </div>
       </div>
       {scoreDeltaText ? (
-        <div className={`mt-0.5 text-[9px] font-semibold md:text-[10px] ${scoreDeltaToneClass}`}>{scoreDeltaText}</div>
+        <div className={`mt-0.25 text-[7px] font-semibold md:text-[10px] ${scoreDeltaToneClass}`}>{scoreDeltaText}</div>
       ) : null}
     </div>
   );
@@ -1011,17 +1011,17 @@ function SignalRail({
   const rail = getToneRailClasses(tone);
 
   return (
-    <div className="rounded-[14px] bg-[var(--surface-card)] px-3 py-2.5 dark:bg-white/[0.04] md:rounded-[16px]">
+    <div className="rounded-[10px] bg-[var(--surface-card)] px-2 py-1.75 dark:bg-white/[0.04] md:rounded-[16px] md:px-3 md:py-2.5">
       <div className="flex items-center justify-between gap-3">
-        <div className="text-[10px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
+        <div className="text-[8px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-400 md:text-[10px]">
           {label}
         </div>
-        <div className={`text-[11px] font-semibold ${rail.text}`}>{value}</div>
+        <div className={`text-[9px] font-semibold ${rail.text} md:text-[11px]`}>{value}</div>
       </div>
       <div className={`mt-2 h-1.5 overflow-hidden rounded-full ${rail.track}`}>
         <div className={`h-full rounded-full ${rail.fill}`} style={{ width: `${percent}%` }} />
       </div>
-      <div className="mt-1.5 text-[11px] text-slate-500 dark:text-slate-400">{helper}</div>
+      <div className="mt-1 text-[8px] text-slate-500 dark:text-slate-400 md:mt-1.5 md:text-[11px]">{helper}</div>
     </div>
   );
 }
