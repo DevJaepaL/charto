@@ -742,12 +742,14 @@ function RecommendationCard({
                   </div>
                 </div>
                 <div className="mt-3">
-                   <div className="relative flex h-2.5 overflow-hidden rounded-full bg-white/40 dark:bg-white/8">
-                    <span className="h-full w-1/3 bg-[rgba(240,66,81,0.75)]" />
-                    <span className="h-full w-1/3 bg-slate-300 dark:bg-slate-600" />
-                    <span className="h-full w-1/3 bg-[rgba(5,192,114,0.75)]" />
+                  <div className="relative px-0.5 py-1">
+                    <div className="flex h-2.5 overflow-hidden rounded-full bg-white/40 dark:bg-white/8">
+                      <span className="h-full w-1/3 bg-[rgba(240,66,81,0.75)]" />
+                      <span className="h-full w-1/3 bg-slate-300 dark:bg-slate-600" />
+                      <span className="h-full w-1/3 bg-[rgba(5,192,114,0.75)]" />
+                    </div>
                     <div
-                      className={`absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white ${getScoreMarkerClass(score)} dark:border-[var(--surface-3)]`}
+                      className={`absolute top-1/2 z-10 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_4px_12px_rgba(15,23,42,0.18)] ${getScoreMarkerClass(score)} dark:border-[var(--surface-3)] dark:shadow-[0_4px_14px_rgba(2,6,23,0.32)]`}
                       style={{ left: `${scorePosition}%` }}
                     />
                   </div>
@@ -1767,10 +1769,10 @@ export function AnalysisPageClient({
             {!isAiAuthAvailable ? (
               <div className="surface-card rounded-[14px] p-3 md:rounded-[16px] md:p-3.5">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                  로그인 기능 준비 중이에요
+                  로그인 기능 준비 중이에요.
                 </div>
                 <p className="mt-1 break-keep text-[13px] leading-5 text-slate-500 dark:text-slate-300">
-                  현재 배포에서는 Google / Kakao 로그인 연동을 아직 열어두지 않았어요. AI 브리핑은 로그인 기능이 준비되면 함께 사용할 수 있습니다.
+                  현재 로그인 기능을 준비하지 않았어요. AI 브리핑은 로그인 기능이 준비되면 함께 사용할 수 있습니다.
                 </p>
               </div>
             ) : null}
