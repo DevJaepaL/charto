@@ -1576,7 +1576,7 @@ export function AnalysisPageClient({
               )}
             </div>
 
-            <div className="mt-2.5 grid gap-2">
+            {/* <div className="mt-2.5 grid gap-2">
               <div className="soft-panel rounded-[12px] p-1.5 md:rounded-[16px] md:p-2.5">
                 <div className="mb-1.5 text-[9px] font-semibold tracking-[0.12em] text-slate-500">
                   표시 기준
@@ -1597,7 +1597,7 @@ export function AnalysisPageClient({
                   {notice}
                 </div>
               ) : null}
-            </div>
+            </div> */}
             </section>
 
             <div className="grid gap-3.5">
