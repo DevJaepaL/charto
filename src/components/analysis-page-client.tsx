@@ -1,8 +1,11 @@
 "use client";
 
 import { type CSSProperties, type ReactNode, useEffect, useReducer, useRef, useState } from "react";
-import { IconSparkles } from "@tabler/icons-react";
+import Link from "next/link";
+import { IconHome2, IconSparkles } from "@tabler/icons-react";
+import { createPortal } from "react-dom";
 
+import { AnimatedLoadingStage } from "@/components/animated-loading-stage";
 import { AuthActions } from "@/components/auth-actions";
 import {
   formatCompanyContextBrief,
@@ -229,13 +232,13 @@ function SignalTextItem({ text, className = "" }: { text: string; className?: st
 function getMetricToneClass(tone: MetricTone) {
   switch (tone) {
     case "positive":
-      return "border-[rgba(5,192,114,0.22)] bg-[rgba(5,192,114,0.08)] text-[var(--positive-text)] dark:border-[rgba(5,192,114,0.18)] dark:bg-[rgba(5,192,114,0.12)] dark:text-[var(--positive-text)]";
+      return "bg-[rgba(5,192,114,0.1)] text-[var(--positive-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.42)] dark:bg-[rgba(5,192,114,0.14)] dark:text-[var(--positive-text)]";
     case "warning":
-      return "border-amber-200 bg-[rgba(251,191,36,0.12)] text-amber-800 dark:border-amber-400/30 dark:bg-[rgba(217,119,6,0.18)] dark:text-amber-100";
+      return "bg-[rgba(251,191,36,0.13)] text-amber-800 shadow-[inset_0_1px_0_rgba(255,255,255,0.42)] dark:bg-[rgba(217,119,6,0.18)] dark:text-amber-100";
     case "negative":
-      return "border-rose-200 bg-[rgba(244,63,94,0.1)] text-rose-700 dark:border-rose-400/30 dark:bg-[rgba(190,24,93,0.16)] dark:text-rose-100";
+      return "bg-[rgba(244,63,94,0.1)] text-rose-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.42)] dark:bg-[rgba(190,24,93,0.16)] dark:text-rose-100";
     default:
-      return "border-slate-200 bg-[rgba(226,234,244,0.96)] text-slate-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-100";
+      return "bg-[rgba(228,235,245,0.94)] text-[#41546c] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:bg-[rgba(148,163,184,0.12)] dark:text-slate-100";
   }
 }
 
@@ -293,11 +296,11 @@ function PerformanceChip({ label, value }: { label: string; value: number | null
   const toneClass = getQuoteTextToneClass(tone);
 
   return (
-    <div className="surface-card rounded-[13px] px-2 py-2 md:rounded-[16px] md:px-3">
-      <div className="text-[10px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-400">
+    <div className="surface-card rounded-[11px] px-2 py-1.5 md:rounded-[14px] md:px-2.5 md:py-2">
+      <div className="text-[9px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-400">
         {label}
       </div>
-      <div className={`mt-1 text-[12px] font-extrabold tabular-nums md:text-[15px] ${toneClass}`}>
+      <div className={`mt-1 text-[13px] font-extrabold tabular-nums md:text-[14px] ${toneClass}`}>
         {value === null ? "-" : formatPercent(value)}
       </div>
     </div>
@@ -379,30 +382,30 @@ function MetricCard({
 }) {
   return (
     <div
-      className={`min-w-0 rounded-[18px] border ${compact ? "p-2.5" : "p-3"} ${getMetricToneClass(
+      className={`min-w-0 rounded-[14px] ${compact ? "p-2" : "p-2.5"} ${getMetricToneClass(
         tone,
-      )} md:rounded-[20px] md:p-4`}
+      )} md:rounded-[16px] md:p-3`}
     >
       <div className="flex items-start justify-between gap-3">
-        <div className={`${compact ? "text-[11px]" : "text-xs"} font-semibold text-slate-500 dark:text-slate-300`}>
+        <div className={`${compact ? "text-[10px]" : "text-[11px]"} font-semibold text-slate-500 dark:text-slate-300`}>
           {label}
         </div>
         {statusLabel ? (
-          <div className="inline-flex shrink-0 whitespace-nowrap rounded-full border border-current/20 bg-white/95 px-2 py-1 text-[10px] font-bold tracking-[0.04em] text-current dark:bg-white/8">
+          <div className="inline-flex shrink-0 whitespace-nowrap rounded-full border border-current/20 bg-white/95 px-1.5 py-0.5 text-[9px] font-bold tracking-[0.03em] text-current dark:bg-white/8">
             {statusLabel}
           </div>
         ) : null}
       </div>
       <div
         className={`mt-2 break-keep font-bold tracking-tight text-slate-950 tabular-nums dark:text-slate-50 ${
-          compact ? "text-[15px] md:text-lg" : "text-base md:text-xl"
+          compact ? "text-[14px] md:text-[17px]" : "text-[15px] md:text-[19px]"
         }`}
       >
         {value}
       </div>
       <div
         className={`mt-2 break-keep text-slate-500 dark:text-slate-300 ${
-          compact ? "hidden text-[11px] leading-4.5 md:block" : "text-xs leading-5"
+          compact ? "hidden text-[10px] leading-4 md:block" : "text-[11px] leading-4.5"
         }`}
       >
         {hint}
@@ -449,64 +452,64 @@ function getSignalBiasMeta(bias: SignalSummary["bias"] | undefined) {
       return {
         label: "차트 우호적",
         className:
-          "border-[rgba(5,192,114,0.24)] bg-[rgba(5,192,114,0.12)] text-[var(--positive-text)] dark:border-[rgba(5,192,114,0.2)] dark:bg-[rgba(5,192,114,0.14)] dark:text-[var(--positive-text)]",
+          "bg-[rgba(5,192,114,0.12)] text-[var(--positive-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] dark:bg-[rgba(5,192,114,0.14)] dark:text-[var(--positive-text)]",
       };
     case "bearish":
       return {
         label: "차트 주의",
         className:
-          "border-rose-200 bg-[rgba(244,63,94,0.1)] text-rose-700 dark:border-rose-400/30 dark:bg-[rgba(190,24,93,0.16)] dark:text-rose-100",
+          "bg-[rgba(244,63,94,0.1)] text-rose-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] dark:bg-[rgba(190,24,93,0.16)] dark:text-rose-100",
       };
     default:
       return {
         label: "차트 중립",
         className:
-          "border-[rgba(91,112,141,0.26)] bg-[rgba(220,229,241,0.92)] text-[#40546f] dark:border-[rgba(148,163,184,0.26)] dark:bg-[rgba(148,163,184,0.14)] dark:text-slate-100",
+          "bg-[rgba(220,229,241,0.92)] text-[#40546f] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:bg-[rgba(148,163,184,0.14)] dark:text-slate-100",
       };
   }
 }
 
 function getRecommendationMeta(score: number) {
   if (score >= 60) {
-    return {
-      label: "강력 추천",
-      cardClassName:
-        "border-[rgba(5,192,114,0.24)] bg-[rgba(5,192,114,0.12)] dark:border-[rgba(5,192,114,0.22)] dark:bg-[rgba(5,192,114,0.16)]",
-      badgeClassName:
-        "border border-[rgba(5,192,114,0.36)] bg-[var(--positive-text)] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.22)] dark:border-[rgba(5,192,114,0.28)] dark:bg-[rgba(5,192,114,0.22)] dark:text-[var(--positive-text)]",
+      return {
+        label: "강력 추천",
+        cardClassName:
+          "bg-[rgba(5,192,114,0.12)] shadow-[inset_0_1px_0_rgba(255,255,255,0.44)] dark:bg-[rgba(5,192,114,0.16)]",
+        badgeClassName:
+          "border border-[rgba(5,192,114,0.36)] bg-[var(--positive-text)] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.22)] dark:border-[rgba(5,192,114,0.28)] dark:bg-[rgba(5,192,114,0.22)] dark:text-[var(--positive-text)]",
       scoreClassName: "text-[var(--positive-text)]",
     };
   }
 
   if (score >= 30) {
-    return {
-      label: "추천",
-      cardClassName:
-        "border-[rgba(5,192,114,0.18)] bg-[rgba(5,192,114,0.08)] dark:border-[rgba(5,192,114,0.18)] dark:bg-[rgba(5,192,114,0.12)]",
-      badgeClassName:
-        "border border-[rgba(5,192,114,0.26)] bg-[rgba(5,192,114,0.14)] text-[var(--positive-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] dark:border-[rgba(5,192,114,0.24)] dark:bg-[rgba(5,192,114,0.18)] dark:text-[var(--positive-text)]",
+      return {
+        label: "추천",
+        cardClassName:
+          "bg-[rgba(5,192,114,0.08)] shadow-[inset_0_1px_0_rgba(255,255,255,0.44)] dark:bg-[rgba(5,192,114,0.12)]",
+        badgeClassName:
+          "border border-[rgba(5,192,114,0.26)] bg-[rgba(5,192,114,0.14)] text-[var(--positive-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] dark:border-[rgba(5,192,114,0.24)] dark:bg-[rgba(5,192,114,0.18)] dark:text-[var(--positive-text)]",
       scoreClassName: "text-[var(--positive-text)]",
     };
   }
 
   if (score <= -60) {
-    return {
-      label: "주의",
-      cardClassName:
-        "border-rose-200 bg-[rgba(244,63,94,0.12)] dark:border-rose-400/34 dark:bg-[rgba(190,24,93,0.18)]",
-      badgeClassName:
-        "border border-rose-200 bg-rose-100 text-rose-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.48)] dark:border-rose-400/30 dark:bg-rose-500/18 dark:text-rose-200",
+      return {
+        label: "주의",
+        cardClassName:
+          "bg-[rgba(244,63,94,0.12)] shadow-[inset_0_1px_0_rgba(255,255,255,0.44)] dark:bg-[rgba(190,24,93,0.18)]",
+        badgeClassName:
+          "border border-rose-200 bg-rose-100 text-rose-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.48)] dark:border-rose-400/30 dark:bg-rose-500/18 dark:text-rose-200",
       scoreClassName: "text-rose-700 dark:text-rose-200",
     };
   }
 
   if (score <= -30) {
-    return {
-      label: "관망",
-      cardClassName:
-        "border-amber-200 bg-[rgba(251,191,36,0.12)] dark:border-amber-400/30 dark:bg-[rgba(217,119,6,0.18)]",
-      badgeClassName:
-        "border border-amber-200 bg-amber-100 text-amber-800 shadow-[inset_0_1px_0_rgba(255,255,255,0.48)] dark:border-amber-400/30 dark:bg-amber-500/16 dark:text-amber-200",
+      return {
+        label: "관망",
+        cardClassName:
+          "bg-[rgba(251,191,36,0.12)] shadow-[inset_0_1px_0_rgba(255,255,255,0.44)] dark:bg-[rgba(217,119,6,0.18)]",
+        badgeClassName:
+          "border border-amber-200 bg-amber-100 text-amber-800 shadow-[inset_0_1px_0_rgba(255,255,255,0.48)] dark:border-amber-400/30 dark:bg-amber-500/16 dark:text-amber-200",
       scoreClassName: "text-amber-700 dark:text-amber-200",
     };
   }
@@ -514,7 +517,7 @@ function getRecommendationMeta(score: number) {
   return {
     label: "중립",
     cardClassName:
-      "border-[rgba(91,112,141,0.28)] bg-[rgba(220,229,241,0.94)] dark:border-[rgba(148,163,184,0.26)] dark:bg-[rgba(148,163,184,0.14)]",
+      "bg-[rgba(220,229,241,0.94)] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:bg-[rgba(148,163,184,0.14)]",
     badgeClassName:
       "border border-[rgba(91,112,141,0.28)] bg-[rgba(205,218,235,0.98)] text-[#31465f] shadow-[inset_0_1px_0_rgba(255,255,255,0.56)] dark:border-[rgba(148,163,184,0.28)] dark:bg-[rgba(148,163,184,0.2)] dark:text-slate-100",
     scoreClassName: "text-[#304566] dark:text-slate-50",
@@ -567,15 +570,15 @@ function PrimaryQuoteCard({
   const detailToneClass = getQuoteTextToneClass(detailTone);
 
   return (
-    <div className={`surface-card rounded-[15px] px-2.5 py-2 md:rounded-[18px] md:px-3.5 md:py-3 ${className ?? ""}`}>
-      <div className="text-[11px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-300">현재가</div>
-      <div className="mt-1.5 flex items-start justify-between gap-3">
+    <div className={`surface-card-strong rounded-[14px] px-3 py-2.5 md:rounded-[16px] md:px-3.5 md:py-3 ${className ?? ""}`}>
+      <div className="text-[10px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-300">현재가</div>
+      <div className="mt-1 flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <div className="break-keep text-[15px] font-extrabold tracking-tight text-slate-950 tabular-nums dark:text-slate-50 md:text-xl">
+          <div className="break-keep text-[14px] font-extrabold tracking-tight text-slate-950 tabular-nums dark:text-slate-50 md:text-[18px]">
             {price}
           </div>
           {detail ? (
-            <div className={`mt-0.5 break-keep text-[10px] font-semibold tabular-nums md:text-[11px] ${detailToneClass}`}>
+            <div className={`mt-0.5 break-keep text-[9px] font-semibold tabular-nums md:text-[10px] ${detailToneClass}`}>
               {detail}
             </div>
           ) : null}
@@ -605,6 +608,8 @@ function RecommendationCard({
 }) {
   const [pinnedOpen, setPinnedOpen] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [tooltipStyle, setTooltipStyle] = useState<CSSProperties | null>(null);
+  const triggerRef = useRef<HTMLDivElement | null>(null);
   const explanationItems = [
     ...signal.reasons.slice(0, 2),
     ...signal.risks.slice(0, 1),
@@ -632,15 +637,50 @@ function RecommendationCard({
     typeof window !== "undefined" &&
     window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
+  useEffect(() => {
+    if (!open || !triggerRef.current || typeof window === "undefined") {
+      return;
+    }
+
+    const updatePosition = () => {
+      if (!triggerRef.current) {
+        return;
+      }
+
+      const rect = triggerRef.current.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const tooltipWidth = Math.min(280, viewportWidth - 32);
+      const left = Math.max(16, Math.min(rect.right - tooltipWidth, viewportWidth - tooltipWidth - 16));
+
+      setTooltipStyle({
+        position: "fixed",
+        top: rect.bottom + 8,
+        left,
+        width: tooltipWidth,
+        zIndex: 200,
+      });
+    };
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+    };
+  }, [open]);
+
   return (
     <div
-      className={`relative z-20 min-w-0 rounded-[15px] border px-2.5 py-2 ${recommendation.cardClassName} md:rounded-[18px] md:px-3.5 md:py-3 ${className ?? ""}`}
+      className={`relative z-20 min-w-0 rounded-[14px] px-3 py-2.5 ${recommendation.cardClassName} md:rounded-[16px] md:px-3.5 md:py-3 ${className ?? ""}`}
     >
       <div className="flex items-center justify-between gap-3">
-        <div className="text-[11px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-300">
+        <div className="text-[10px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-300">
           추천 점수
         </div>
         <div
+          ref={triggerRef}
           className="relative shrink-0"
           onMouseEnter={() => {
             if (supportsHover()) {
@@ -656,7 +696,7 @@ function RecommendationCard({
           <button
             aria-expanded={open}
             aria-label={open ? "추천 점수 설명 닫기" : "추천 점수 설명 보기"}
-            className="brand-outline-hover inline-flex h-4 w-4 items-center justify-center rounded-full border border-[var(--brand-soft-strong)] bg-white/96 text-[var(--brand-strong)] dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-100"
+            className="inline-flex h-4.5 w-4.5 items-center justify-center rounded-full bg-[rgba(73,178,255,0.14)] text-sky-700 shadow-[0_6px_16px_rgba(73,178,255,0.18)] hover:bg-[rgba(73,178,255,0.22)] dark:bg-[rgba(73,178,255,0.18)] dark:text-sky-100 dark:shadow-[0_8px_18px_rgba(18,40,72,0.34)] dark:hover:bg-[rgba(73,178,255,0.26)]"
             type="button"
             onClick={() => {
               setPinnedOpen((current) => !current);
@@ -667,10 +707,14 @@ function RecommendationCard({
               }
             }}
           >
-            <IconSparkles size={10} stroke={2.2} />
+            <IconSparkles size={10} stroke={2.15} />
           </button>
-          {open ? (
-            <div className="absolute right-0 top-full z-40 mt-2 w-[min(300px,calc(100vw-2.5rem))] rounded-[16px] border border-[var(--brand-soft-strong)] bg-[var(--surface-card)] px-3 py-3 text-[11px] leading-5 text-slate-600 shadow-[0_22px_60px_rgba(15,23,42,0.16)] dark:border-white/10 dark:bg-[var(--surface-1)] dark:text-slate-300 dark:shadow-[0_24px_64px_rgba(2,6,23,0.42)]">
+          {open && tooltipStyle && typeof document !== "undefined"
+            ? createPortal(
+                <div
+                  className="rounded-[14px] border border-[var(--brand-soft-strong)] bg-[var(--surface-card)] px-3 py-3 text-[11px] leading-5 text-slate-600 shadow-[0_22px_60px_rgba(15,23,42,0.16)] dark:border-white/10 dark:bg-[var(--surface-1)] dark:text-slate-300 dark:shadow-[0_24px_64px_rgba(2,6,23,0.42)]"
+                  style={tooltipStyle}
+                >
               <div className="mb-3 rounded-[14px] bg-[var(--surface-card-strong)] p-3 dark:bg-white/[0.04]">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -686,7 +730,7 @@ function RecommendationCard({
                   </div>
                 </div>
                 <div className="mt-3">
-                  <div className="relative flex h-2.5 overflow-hidden rounded-full bg-white/10 dark:bg-white/8">
+                   <div className="relative flex h-2.5 overflow-hidden rounded-full bg-white/40 dark:bg-white/8">
                     <span className="h-full w-1/3 bg-[rgba(240,66,81,0.75)]" />
                     <span className="h-full w-1/3 bg-slate-300 dark:bg-slate-600" />
                     <span className="h-full w-1/3 bg-[rgba(5,192,114,0.75)]" />
@@ -712,20 +756,22 @@ function RecommendationCard({
                   ))}
                 </ul>
               ) : null}
-            </div>
-          ) : null}
+                </div>,
+                document.body,
+              )
+            : null}
         </div>
       </div>
       <div className="mt-1.5 flex items-end justify-between gap-3">
-        <div className={`text-[1.05rem] font-extrabold tracking-tight tabular-nums md:text-[1.75rem] ${recommendation.scoreClassName}`}>
+        <div className={`text-[1rem] font-extrabold tracking-tight tabular-nums md:text-[1.4rem] ${recommendation.scoreClassName}`}>
           {score}
         </div>
-        <div className={`shrink-0 rounded-[14px] px-2 py-1 text-right ${recommendation.badgeClassName}`}>
-          <div className="text-[10px] font-semibold md:text-[11px]">{recommendation.label}</div>
+        <div className={`shrink-0 rounded-[10px] px-2 py-0.5 text-right ${recommendation.badgeClassName}`}>
+          <div className="text-[9px] font-semibold md:text-[10px]">{recommendation.label}</div>
         </div>
       </div>
       {scoreDeltaText ? (
-        <div className={`mt-0.5 text-[10px] font-semibold md:text-[11px] ${scoreDeltaToneClass}`}>{scoreDeltaText}</div>
+        <div className={`mt-0.5 text-[9px] font-semibold md:text-[10px] ${scoreDeltaToneClass}`}>{scoreDeltaText}</div>
       ) : null}
     </div>
   );
@@ -746,14 +792,14 @@ function SegmentTabs<T extends string>({
   return (
     <div className="max-w-full">
       <div
-        className={`grid gap-1.5 rounded-[18px] bg-[var(--surface-card-strong)] p-1 dark:bg-white/[0.04] ${mobileGridCols} md:inline-flex md:min-w-full`}
+        className={`grid gap-0.75 rounded-[10px] bg-[var(--surface-card-strong)] p-0.5 dark:bg-white/[0.04] ${mobileGridCols} md:inline-flex md:min-w-full md:rounded-[12px]`}
       >
         {items.map((item) => {
           const active = item.value === value;
           return (
             <button
               key={item.value}
-              className={`min-w-0 rounded-full px-2.5 py-1.5 text-[11px] font-semibold md:shrink-0 md:whitespace-nowrap md:px-3 md:text-xs ${
+                className={`min-w-0 rounded-[8px] px-1.5 py-1 text-[9px] font-semibold md:shrink-0 md:whitespace-nowrap md:px-2 md:text-[10px] ${
                 active
                   ? "brand-tab-active"
                   : "brand-soft-hover text-slate-500 dark:text-slate-300"
@@ -783,10 +829,10 @@ function AiInsightCard({
 }) {
   const toneClass =
     tone === "brand"
-      ? "border-[rgba(var(--brand-rgb),0.2)] bg-[var(--surface-card)] dark:border-[rgba(73,178,255,0.22)] dark:bg-white/[0.05]"
+      ? "bg-[var(--surface-card)] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:bg-white/[0.05]"
       : tone === "risk"
-        ? "border-amber-300/90 bg-[var(--surface-card)] dark:border-amber-400/28 dark:bg-white/[0.05]"
-        : "border-[rgba(var(--brand-rgb),0.18)] bg-[var(--surface-card)] dark:border-[rgba(136,182,255,0.16)] dark:bg-white/[0.05]";
+        ? "bg-[var(--surface-card)] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:bg-white/[0.05]"
+        : "bg-[var(--surface-card)] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:bg-white/[0.05]";
 
   const labelClass =
     tone === "brand"
@@ -796,8 +842,8 @@ function AiInsightCard({
         : "bg-[var(--brand-soft)] text-[var(--brand-strong)] dark:bg-white/[0.06] dark:text-slate-100";
 
   return (
-    <div className={`rounded-[18px] border p-3 ${toneClass} md:rounded-[20px] md:p-3.5`}>
-      <div className={`inline-flex rounded-full px-2.5 py-1 text-[11px] font-bold tracking-[0.04em] ${labelClass}`}>
+    <div className={`rounded-[14px] p-2.5 ${toneClass} md:rounded-[16px] md:p-3`}>
+      <div className={`inline-flex rounded-full px-2 py-0.75 text-[10px] font-bold tracking-[0.04em] ${labelClass}`}>
         {label}
       </div>
       <p className="mt-2 break-keep text-[13px] font-semibold leading-5 text-slate-800 dark:text-slate-100 md:text-sm">
@@ -814,7 +860,7 @@ function AiInsightCard({
 
 function AiLoadingCard() {
   return (
-    <div className="ai-glow rounded-[24px] border border-[rgba(123,97,255,0.14)] px-4 py-5 text-sm text-slate-600 dark:border-[rgba(157,196,255,0.14)] dark:text-slate-200">
+    <div className="ai-glow rounded-[18px] px-4 py-4 text-sm text-slate-600 shadow-[0_18px_42px_rgba(35,60,124,0.12)] dark:text-slate-200">
       <div className="ai-gradient-text text-xs font-semibold tracking-[0.12em]">
         AI 브리핑
       </div>
@@ -823,11 +869,21 @@ function AiLoadingCard() {
   );
 }
 
+function AnalyzeInitialLoading({ stock }: { stock: StockLookupItem }) {
+  return (
+    <main className="mx-auto flex min-h-[calc(100vh-132px)] max-w-5xl items-center px-4 pb-12 pt-5 md:px-6 md:pt-8">
+      <section className="glass-card w-full rounded-[24px] p-4 md:rounded-[28px] md:p-6">
+        <AnimatedLoadingStage stock={stock} />
+      </section>
+    </main>
+  );
+}
+
 function RefreshingBadge({ compact = false }: { compact?: boolean }) {
   return (
     <div
-      className={`inline-flex items-center gap-1.5 rounded-full border border-[var(--brand-soft-strong)] bg-[rgba(var(--brand-rgb),0.14)] font-bold text-[var(--brand-strong)] shadow-[0_10px_24px_rgba(36,87,135,0.12)] dark:border-[rgba(136,182,255,0.22)] dark:bg-[rgba(73,178,255,0.14)] dark:text-slate-50 ${
-        compact ? "px-2.5 py-1 text-[11px]" : "px-3 py-1.5 text-xs"
+      className={`inline-flex items-center gap-1.5 rounded-full bg-[rgba(var(--brand-rgb),0.14)] font-bold text-[var(--brand-strong)] shadow-[0_10px_24px_rgba(36,87,135,0.12)] dark:bg-[rgba(73,178,255,0.14)] dark:text-slate-50 ${
+        compact ? "px-2 py-0.75 text-[10px]" : "px-2.5 py-1.25 text-[11px]"
       }`}
     >
       <span className="relative inline-flex h-2.5 w-2.5 shrink-0">
@@ -955,7 +1011,7 @@ function SignalRail({
   const rail = getToneRailClasses(tone);
 
   return (
-    <div className="rounded-[14px] bg-[var(--surface-card-strong)] px-3 py-2.5 dark:bg-white/[0.04]">
+    <div className="rounded-[14px] bg-[var(--surface-card)] px-3 py-2.5 dark:bg-white/[0.04] md:rounded-[16px]">
       <div className="flex items-center justify-between gap-3">
         <div className="text-[10px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
           {label}
@@ -1053,8 +1109,18 @@ export function AnalysisPageClient({
     initialRecommendationSignal,
   );
   const [aiRequested, setAiRequested] = useState(isAiUserSignedIn ? shouldAutoFetchAi : false);
+  const [minIntroReady, setMinIntroReady] = useState(false);
+  const [revealPhase, setRevealPhase] = useState(0);
   const skipInitialDataFetch = useRef(Boolean(initialTechnicalPayload && !initialError));
   const isIntradayView = isIntradayInterval(interval);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setMinIntroReady(true);
+    }, 4300);
+
+    return () => window.clearTimeout(timeoutId);
+  }, []);
 
   useEffect(() => {
     if (skipInitialDataFetch.current && interval === DEFAULT_INTERVAL && range === DEFAULT_RANGE) {
@@ -1151,6 +1217,28 @@ export function AnalysisPageClient({
     ? `${stock.symbol}:${technicalPayload.interval}:${technicalPayload.range}`
     : null;
   const isRefreshing = Boolean(technicalPayload) && currentSelectionKey !== loadedSelectionKey;
+
+  useEffect(() => {
+    if (isInitialLoading || !minIntroReady) {
+      const resetTimer = window.setTimeout(() => {
+        setRevealPhase(0);
+      }, 0);
+
+      return () => window.clearTimeout(resetTimer);
+    }
+
+    const schedule = [120, 320, 560, 820, 1120, 1460, 1820];
+    const timers = schedule.map((delay, index) =>
+      window.setTimeout(() => {
+        setRevealPhase(index + 1);
+      }, delay),
+    );
+
+    return () => {
+      timers.forEach((timerId) => window.clearTimeout(timerId));
+    };
+  }, [stock.symbol, loadedSelectionKey, isInitialLoading, minIntroReady]);
+
   const aiSummary = aiState.summary;
   const canUseAi = isAiUserSignedIn;
   const sma5State = getAverageMetricState(technical?.currentPrice, technical?.sma5);
@@ -1286,89 +1374,115 @@ export function AnalysisPageClient({
     },
   ];
 
+  if (isInitialLoading || !minIntroReady) {
+    return <AnalyzeInitialLoading stock={stock} />;
+  }
+
   return (
-    <main className="mx-auto max-w-6xl px-4 pb-12 pt-4 md:px-7 md:pb-14 md:pt-6">
-      <div className="flex flex-col gap-3.5 md:gap-5">
-        <div className="min-w-0">
-          <StockSearch featured={featured} variant="inline" />
+    <main className="mx-auto max-w-6xl px-3.5 pb-8 pt-3.5 md:px-6 md:pb-12 md:pt-5">
+      <div
+        key={`${stock.symbol}:${loadedSelectionKey ?? "ready"}`}
+        className="flex flex-col gap-3.5 md:gap-4"
+      >
+        <div
+          className={`waterfall-item flex items-center gap-2 md:gap-2.5 ${revealPhase >= 1 ? "is-visible" : ""}`}
+        >
+          <Link
+            aria-label="홈으로 이동"
+            className="brand-soft-hover inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] text-[var(--brand-strong)] dark:text-slate-100 md:h-10 md:w-10 md:rounded-[14px]"
+            href="/"
+          >
+            <IconHome2 size={15} stroke={2} />
+          </Link>
+          <div className="min-w-0 flex-1">
+            <StockSearch featured={featured} variant="inline" />
+          </div>
         </div>
 
-        <section className="glass-card relative z-10 overflow-visible rounded-[20px] p-2.5 md:rounded-[24px] md:p-4">
-          <div className="flex min-w-0 items-start gap-3">
-            <StockAvatar size="lg" stock={stock} />
+        <section
+          className={`waterfall-item glass-card relative z-10 overflow-visible rounded-[14px] p-2 md:rounded-[22px] md:p-4 ${revealPhase >= 2 ? "is-visible" : ""}`}
+        >
+            <div
+              className={`waterfall-item flex min-w-0 items-start gap-3 ${revealPhase >= 2 ? "is-visible" : ""}`}
+              style={{ "--waterfall-delay": "120ms" } as CSSProperties}
+            >
+            <StockAvatar size="sm" stock={stock} />
             <div className="min-w-0 flex-1">
-              <h1 className="mt-0.5 break-keep text-[1.35rem] font-extrabold tracking-tight text-slate-950 dark:text-slate-50 md:mt-1 md:text-[2rem]">
+              <h1 className="mt-0.5 break-keep text-[1rem] font-extrabold tracking-tight text-slate-950 dark:text-slate-50 md:mt-1 md:text-[1.7rem]">
                 {stock.name}
               </h1>
-              <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs md:text-sm">
-                <span className="inline-flex items-center rounded-full border border-slate-200/80 bg-[var(--surface-card)] px-2.5 py-1 font-semibold text-slate-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-200">
+              <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[10px] md:text-[12px]">
+                <span className="inline-flex items-center rounded-full bg-[var(--surface-pill)] px-2 py-0.75 font-semibold text-slate-600 dark:bg-white/[0.06] dark:text-slate-200">
                   {stock.symbol}
                 </span>
-                <span className="inline-flex items-center rounded-full border border-slate-200/80 bg-[var(--surface-card)] px-2.5 py-1 font-semibold text-slate-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-200">
+                <span className="inline-flex items-center rounded-full bg-[var(--surface-pill)] px-2 py-0.75 font-semibold text-slate-600 dark:bg-white/[0.06] dark:text-slate-200">
                   {stock.market}
                 </span>
               </div>
             </div>
-          </div>
-          <div className="mt-2.5 grid gap-2.5 xl:grid-cols-[minmax(0,1fr)_minmax(320px,340px)] xl:items-stretch">
-            <div className="surface-card h-full rounded-[16px] p-2.5 md:rounded-[20px] md:p-3.5">
+            </div>
+              <div
+                className={`waterfall-item mt-2 grid gap-2 xl:grid-cols-[minmax(0,1fr)_minmax(320px,344px)] xl:items-stretch ${revealPhase >= 3 ? "is-visible" : ""}`}
+                style={{ "--waterfall-delay": "80ms" } as CSSProperties}
+              >
+            <div className="surface-card h-full rounded-[12px] p-2 md:rounded-[18px] md:p-3">
               <div className="flex items-start gap-3">
                 <div
-                  className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] border md:h-14 md:w-14 md:rounded-[18px]"
+                  className="inline-flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-[10px] md:h-12 md:w-12 md:rounded-[14px]"
                   style={companyContextVisuals.headlineStyle as CSSProperties}
                 >
                   <span
-                    className="inline-flex h-7 w-7 items-center justify-center rounded-[10px] md:h-10 md:w-10 md:rounded-[14px]"
+                    className="inline-flex h-6 w-6 items-center justify-center rounded-[8px] md:h-8 md:w-8 md:rounded-[10px]"
                     style={companyContextVisuals.headlineIconStyle}
                   >
-                    <HeadlineIcon size={19} stroke={companyContextVisuals.sectorIconStroke} />
+                    <HeadlineIcon size={16} stroke={companyContextVisuals.sectorIconStroke} />
                   </span>
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <div className="text-[10px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                      <div className="text-[9px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
                         종목 정보
                       </div>
-                      <p className="mt-1 break-keep text-[12px] font-bold leading-4.5 text-slate-900 dark:text-slate-50 md:text-[15px] md:leading-5">
+                      <p className="mt-1 break-keep text-[11px] font-bold leading-4 text-slate-900 dark:text-slate-50 md:text-[14px] md:leading-5">
                         {companyContextHeadline}
                       </p>
                     </div>
-                    <div
-                      className={`shrink-0 rounded-full border px-2.5 py-1 text-[11px] font-semibold ${signalBiasMeta.className}`}
-                    >
+                     <div
+                       className={`shrink-0 rounded-full px-2 py-0.75 text-[9px] font-semibold ${signalBiasMeta.className}`}
+                     >
                       {signalBiasMeta.label}
                     </div>
                   </div>
-                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                  <div className="mt-2 flex flex-wrap items-center gap-1.5">
                     <div
-                      className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold [border-color:var(--chip-border)] [background-color:var(--chip-bg)] [color:var(--chip-text)] dark:[border-color:var(--chip-border-dark)] dark:[background-color:var(--chip-bg-dark)] dark:[color:var(--chip-text-dark)]"
+                      className="inline-flex items-center gap-1 rounded-full px-1.75 py-0.5 text-[9px] font-semibold [background-color:var(--chip-bg)] [color:var(--chip-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] dark:[background-color:var(--chip-bg-dark)] dark:[color:var(--chip-text-dark)]"
                       style={companyContextVisuals.groupChipStyle as CSSProperties}
                     >
                       {companyContextVisuals.brandLabel}
                     </div>
                     <div
-                      className="inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[11px] font-semibold [border-color:var(--chip-border)] [background-color:var(--chip-bg)] [color:var(--chip-text)] dark:[border-color:var(--chip-border-dark)] dark:[background-color:var(--chip-bg-dark)] dark:[color:var(--chip-text-dark)]"
+                      className="inline-flex items-center gap-1 rounded-full px-1.75 py-0.5 text-[9px] font-semibold [background-color:var(--chip-bg)] [color:var(--chip-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] dark:[background-color:var(--chip-bg-dark)] dark:[color:var(--chip-text-dark)]"
                       style={companyContextVisuals.sectorChipStyle as CSSProperties}
                     >
                       <span
-                        className="inline-flex h-5 w-5 items-center justify-center rounded-full [background-color:var(--chip-icon-bg)] [color:var(--chip-icon-color)] dark:[background-color:var(--chip-icon-bg-dark)] dark:[color:var(--chip-icon-color-dark)]"
+                        className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full [background-color:var(--chip-icon-bg)] [color:var(--chip-icon-color)] dark:[background-color:var(--chip-icon-bg-dark)] dark:[color:var(--chip-icon-color-dark)]"
                         style={companyContextVisuals.sectorIconStyle as CSSProperties}
                       >
-                        <ContextSectorIcon size={13} stroke={companyContextVisuals.sectorIconStroke} />
+                        <ContextSectorIcon size={11} stroke={companyContextVisuals.sectorIconStroke} />
                       </span>
                       {companyContext.sector}
                     </div>
                   </div>
-                  <p className="mt-1.5 break-keep text-[11px] leading-4.5 text-slate-500 dark:text-slate-300 md:text-[13px] md:leading-5">
+                  <p className="mt-1.5 break-keep text-[10px] leading-4 text-slate-500 dark:text-slate-300 md:text-[12px] md:leading-5">
                     {companyContextBrief}
                   </p>
                 </div>
               </div>
             </div>
-            <div className="grid min-w-0 auto-rows-fr gap-2 sm:grid-cols-2">
+             <div className="grid min-w-0 grid-cols-2 auto-rows-fr gap-2.5">
               <PrimaryQuoteCard
-                className="order-1 h-full sm:order-2"
+                className="order-1 h-full"
                 price={hasValidQuote && quote ? formatPrice(quote.currentPrice) : "-"}
                 detail={
                   hasValidQuote && quote
@@ -1379,62 +1493,67 @@ export function AnalysisPageClient({
               />
               {recommendationSignal && recommendation ? (
                 <RecommendationCard
-                  className="order-2 h-full sm:order-1"
+                  className="order-2 h-full"
                   recommendation={recommendation}
                   score={recommendationSignal.score}
                   signal={recommendationSignal}
                   comparisonLabel={scoreComparisonLabel}
                 />
               ) : null}
-              <div className="order-3 grid gap-1.5 sm:col-span-2 sm:grid-cols-3 sm:gap-2">
+              <div className="order-3 col-span-2 grid gap-1.5 sm:grid-cols-3 sm:gap-2">
                 <PerformanceChip label="올해 수익률" value={ytdReturn} />
                 <PerformanceChip label="최근 1개월" value={monthlyReturn} />
                 <PerformanceChip label="최근 1주" value={weeklyReturn} />
               </div>
             </div>
-          </div>
-            <div className="mt-2.5 surface-card rounded-[16px] p-2.5 md:mt-4 md:rounded-[20px] md:p-3.5">
-              <div className="text-[10px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
+              </div>
+             <div
+               className={`waterfall-item mt-2 surface-card rounded-[12px] p-2 md:mt-3 md:rounded-[18px] md:p-3 ${revealPhase >= 4 ? "is-visible" : ""}`}
+               style={{ "--waterfall-delay": "120ms" } as CSSProperties}
+             >
+              <div className="text-[9px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
                 기업 포인트
               </div>
-              <p className="mt-1.5 break-keep text-[11px] leading-4.5 text-slate-600 dark:text-slate-300 md:text-[13px] md:leading-5">
+              <p className="mt-1.5 break-keep text-[10px] leading-4 text-slate-600 dark:text-slate-300 md:text-[12px] md:leading-5">
                 {companyContext.marketPosition}
               </p>
               {companyContext.cautionNote ? (
-                <div className="mt-2 rounded-[12px] border border-amber-200/90 bg-[rgba(251,191,36,0.12)] px-2.5 py-2 text-[10px] font-medium leading-4.5 text-amber-800 dark:border-amber-400/20 dark:bg-[rgba(217,119,6,0.16)] dark:text-amber-100 md:px-3 md:text-[11px] md:leading-5">
+                <div className="mt-2 rounded-[12px] bg-[rgba(251,191,36,0.12)] px-2.5 py-2 text-[9px] font-medium leading-4 text-amber-800 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] dark:bg-[rgba(217,119,6,0.16)] dark:text-amber-100 md:px-3 md:text-[10px] md:leading-5">
                   {companyContext.cautionNote}
                 </div>
               ) : null}
-            <div className="mt-3">
-              <div className="mb-2 text-[10px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                신호 보드
+              <div className="mt-3">
+                <div className="mb-2 text-[9px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                  신호 보드
+                </div>
+                <div className="grid gap-1.5 sm:grid-cols-2 xl:grid-cols-4">
+                  {headerSignalItems.map((item) => (
+                    <SignalRail
+                      key={item.label}
+                      label={item.label}
+                      value={item.value}
+                      helper={item.helper}
+                      percent={item.percent}
+                      tone={item.tone}
+                    />
+                  ))}
+                </div>
               </div>
-              <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
-                {headerSignalItems.map((item) => (
-                  <SignalRail
-                    key={item.label}
-                    label={item.label}
-                    value={item.value}
-                    helper={item.helper}
-                    percent={item.percent}
-                    tone={item.tone}
-                  />
-                ))}
+              <div className="mt-2 rounded-[12px] bg-[var(--surface-card-strong)] px-2 py-2 dark:bg-white/[0.04]">
+                <div className="text-[9px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                  업종 포인트
+                </div>
+                <p className="mt-1 break-keep text-[11px] leading-4.5 text-slate-600 dark:text-slate-300">
+                  {companyContext.industryFlow}
+                </p>
               </div>
             </div>
-            <div className="mt-3 rounded-[14px] border border-slate-200/90 bg-[var(--surface-card-strong)] px-3 py-2 dark:border-white/10 dark:bg-white/[0.04]">
-              <div className="text-[10px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                업종 포인트
-              </div>
-              <p className="mt-1 break-keep text-[12px] leading-5 text-slate-600 dark:text-slate-300">
-                {companyContext.industryFlow}
-              </p>
-            </div>
-          </div>
-        </section>
+          </section>
 
         {error ? (
-          <section className="glass-card rounded-[32px] p-8 text-center">
+          <section
+            className={`waterfall-item glass-card rounded-[32px] p-8 text-center ${revealPhase >= 2 ? "is-visible" : ""}`}
+          >
             <div className="text-lg font-semibold text-slate-900">데이터를 불러오지 못했습니다.</div>
             <p className="mt-2 break-keep text-sm text-slate-500">{error}</p>
             <button
@@ -1447,24 +1566,26 @@ export function AnalysisPageClient({
           </section>
         ) : null}
 
-        <div className="grid gap-4 xl:grid-cols-[minmax(0,1.74fr)_minmax(280px,0.9fr)] xl:items-start">
-          <section className="glass-card self-start overflow-hidden rounded-[22px] p-3 md:rounded-[24px] md:p-5">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="grid gap-3.5 xl:grid-cols-[minmax(0,1.72fr)_minmax(280px,0.92fr)] xl:items-start">
+            <section
+              className={`waterfall-item glass-card self-start overflow-hidden rounded-[14px] p-2.5 md:rounded-[24px] md:p-4 ${revealPhase >= 5 ? "is-visible" : ""}`}
+            >
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
-                <h2 className="text-base font-bold text-slate-950 dark:text-slate-50 md:text-lg">가격 차트</h2>
+                <h2 className="text-[15px] font-bold text-slate-950 dark:text-slate-50 md:text-[17px]">가격 차트</h2>
                 <p className="mt-1 hidden break-keep text-xs leading-5 text-slate-500 dark:text-slate-300 md:block">
                   최근 흐름부터 보고, 필요한 봉 간격만 바꿔 확인할 수 있습니다.
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
-                <div className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600 dark:bg-white/[0.06] dark:text-slate-200">
+                <div className="rounded-full bg-slate-100 px-1.75 py-0.5 text-[9px] font-semibold text-slate-600 dark:bg-white/[0.06] dark:text-slate-200">
                   {candlesPayload?.provider === "demo" ? "Demo" : "KIS"}
                 </div>
                 {isRefreshing ? <RefreshingBadge compact /> : null}
               </div>
             </div>
 
-            <div className="relative mt-3 max-w-full overflow-hidden rounded-[20px] bg-white/70 p-1.5 md:mt-4 md:rounded-[22px] md:p-3">
+            <div className="relative mt-2 max-w-full overflow-hidden rounded-[14px] bg-[var(--surface-3)] p-1 md:mt-3 md:rounded-[20px] md:p-2">
               {isRefreshing ? (
                 <div className="pointer-events-none absolute right-3 top-3 z-10">
                   <RefreshingBadge />
@@ -1474,7 +1595,7 @@ export function AnalysisPageClient({
                 <StockChart candles={candlesPayload.candles} />
               ) : (
                 <div
-                  className={`flex h-[320px] flex-col items-center justify-center rounded-[24px] px-6 text-center md:h-[420px] ${
+                  className={`flex h-[300px] flex-col items-center justify-center rounded-[18px] px-6 text-center md:h-[390px] ${
                     chartUnavailable
                       ? "bg-slate-100 text-slate-600 dark:bg-white/[0.05] dark:text-slate-200"
                       : "bg-slate-50 text-slate-400 dark:bg-[var(--surface-3)] dark:text-slate-400"
@@ -1497,8 +1618,8 @@ export function AnalysisPageClient({
             </div>
 
             <div className="mt-2.5 grid gap-2">
-              <div className="soft-panel rounded-[18px] p-2 md:rounded-[20px] md:p-2.5">
-                <div className="mb-2 text-[11px] font-semibold tracking-[0.14em] text-slate-500">
+              <div className="soft-panel rounded-[12px] p-1.5 md:rounded-[16px] md:p-2.5">
+                <div className="mb-1.5 text-[9px] font-semibold tracking-[0.12em] text-slate-500">
                   캔들 간격
                 </div>
                 <SegmentTabs
@@ -1517,8 +1638,8 @@ export function AnalysisPageClient({
               </div>
 
               {isIntradayView ? (
-                <div className="soft-panel rounded-[18px] p-2 md:rounded-[20px] md:p-2.5">
-                  <div className="mb-2 text-[11px] font-semibold tracking-[0.14em] text-slate-500">
+                <div className="soft-panel rounded-[12px] p-1.5 md:rounded-[16px] md:p-2.5">
+                  <div className="mb-1.5 text-[9px] font-semibold tracking-[0.12em] text-slate-500">
                     조회 범위
                   </div>
                   <SegmentTabs
@@ -1528,11 +1649,11 @@ export function AnalysisPageClient({
                   />
                 </div>
               ) : (
-                <div className="soft-panel rounded-[18px] p-2 md:rounded-[20px] md:p-2.5">
-                  <div className="mb-2 text-[11px] font-semibold tracking-[0.14em] text-slate-500">
+                <div className="soft-panel rounded-[12px] p-1.5 md:rounded-[16px] md:p-2.5">
+                  <div className="mb-1.5 text-[9px] font-semibold tracking-[0.12em] text-slate-500">
                     표시 기준
                   </div>
-                  <div className="rounded-[14px] border border-[var(--brand-soft-strong)] bg-[var(--brand-soft)] px-3 py-2 text-[12px] font-semibold text-[var(--brand-strong)] dark:border-white/10 dark:bg-white/6 dark:text-slate-100 md:rounded-[16px] md:py-2.5 md:text-sm">
+                  <div className="rounded-[10px] border border-[var(--brand-soft-strong)] bg-[var(--brand-soft)] px-2.5 py-1.75 text-[10px] font-semibold text-[var(--brand-strong)] dark:border-white/10 dark:bg-white/6 dark:text-slate-100 md:rounded-[12px] md:py-2 md:text-[11px]">
                     일봉·주봉은 전체 기간 기준으로 보여줍니다.
                   </div>
                 </div>
@@ -1540,7 +1661,7 @@ export function AnalysisPageClient({
 
               {notice ? (
                 <div
-                  className={`rounded-[18px] px-3 py-2.5 text-[12px] leading-5 md:rounded-[20px] md:px-3.5 md:py-3 md:text-sm ${
+                  className={`rounded-[12px] px-2.5 py-2 text-[10px] leading-4.5 md:rounded-[16px] md:px-3.5 md:py-3 md:text-sm ${
                     chartUnavailable
                       ? "bg-slate-100 text-slate-700 dark:bg-white/[0.05] dark:text-slate-200"
                       : "bg-amber-50 text-amber-800 dark:bg-amber-500/12 dark:text-amber-100"
@@ -1550,22 +1671,25 @@ export function AnalysisPageClient({
                 </div>
               ) : null}
             </div>
-          </section>
+            </section>
 
-          <div className="grid gap-4">
-            <section className="glass-card overflow-hidden rounded-[22px] p-3 md:rounded-[24px] md:p-5">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="grid gap-3.5">
+                <section
+                  className={`waterfall-item glass-card overflow-hidden rounded-[14px] p-2.5 md:rounded-[24px] md:p-4 ${revealPhase >= 6 ? "is-visible" : ""}`}
+                  style={{ "--waterfall-delay": "80ms" } as CSSProperties}
+                >
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0">
-                  <h2 className="text-base font-bold text-slate-950 dark:text-slate-50 md:text-lg">한눈에 보기</h2>
+                  <h2 className="text-[15px] font-bold text-slate-950 dark:text-slate-50 md:text-[17px]">한눈에 보기</h2>
                   <p className="mt-1 hidden break-keep text-xs leading-5 text-slate-500 dark:text-slate-300 md:block">
                     차트 옆에서 핵심 신호와 지표를 바로 확인합니다.
                   </p>
                 </div>
               </div>
-              <div className="mt-3 space-y-2.5 md:mt-4 md:space-y-3">
-                <div className="rounded-[16px] bg-white/80 p-2.5 dark:bg-white/[0.04] md:rounded-[18px] md:p-3">
-                  <div className="text-sm font-semibold text-slate-700 dark:text-slate-100">핵심 근거</div>
-                  <ul className="mt-2 space-y-1.5 text-[12px] leading-5 text-slate-600 dark:text-slate-300 md:mt-2.5 md:text-[13px]">
+              <div className="mt-2.5 space-y-2.5 md:mt-3 md:space-y-3">
+                <div className="surface-card rounded-[12px] p-2 dark:bg-white/[0.04] md:rounded-[18px] md:p-3">
+                  <div className="text-[13px] font-semibold text-slate-700 dark:text-slate-100">핵심 근거</div>
+                  <ul className="mt-1.5 space-y-1.25 text-[11px] leading-4.5 text-slate-600 dark:text-slate-300 md:mt-2.5 md:text-[13px]">
                     {visibleReasons.length ? (
                       visibleReasons.map((reason, index) => (
                         <SignalTextItem
@@ -1579,9 +1703,9 @@ export function AnalysisPageClient({
                     )}
                   </ul>
                 </div>
-                <div className="rounded-[16px] bg-slate-50 p-2.5 dark:bg-[var(--surface-3)] md:rounded-[18px] md:p-3">
-                  <div className="text-sm font-semibold text-slate-700 dark:text-slate-100">주의 포인트</div>
-                  <ul className="mt-2 space-y-1.5 text-[12px] leading-5 text-slate-600 dark:text-slate-300 md:mt-2.5 md:text-[13px]">
+                <div className="surface-card-strong rounded-[12px] p-2 dark:bg-[var(--surface-3)] md:rounded-[18px] md:p-3">
+                  <div className="text-[13px] font-semibold text-slate-700 dark:text-slate-100">주의 포인트</div>
+                  <ul className="mt-1.5 space-y-1.25 text-[11px] leading-4.5 text-slate-600 dark:text-slate-300 md:mt-2.5 md:text-[13px]">
                     {visibleRisks.length ? (
                       visibleRisks.map((risk, index) => (
                         <SignalTextItem
@@ -1615,11 +1739,14 @@ export function AnalysisPageClient({
                   </div>
                 </div>
               </div>
-            </section>
+                </section>
+            </div>
           </div>
-        </div>
 
-        <section className="ai-shell relative overflow-hidden rounded-[22px] p-3 md:rounded-[24px] md:p-5">
+        <section
+          className={`waterfall-item ai-shell relative overflow-hidden rounded-[20px] p-3 md:rounded-[24px] md:p-4 ${revealPhase >= 7 ? "is-visible" : ""}`}
+          style={{ "--waterfall-delay": "120ms" } as CSSProperties}
+        >
           <div className="pointer-events-none absolute -right-16 -top-10 hidden h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(73,178,255,0.16)_0%,rgba(73,178,255,0)_72%)] dark:bg-[radial-gradient(circle,rgba(73,178,255,0.2)_0%,rgba(73,178,255,0)_72%)] md:block" />
           <div className="pointer-events-none absolute left-0 top-0 hidden h-28 w-28 rounded-full bg-[radial-gradient(circle,rgba(35,60,124,0.12)_0%,rgba(35,60,124,0)_72%)] dark:bg-[radial-gradient(circle,rgba(35,60,124,0.2)_0%,rgba(35,60,124,0)_74%)] md:block" />
           <div className="relative min-w-0">
@@ -1630,14 +1757,14 @@ export function AnalysisPageClient({
               차트 흐름과 기업 맥락만 짧게 정리합니다.
             </p>
           </div>
-          <div className="mt-3 space-y-2.5 text-sm leading-6 text-slate-600 dark:text-slate-300 md:mt-4 md:space-y-3">
+          <div className="mt-2.5 space-y-2.5 text-sm leading-6 text-slate-600 dark:text-slate-300 md:mt-3 md:space-y-3">
             {canUseAi ? (
-              <div className="surface-card rounded-[18px] p-3">
+              <div className="surface-card rounded-[14px] p-2.5 md:rounded-[16px] md:p-3">
                 <AuthActions isSignedIn providers={aiProviders} userName={aiUserName} />
               </div>
             ) : null}
             {!canUseAi ? (
-              <div className="surface-card rounded-[20px] p-4">
+              <div className="surface-card rounded-[14px] p-3 md:rounded-[16px] md:p-3.5">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   로그인해 보세요!
                 </div>
@@ -1650,7 +1777,7 @@ export function AnalysisPageClient({
               </div>
             ) : null}
             {canUseAi && !aiRequested ? (
-              <div className="surface-card rounded-[20px] p-4">
+              <div className="surface-card rounded-[14px] p-3 md:rounded-[16px] md:p-3.5">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   AI 브리핑을 바로 생성할 수 있어요.
                 </div>
@@ -1658,7 +1785,7 @@ export function AnalysisPageClient({
                   최신 차트와 기업 흐름을 짧게 정리합니다. 같은 조건은 캐시를 재사용합니다.
                 </p>
                 <button
-                  className="brand-button mt-3 rounded-full px-4 py-2 text-sm font-semibold"
+                  className="brand-button mt-3 rounded-full px-3 py-1.5 text-[11px] font-semibold"
                   type="button"
                   onClick={() => setAiRequested(true)}
                 >
@@ -1670,13 +1797,13 @@ export function AnalysisPageClient({
             {aiRequested && aiSummary?.available ? (
               <>
                 {aiState.loading ? (
-                  <div className="ai-glow rounded-[18px] border border-[rgba(73,178,255,0.14)] px-3.5 py-3 text-xs font-semibold text-slate-700 dark:border-[rgba(157,196,255,0.14)] dark:text-slate-100">
+                  <div className="ai-glow rounded-[14px] border border-[rgba(73,178,255,0.14)] px-3 py-2.5 text-xs font-semibold text-slate-700 dark:border-[rgba(157,196,255,0.14)] dark:text-slate-100">
                     AI 브리핑을 최신 데이터 기준으로 다시 정리하고 있습니다.
                   </div>
                 ) : null}
                 <div className="grid gap-2.5 xl:grid-cols-[minmax(0,1.1fr)_minmax(260px,0.9fr)] md:gap-3">
                   <div className="space-y-3">
-                    <div className="rounded-[18px] border border-[rgba(73,178,255,0.22)] bg-[linear-gradient(135deg,rgba(35,60,124,0.18),rgba(73,178,255,0.14),rgba(255,255,255,0.96))] p-3 dark:border-[rgba(157,196,255,0.2)] dark:bg-[linear-gradient(135deg,rgba(35,60,124,0.3),rgba(73,178,255,0.16),rgba(10,18,30,0.98))] md:rounded-[20px] md:p-3.5">
+                    <div className="rounded-[14px] border border-[rgba(73,178,255,0.22)] bg-[linear-gradient(135deg,rgba(35,60,124,0.18),rgba(73,178,255,0.14),rgba(255,255,255,0.96))] p-3 dark:border-[rgba(157,196,255,0.2)] dark:bg-[linear-gradient(135deg,rgba(35,60,124,0.3),rgba(73,178,255,0.16),rgba(10,18,30,0.98))] md:rounded-[16px] md:p-3.5">
                       <div className="inline-flex rounded-full bg-white/82 px-2.5 py-1 text-[11px] font-bold tracking-[0.04em] text-[var(--brand-strong)] dark:bg-white/[0.08] dark:text-sky-100">
                         한줄 결론
                       </div>
@@ -1695,7 +1822,7 @@ export function AnalysisPageClient({
                     </div>
                   </div>
                   <div className="grid gap-3">
-                    <div className="rounded-[20px] border border-[rgba(73,178,255,0.2)] bg-[var(--surface-card)] p-3.5 dark:border-[rgba(73,178,255,0.22)] dark:bg-white/[0.05]">
+                    <div className="rounded-[14px] border border-[rgba(73,178,255,0.2)] bg-[var(--surface-card)] p-3 dark:border-[rgba(73,178,255,0.22)] dark:bg-white/[0.05] md:rounded-[16px] md:p-3.5">
                       <div className="flex flex-wrap items-center gap-2">
                         <div className="inline-flex rounded-full bg-[rgba(73,178,255,0.12)] px-2.5 py-1 text-[11px] font-bold tracking-[0.04em] text-[var(--brand-strong)] dark:bg-[rgba(73,178,255,0.14)] dark:text-sky-100">
                           기업·업종
@@ -1726,7 +1853,7 @@ export function AnalysisPageClient({
               </>
             ) : null}
             {aiRequested && aiSummary && !aiSummary.available && !aiState.loading ? (
-              <div className="rounded-[20px] border border-slate-200/80 bg-slate-50 p-3.5 dark:border-white/10 dark:bg-[var(--surface-3)]">
+              <div className="rounded-[14px] border border-slate-200/80 bg-slate-50 p-3 dark:border-white/10 dark:bg-[var(--surface-3)] md:rounded-[16px] md:p-3.5">
                 <div className="font-semibold text-slate-800 dark:text-slate-100">AI 요약을 사용할 수 없습니다.</div>
                 <p className="mt-2 break-keep">
                   {getAiUnavailableCopy(aiSummary.reason)}
@@ -1734,7 +1861,7 @@ export function AnalysisPageClient({
               </div>
             ) : null}
             {aiRequested ? (
-              <div className="brand-note rounded-[20px] px-3.5 py-3 text-xs break-keep">
+              <div className="brand-note rounded-[14px] px-3 py-2.5 text-xs break-keep md:rounded-[16px] md:px-3.5 md:py-3">
                 {aiSummary?.disclaimer ??
                   "이 분석은 기술적 지표를 바탕으로 한 참고 정보이며 투자 판단의 책임은 사용자에게 있습니다."}
               </div>

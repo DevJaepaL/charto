@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 
 import { StockAvatar } from "@/components/stock-avatar";
@@ -29,6 +29,9 @@ export function MarketPulsePanel() {
     {},
   );
   const [error, setError] = useState<string | null>(null);
+  const [visibleItems, setVisibleItems] = useState<Record<string, boolean>>({});
+  const listRef = useRef<HTMLDivElement | null>(null);
+  const itemRefs = useRef(new Map<string, HTMLAnchorElement | null>());
 
   useEffect(() => {
     let cancelled = false;
@@ -58,28 +61,69 @@ export function MarketPulsePanel() {
   }, []);
 
   const activePayload = payloads[activeMode];
+  const itemLabel =
+    activeMode === "volume"
+      ? "거래량"
+      : activeMode === "value"
+        ? "거래대금"
+        : "시가총액";
+
+  useEffect(() => {
+    if (!activePayload?.items.length || !listRef.current) {
+      return;
+    }
+
+    const root = listRef.current;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+
+          const key = (entry.target as HTMLElement).dataset.revealKey;
+          if (!key) {
+            return;
+          }
+
+          setVisibleItems((current) => (current[key] ? current : { ...current, [key]: true }));
+          observer.unobserve(entry.target);
+        });
+      },
+      {
+        root,
+        threshold: 0.12,
+        rootMargin: "0px 0px -10% 0px",
+      },
+    );
+
+    activePayload.items.forEach((item) => {
+      const key = `${activeMode}-${item.stock.symbol}`;
+      const element = itemRefs.current.get(key);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, [activeMode, activePayload]);
 
   return (
-    <div className="soft-panel rounded-[16px] p-1 md:rounded-[20px] md:p-2.5">
-      <div>
-        <div className="text-[11px] font-bold text-slate-800 dark:text-slate-100 md:text-[13px]">
-          <b>오늘 가장 많이 본 흐름</b>
-        </div>
-        <p className="mt-0.5 text-[9px] leading-3.5 text-slate-500 dark:text-slate-300 md:text-[11px] md:leading-4.5">
-          거래대금, 거래량, 시가총액 기준 상위 종목을 빠르게 확인합니다.
-        </p>
+    <div className="soft-panel rounded-[8px] p-0.75 md:rounded-[14px] md:p-1.25">
+      <div className="text-[9px] font-bold text-slate-800 dark:text-slate-100 md:text-[11px]">
+        <b>오늘 가장 많이 본 흐름</b>
       </div>
-      <div className="mt-1.5 md:mt-2.5">
-        <div className="grid grid-cols-3 gap-0.5 rounded-[10px] bg-[var(--surface-card-strong)] p-0.5">
+
+      <div className="mt-1.5 md:mt-2">
+        <div className="grid grid-cols-3 gap-0.5 rounded-[7px] bg-[var(--surface-card-strong)] p-0.5 md:rounded-[9px]">
           {MODES.map((mode) => {
             const active = mode.value === activeMode;
+
             return (
               <button
                 key={mode.value}
-                className={`brand-soft-hover min-w-0 rounded-[8px] px-0.5 py-0.5 text-center text-[7px] font-bold leading-3 md:px-1.5 md:py-1.5 md:text-[10px] ${
-                  active
-                    ? "brand-tab-active"
-                    : "text-slate-500 dark:text-slate-300"
+                className={`brand-soft-hover min-w-0 rounded-[6px] px-0.75 py-0.75 text-center text-[6.5px] font-bold leading-[1.05] md:px-1.5 md:py-1.5 md:text-[9px] ${
+                  active ? "brand-tab-active" : "text-slate-500 dark:text-slate-300"
                 }`}
                 type="button"
                 onClick={() => setActiveMode(mode.value)}
@@ -99,42 +143,61 @@ export function MarketPulsePanel() {
       ) : null}
 
       {!error && !activePayload ? (
-        <div className="mt-3 space-y-2">
+        <div className="mt-2 space-y-1.5">
           {Array.from({ length: 6 }, (_, index) => (
-            <div key={index} className="h-[64px] animate-pulse rounded-[16px] surface-card" />
+            <div
+              key={index}
+              className="h-[58px] animate-pulse rounded-[12px] surface-card md:h-[64px] md:rounded-[14px]"
+            />
           ))}
         </div>
       ) : null}
 
       {activePayload ? (
-        <div className="scrollbar-visible mt-2 max-h-[260px] space-y-1 overflow-y-auto pr-1 md:mt-3 md:max-h-[360px] md:space-y-1.5">
-          {activePayload.items.map((item) => (
+        <div
+          ref={listRef}
+          className="surface-card scrollbar-visible mt-1.5 max-h-[224px] overflow-y-auto rounded-[8px] p-0.75 pr-0.75 md:mt-2 md:max-h-[288px] md:rounded-[12px]"
+        >
+          {activePayload.items.map((item, index) => (
             <Link
               key={`${activeMode}-${item.stock.symbol}`}
-              className="surface-hover surface-card block overflow-hidden rounded-[12px] p-1.25 transition-colors md:rounded-[15px] md:p-2"
+              ref={(element) => {
+                itemRefs.current.set(`${activeMode}-${item.stock.symbol}`, element);
+              }}
+              data-reveal-key={`${activeMode}-${item.stock.symbol}`}
+              style={
+                {
+                  "--reveal-delay": `${Math.min(index, 5) * 46}ms`,
+                } as CSSProperties
+              }
+              className={`scroll-reveal-item market-row-hover block overflow-hidden rounded-[8px] px-1.5 py-1.5 transition-colors md:rounded-[12px] md:px-2.5 md:py-2.5 ${
+                visibleItems[`${activeMode}-${item.stock.symbol}`] ? "is-visible" : ""
+              } ${
+                index !== activePayload.items.length - 1 ? "border-b border-[var(--line-soft)]" : ""
+              }`}
               href={`/analyze/${item.stock.symbol}`}
             >
               <div className="flex items-start gap-2">
-                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[rgba(var(--brand-rgb),0.1)] text-[9px] font-black text-[var(--brand-strong)] dark:bg-white/10 dark:text-slate-100">
+                <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[rgba(var(--brand-rgb),0.1)] text-[7px] font-black text-[var(--brand-strong)] dark:bg-white/10 dark:text-slate-100 md:h-6 md:w-6 md:text-[9px]">
                   {item.rank}
                 </div>
                 <StockAvatar size="sm" stock={item.stock} />
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-2">
-                    <div className="min-w-0 flex-1 pr-1">
-                      <div className="surface-hover-text overflow-hidden text-[10px] font-semibold leading-3.5 text-slate-900 dark:text-slate-50 md:text-[11px] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0 flex-1 pr-1.5">
+                      <div className="surface-hover-text overflow-hidden text-[11px] font-semibold leading-[1.22] text-slate-900 dark:text-slate-50 md:text-[13px] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
                         {item.stock.name}
                       </div>
-                      <div className="mt-0.5 truncate text-[9px] text-slate-500 dark:text-slate-400 md:text-[10px]">
-                        {item.stock.symbol} · {item.stock.market}
+                      <div className="mt-0.5 truncate text-[8px] text-slate-500 dark:text-slate-400 md:text-[10px]">
+                        {item.stock.market} · {item.stock.symbol}
                       </div>
                     </div>
-                    <div className="min-w-0 sm:min-w-[90px] sm:max-w-[104px] sm:text-right md:min-w-[96px]">
-                      <div className="surface-hover-text truncate text-[9px] font-bold tabular-nums text-slate-900 dark:text-slate-50 md:text-[11px]">
+                    <div className="min-w-[92px] text-right md:min-w-[116px]">
+                      <div className="surface-hover-text truncate text-[10px] font-bold tabular-nums text-slate-900 dark:text-slate-50 md:text-[12px]">
                         {formatPrice(item.price)}
                       </div>
                       <div
-                        className={`mt-0.5 text-[9px] font-semibold tabular-nums md:text-[10px] ${
+                        className={`mt-0.5 text-[8px] font-semibold tabular-nums md:text-[10px] ${
                           item.changePercent > 0
                             ? "text-[var(--price-up)]"
                             : item.changePercent < 0
@@ -146,13 +209,15 @@ export function MarketPulsePanel() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-1 flex items-center gap-2 text-[9px] text-slate-500 dark:text-slate-300 md:text-[10px]">
-                    <span className="surface-pill max-w-full truncate rounded-full px-1.5 py-0.5 font-medium dark:border-white/10 dark:bg-white/6">
+
+                  <div className="mt-0.75 flex items-center justify-between gap-2 text-[8px] text-slate-500 dark:text-slate-300 md:text-[10px]">
+                    <span className="truncate">{itemLabel}</span>
+                    <span className="truncate font-medium text-slate-600 dark:text-slate-200">
                       {activeMode === "volume"
-                        ? `누적 거래량 ${formatCompactNumber(item.volume)}주`
+                        ? `${formatCompactNumber(item.volume)}주`
                         : activeMode === "value"
-                          ? `누적 거래대금 ${formatCompactNumber(item.tradeValue)}원`
-                          : `시가총액 ${formatKoreanWon(item.marketCap ?? null)}`}
+                          ? `${formatCompactNumber(item.tradeValue)}원`
+                          : `${formatKoreanWon(item.marketCap ?? null)}`}
                     </span>
                   </div>
                 </div>

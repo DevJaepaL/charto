@@ -19,7 +19,7 @@ export function AuthActions({
   if (!providers.length) {
     return (
       <div className="rounded-[18px] border border-slate-200/80 bg-[var(--surface-card)] px-4 py-3 text-[13px] leading-5 text-slate-500 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300">
-        현재는 로그인 기능 준비 중입니다. Google 또는 Kakao OAuth 정보를 연결하면 AI 브리핑 로그인이 활성화됩니다.
+        현재 AI 분석은 테스트 중이에요. 기다려주세요.
       </div>
     );
   }

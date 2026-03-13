@@ -3,6 +3,7 @@
 import { useDeferredValue, useEffect, useReducer, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
+import { AnimatedLoadingStage } from "@/components/animated-loading-stage";
 import { StockAvatar } from "@/components/stock-avatar";
 import type { MarketRankingResponse, StockLookupItem } from "@/lib/types";
 
@@ -70,6 +71,7 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
   const [liveFeatured, setLiveFeatured] = useState<StockLookupItem[]>(featured);
   const [isPending, startTransition] = useTransition();
   const [isFocused, setIsFocused] = useState(false);
+  const [pendingTarget, setPendingTarget] = useState<StockLookupItem | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -117,6 +119,7 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
       return;
     }
 
+    setPendingTarget(target);
     startTransition(() => {
       router.push(`/analyze/${target.symbol}`);
     });
@@ -130,23 +133,23 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
       <div
         className={`glass-card relative ${
           inline
-            ? "rounded-[14px] p-0.5 md:rounded-[20px]"
+            ? "rounded-[8px] p-0.5 md:rounded-[10px]"
             : compact
-              ? "rounded-[16px] p-1 md:rounded-[24px]"
-              : "rounded-[20px] p-3 md:rounded-[32px] md:p-5"
+              ? "rounded-[10px] p-0.5 md:rounded-[12px]"
+              : "rounded-[12px] p-1.5 md:rounded-[16px] md:p-2"
         }`}
       >
         <div
-          className={`flex flex-col bg-[var(--surface-card)] sm:flex-row sm:items-center ${
-            inline ? "rounded-[12px] md:rounded-[18px]" : compact ? "rounded-[14px] md:rounded-[20px]" : "rounded-[16px] md:rounded-[24px]"
+          className={`grid grid-cols-[minmax(0,1fr)_auto] items-center bg-[var(--surface-card)] ${
+            inline ? "rounded-[8px] md:rounded-[10px]" : compact ? "rounded-[10px] md:rounded-[12px]" : "rounded-[12px] md:rounded-[14px]"
           } ${
-            inline ? "gap-1.5 p-1" : "gap-3 p-2"
+            inline ? "gap-1 p-1" : compact ? "gap-1 p-1.5" : "gap-1.5 p-1.5"
           }`}
         >
-          <div className={`flex min-w-0 flex-1 items-center ${inline ? "gap-2 px-2 py-1" : "gap-3 px-3 py-2"}`}>
+          <div className={`flex min-w-0 items-center ${inline ? "gap-1.5 px-2 py-1" : compact ? "gap-1.5 px-2.5 py-1.5" : "gap-2 px-2.5 py-1.5"}`}>
             <svg
               aria-hidden
-              className={`${inline ? "size-4" : "size-5"} shrink-0 text-slate-400 dark:text-slate-500`}
+              className={`${inline ? "size-3.5" : compact ? "size-4" : "size-4.5"} shrink-0 text-slate-400 dark:text-slate-500`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -158,10 +161,10 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
               aria-label="종목 검색"
               className={`w-full min-w-0 bg-transparent text-slate-900 outline-none placeholder:text-sm placeholder:text-slate-400 dark:text-slate-100 dark:placeholder:text-slate-500 md:placeholder:text-base ${
                 inline
-                  ? "text-[13px] placeholder:text-[11px] md:text-sm md:placeholder:text-sm"
+                  ? "text-[12px] placeholder:text-[10px] md:text-[12px] md:placeholder:text-[11px]"
                   : compact
-                    ? "text-sm md:text-base"
-                    : "text-base md:text-lg"
+                    ? "text-[12.5px] placeholder:text-[10.5px] md:text-[13px] md:placeholder:text-[11px]"
+                    : "text-[14px] placeholder:text-[11px] md:text-[15px] md:placeholder:text-[12px]"
               }`}
               placeholder="종목명 또는 종목코드 검색"
               value={query}
@@ -177,20 +180,28 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
             />
           </div>
           <button
-            className={`brand-button shrink-0 whitespace-nowrap rounded-lg font-semibold ${
+            className={`brand-button shrink-0 whitespace-nowrap rounded-md font-semibold ${
               inline
-                ? "px-3 py-1.5 text-[11px] sm:min-w-[64px]"
-                : "px-5 py-3 text-sm sm:min-w-[88px]"
+                ? "px-2 py-1 text-[10px] min-w-[52px]"
+                : compact
+                  ? "px-2.5 py-1.5 text-[10px] min-w-[58px]"
+                  : "px-3 py-1.5 text-[11px] min-w-[64px]"
             }`}
             type="button"
             onClick={() => submitSearch()}
           >
-            {isPending ? "이동 중..." : "검색"}
+            {isPending ? "분석 중..." : "검색"}
           </button>
         </div>
 
+        {isPending && pendingTarget ? (
+          <div className="absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-[rgba(248,251,255,0.92)] backdrop-blur-sm dark:bg-[rgba(10,14,20,0.84)]">
+            <AnimatedLoadingStage compact stock={pendingTarget} />
+          </div>
+        ) : null}
+
         {(isFocused || query.trim()) && (
-          <div className="surface-card mt-3 rounded-[24px] p-2">
+          <div className="surface-card mt-2.5 rounded-[16px] p-2 md:rounded-[20px]">
             <div className="flex items-center justify-between px-3 py-2 text-xs font-medium text-slate-500 dark:text-slate-300">
               <span>{query.trim() ? "검색 결과" : "실시간 거래대금 상위"}</span>
               {query.trim() && searchState.error ? (
@@ -201,7 +212,7 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
               {activeItems.map((item) => (
                 <button
                   key={`${item.market}-${item.symbol}`}
-                  className="brand-soft-hover grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[18px] px-3 py-3 text-left transition-colors"
+                  className="brand-soft-hover grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[14px] px-3 py-2.5 text-left transition-colors md:rounded-[16px]"
                   type="button"
                   onMouseDown={(event) => event.preventDefault()}
                   onClick={() => submitSearch(item)}

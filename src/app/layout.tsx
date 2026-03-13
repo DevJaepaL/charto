@@ -1,17 +1,9 @@
 import type { Metadata } from "next";
-import { Noto_Sans_KR } from "next/font/google";
 import Link from "next/link";
 import { Analytics } from "@vercel/analytics/next";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import "./globals.css";
-
-const notoSansKr = Noto_Sans_KR({
-  subsets: ["latin"],
-  weight: ["400", "500", "700", "900"],
-  variable: "--font-noto-sans-kr",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://charto.vercel.app"),
@@ -45,13 +37,18 @@ export default function RootLayout({
   return (
     <html lang="ko" className="dark" data-theme="dark" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var stored=localStorage.getItem('charto-theme');var theme=stored||'dark';document.documentElement.classList.toggle('dark',theme==='dark');document.documentElement.dataset.theme=theme;}catch(e){document.documentElement.classList.add('dark');document.documentElement.dataset.theme='dark';}})();`,
           }}
         />
       </head>
-      <body className={`${notoSansKr.variable} bg-[var(--surface-0)] text-[var(--text-main)] antialiased`}>
+      <body className="bg-[var(--surface-0)] text-[var(--text-main)] antialiased">
         <div className="app-shell flex min-h-screen flex-col">
           <div className="border-b border-amber-200/80 bg-amber-50/90 px-5 py-2 text-center text-[11px] font-medium text-amber-900 dark:border-amber-400/18 dark:bg-amber-500/10 dark:text-amber-100 md:px-8 md:text-xs">
             초기 개발 버전으로 일부 기능이 불안정할 수 있습니다.

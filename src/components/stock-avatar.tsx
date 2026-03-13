@@ -8,10 +8,11 @@ import type { StockLookupItem } from "@/lib/types";
 
 interface StockAvatarProps {
   stock: StockLookupItem;
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
 }
 
 const sizeClassName = {
+  xs: "h-8 w-8 rounded-[10px]",
   sm: "h-10 w-10 rounded-[14px]",
   md: "h-12 w-12 rounded-[16px]",
   lg: "h-14 w-14 rounded-[18px]",
@@ -19,6 +20,7 @@ const sizeClassName = {
 } as const;
 
 const logoPaddingClassName = {
+  xs: "p-0.75",
   sm: "p-1",
   md: "p-1.5",
   lg: "p-2",
@@ -51,7 +53,9 @@ export function StockAvatar({ stock, size = "md" }: StockAvatarProps) {
               ? "56px"
               : size === "md"
                 ? "48px"
-                : "40px"
+                : size === "sm"
+                  ? "40px"
+                  : "32px"
         }
         src={profile.logoSrc}
       />
