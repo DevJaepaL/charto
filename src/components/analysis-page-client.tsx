@@ -679,13 +679,13 @@ function RecommendationCard({
         <div className="text-[9px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-300 md:text-[10px]">
           추천 점수
         </div>
+        <div className={`shrink-0 rounded-[9px] px-2 py-0.75 text-right ${recommendation.badgeClassName}`}>
+          <div className="text-[10px] font-semibold md:text-[11px]">{recommendation.label}</div>
+        </div>
       </div>
       <div className="mt-1 flex items-end justify-between gap-3 pr-8 md:pr-10">
         <div className={`text-[1.12rem] font-extrabold tracking-tight tabular-nums md:text-[1.8rem] ${recommendation.scoreClassName}`}>
           {score}
-        </div>
-        <div className={`shrink-0 rounded-[9px] px-2 py-0.75 text-right ${recommendation.badgeClassName}`}>
-          <div className="text-[10px] font-semibold md:text-[11px]">{recommendation.label}</div>
         </div>
       </div>
       {scoreDeltaText ? (
