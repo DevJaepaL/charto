@@ -96,7 +96,7 @@ const CONTEXT_RULES: CompanyContextRule[] = [
   {
     match: /(바이오|제약|셀트리온|유한양행|삼성바이오로직스|한미약품|알테오젠|펩트론|보로노이|에이비엘바이오)/,
     sector: "바이오·제약",
-    businessSummary: "임상 일정, 기술수출 기대, 생산능력 확대, 정책 변화가 valuation에 크게 반영되는 업종입니다.",
+    businessSummary: "임상 일정, 기술수출 기대, 생산능력 확대, 정책 변화가 벨류에이션에 크게 반영되는 업종입니다.",
     industryFlow: "바이오 업종은 모멘텀 장세에서 빠르게 탄력을 받지만, 이벤트 공백기에는 변동성도 커집니다.",
     marketPosition: "기술 이벤트 기대가 살아 있을수록 수급이 강해지지만, 확인되지 않은 기대만으로는 흔들릴 수 있습니다.",
     interpretWithCaution: true,
