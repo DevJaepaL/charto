@@ -45,7 +45,9 @@ describe("summarizeEarningsContext", () => {
     const summary = summarizeEarningsContext(companyContext, latest, latest, guidance);
 
     expect(summary.available).toBe(true);
-    expect(summary.summary).toContain("최근 실적 공시");
-    expect(summary.outlook).toContain("IR");
+    expect(summary.summary).toBe("2026-03-01 기준 잠정 실적 공시가 있었습니다.");
+    expect(summary.outlook).toBe("2026-03-01 기준 기업설명회(IR) 관련 공시가 있었습니다.");
+    expect(summary.summary).not.toContain(latest.title);
+    expect(summary.outlook).not.toContain(guidance.title);
   });
 });

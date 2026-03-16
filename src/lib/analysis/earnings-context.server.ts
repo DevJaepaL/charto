@@ -105,6 +105,56 @@ export function classifyDisclosureKind(title: string): EarningsDisclosureKind {
   return "filing";
 }
 
+function describeDisclosure(item: EarningsDisclosureItem | null, fallbackPrefix: string) {
+  if (!item) {
+    return "";
+  }
+
+  const title = item.title;
+
+  if (/영업\(잠정\)실적/u.test(title)) {
+    return `${fallbackPrefix} 잠정 실적 공시가 있었습니다.`;
+  }
+
+  if (/매출액또는손익구조/u.test(title)) {
+    return `${fallbackPrefix} 손익 구조 변화 공시가 있었습니다.`;
+  }
+
+  if (/분기보고서/u.test(title)) {
+    return `${fallbackPrefix} 분기 보고서가 제출됐습니다.`;
+  }
+
+  if (/반기보고서/u.test(title)) {
+    return `${fallbackPrefix} 반기 보고서가 제출됐습니다.`;
+  }
+
+  if (/사업보고서/u.test(title)) {
+    return `${fallbackPrefix} 사업 보고서가 제출됐습니다.`;
+  }
+
+  if (/감사보고서/u.test(title)) {
+    return `${fallbackPrefix} 감사 보고서가 제출됐습니다.`;
+  }
+
+  if (/기업설명회/u.test(title) || /\bIR\b/i.test(title)) {
+    return `${fallbackPrefix} 기업설명회(IR) 관련 공시가 있었습니다.`;
+  }
+
+  if (/수주/u.test(title)) {
+    return `${fallbackPrefix} 수주 관련 공시가 있었습니다.`;
+  }
+
+  if (/투자판단관련주요경영사항/u.test(title)) {
+    return `${fallbackPrefix} 주요 경영사항 공시가 있었습니다.`;
+  }
+
+  if (/전망|가이던스/u.test(title)) {
+    return `${fallbackPrefix} 전망 관련 공시가 있었습니다.`;
+  }
+
+  return `${fallbackPrefix} 주요 공시가 있었습니다.`;
+}
+
 function mapDisclosureItem(item: DartDisclosure): EarningsDisclosureItem | null {
   const title = item.report_nm?.trim() ?? "";
   const date = formatDisclosureDate(item.rcept_dt);
@@ -127,13 +177,13 @@ export function summarizeEarningsContext(
   guidance: EarningsDisclosureItem | null,
 ): EarningsContext {
   const summary = earnings
-    ? `최근 실적 공시는 ${earnings.date} ${earnings.title}입니다.`
+    ? describeDisclosure(earnings, `${earnings.date} 기준`)
     : latest
-      ? `최근 확인된 공시는 ${latest.date} ${latest.title}입니다.`
+      ? describeDisclosure(latest, `${latest.date} 기준`)
       : "최근 1년 내 실적 성격 공시는 뚜렷하게 확인되지 않았습니다.";
 
   const outlook = guidance
-    ? `가장 가까운 IR·전망 공시는 ${guidance.date} ${guidance.title}입니다.`
+    ? describeDisclosure(guidance, `${guidance.date} 기준`)
     : `${companyContext.sector} 업종은 ${companyContext.industryFlow}`;
 
   return {
