@@ -1,5 +1,6 @@
 import { generateAiSummary } from "@/lib/analysis/ai-summary";
 import { resolveCompanyContext } from "@/lib/analysis/company-context.server";
+import { resolveEarningsContext } from "@/lib/analysis/earnings-context.server";
 import { buildTechnicalAnalysis } from "@/lib/analysis/technical";
 import { getCandlesWithFallback } from "@/lib/market/provider";
 import { getStockBySymbol } from "@/lib/stock-master";
@@ -69,13 +70,17 @@ export async function loadTechnicalResponse(
       throw new Error("등록되지 않은 종목 코드입니다.");
     }
 
-    const payload = await getCandlesWithFallback(symbol, interval, range);
-    const companyContext = await resolveCompanyContext(stock);
+    const [payload, companyContext] = await Promise.all([
+      getCandlesWithFallback(symbol, interval, range),
+      resolveCompanyContext(stock),
+    ]);
+    const earningsContext = await resolveEarningsContext(stock, companyContext);
     const analysis = buildTechnicalAnalysis(payload.candles, payload.quote, stock, companyContext);
 
     const response = {
       stock,
       companyContext,
+      earningsContext,
       interval,
       range,
       ...payload,
@@ -108,6 +113,7 @@ export async function loadAnalysisPageData(
     technicalResponse.technical,
     technicalResponse.signal,
     technicalResponse.companyContext,
+    technicalResponse.earningsContext,
   );
 
   return {

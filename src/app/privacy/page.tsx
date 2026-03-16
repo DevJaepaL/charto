@@ -24,6 +24,7 @@ export default function PrivacyPage() {
         <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">자동 수집 정보</h2>
         <p className="mt-3 break-keep">
           서비스 품질 개선을 위해 Vercel Analytics를 사용할 수 있으며, 테마 설정 등 일부 정보는 브라우저의 localStorage에 저장됩니다.
+          광고 기능을 활성화할 경우 Google AdSense가 쿠키나 기기 정보를 처리할 수 있습니다.
         </p>
       </section>
       <section>

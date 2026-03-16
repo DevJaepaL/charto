@@ -1,20 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 
 import { ThemeToggle } from "@/components/theme-toggle";
+import { getAdSenseClientId } from "@/lib/adsense";
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://charto.vercel.app"),
   title: {
-    default: "Charto | 국내 증시 차트를 추적해보세요.",
+    default: "CHARTO | 국내 증시 차트를 추적해보세요.",
     template: "%s | Charto",
   },
   description:
-    "국내 주식 차트를 바탕으로 이동평균, RSI, MACD, 볼린저 밴드와 AI 요약을 한 화면에서 확인하는 기술 분석 웹앱",
+    "국내 주식 차트를 바탕으로 각종 보조지표 분석과 AI 요약을 한 화면에서 확인하는 기술 분석 웹앱",
   openGraph: {
-    title: "Charto | 국내 증시 차트를 추적해보세요.",
+    title: "CHARTO | 국내 증시 차트를 추적해보세요.",
     description:
       "한국 주식 차트와 기술지표, AI 요약을 모바일에서도 보기 좋게 제공하는 분석 도구",
     siteName: "Charto",
@@ -23,9 +25,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Charto | 국내 증시 차트를 추적해보세요.",
+    title: "CHARTO | 국내 증시 차트를 추적해보세요.",
     description:
-      "분봉부터 주봉까지 한 번에 보고, 기술지표 해석과 AI 요약까지 확인하는 국내 주식 분석 툴",
+      "국내 증시 종목별 기술지표 분석과 AI 요약까지 확인하는 국내 주식 분석 툴",
   },
 };
 
@@ -34,6 +36,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const adSenseClientId = getAdSenseClientId();
+
   return (
     <html lang="ko" className="dark" data-theme="dark" suppressHydrationWarning>
       <head>
@@ -47,6 +51,14 @@ export default function RootLayout({
             __html: `(function(){try{var stored=localStorage.getItem('charto-theme');var theme=stored||'dark';document.documentElement.classList.toggle('dark',theme==='dark');document.documentElement.dataset.theme=theme;}catch(e){document.documentElement.classList.add('dark');document.documentElement.dataset.theme='dark';}})();`,
           }}
         />
+        {adSenseClientId ? (
+          <Script
+            async
+            crossOrigin="anonymous"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adSenseClientId}`}
+            strategy="afterInteractive"
+          />
+        ) : null}
       </head>
       <body className="bg-[var(--surface-0)] text-[var(--text-main)] antialiased">
         <div className="app-shell flex min-h-screen flex-col">
@@ -68,6 +80,9 @@ export default function RootLayout({
                 </Link>
                 <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/contact">
                   문의
+                </Link>
+                <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/login">
+                  로그인
                 </Link>
               </div>
               <ThemeToggle />

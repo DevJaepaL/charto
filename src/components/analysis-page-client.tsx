@@ -5,6 +5,7 @@ import Link from "next/link";
 import { IconHome2, IconSparkles } from "@tabler/icons-react";
 import { createPortal } from "react-dom";
 
+import { AdSlot } from "@/components/ad-slot";
 import { AnimatedLoadingStage } from "@/components/animated-loading-stage";
 import { AuthActions } from "@/components/auth-actions";
 import {
@@ -756,7 +757,7 @@ function RecommendationCard({
                 </div>
               </div>
               <p className="break-keep">
-                5일선, 20일선, RSI, MACD, 거래량, 지지·저항 신호를 합산한 점수예요. 플러스 100점에 가까울수록 우호적이고 마이너스 100점에 가까울수록 보수적으로 봐요.
+                5일선, 20일선, RSI, MACD, 거래량, 지지·저항 신호를 합산한 점수예요. 플러스 100점에 가까울수록 우호적이고 마이너스 100점에 가까울수록 약세 신호가 강해요.
               </p>
               {explanationItems.length ? (
                 <ul className="mt-2 space-y-1.5 break-keep">
@@ -825,6 +826,30 @@ function AiLoadingCard() {
       <div className="mt-2 font-medium">차트와 기업 흐름을 짧게 정리하고 있습니다.</div>
     </div>
   );
+}
+
+function buildAiLevelsSummary(
+  currentPrice: number | null | undefined,
+  support: number | null | undefined,
+  resistance: number | null | undefined,
+) {
+  if (!support && !resistance) {
+    return "지지선과 저항선이 아직 뚜렷하지 않습니다.";
+  }
+
+  if (support && resistance) {
+    if (currentPrice && currentPrice >= support) {
+      return `지지선은 ${formatPrice(support)}, 저항선은 ${formatPrice(resistance)}입니다.`;
+    }
+
+    return `저항선은 ${formatPrice(resistance)}, 지지선은 ${formatPrice(support)}입니다.`;
+  }
+
+  if (support) {
+    return `가까운 지지선은 ${formatPrice(support)}입니다.`;
+  }
+
+  return `가까운 저항선은 ${formatPrice(resistance)}입니다.`;
 }
 
 function AnalyzeInitialLoading({ stock }: { stock: StockLookupItem }) {
@@ -1025,6 +1050,7 @@ export function AnalysisPageClient({
   initialError,
   shouldAutoFetchAi,
 }: AnalysisPageClientProps) {
+  const analyzeAdSlot = process.env.NEXT_PUBLIC_ADSENSE_ANALYZE_SLOT?.trim() ?? "";
   const [technicalPayload, setTechnicalPayload] = useState<TechnicalResponse | null>(
     initialTechnicalPayload,
   );
@@ -1122,6 +1148,7 @@ export function AnalysisPageClient({
         technical: technicalPayload.technical,
         signal: technicalPayload.signal,
         companyContext: technicalPayload.companyContext,
+        earningsContext: technicalPayload.earningsContext,
       }),
       signal: controller.signal,
     })
@@ -1237,7 +1264,18 @@ export function AnalysisPageClient({
   const companyContextVisuals = getCompanyContextVisuals(stock, companyContext);
   const HeadlineIcon = companyContextVisuals.headlineIcon;
   const ContextSectorIcon = companyContextVisuals.SectorIcon;
-  const companyContextSupport = aiSummary?.business || companyContext.industryFlow;
+  const earningsContext = technicalPayload?.earningsContext ?? null;
+  const shouldShowContextCaution = Boolean(
+    companyContext.cautionNote &&
+      (companyContext.instrumentLabel !== "개별 종목" || companyContext.confidence === "high"),
+  );
+  const aiCompanySummary = aiSummary?.company || aiSummary?.business || companyContextBrief;
+  const aiIndustrySummary = aiSummary?.industry || companyContext.industryFlow;
+  const aiLevelsSummary = buildAiLevelsSummary(
+    technical?.currentPrice,
+    technical?.support,
+    technical?.resistance,
+  );
   const companyContextTags = [
     companyContext.instrumentLabel !== "개별 종목" ? companyContext.instrumentLabel : null,
     companyContext.group,
@@ -1472,7 +1510,7 @@ export function AnalysisPageClient({
               <p className="mt-1.5 break-keep text-[10px] leading-4 text-slate-600 dark:text-slate-300 md:text-[12px] md:leading-5">
                 {companyContext.marketPosition}
               </p>
-              {companyContext.cautionNote ? (
+              {shouldShowContextCaution ? (
                 <div className="mt-2 rounded-[12px] bg-[rgba(251,191,36,0.12)] px-2.5 py-2 text-[9px] font-medium leading-4 text-amber-800 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] dark:bg-[rgba(217,119,6,0.16)] dark:text-amber-100 md:px-3 md:text-[10px] md:leading-5">
                   {companyContext.cautionNote}
                 </div>
@@ -1707,6 +1745,14 @@ export function AnalysisPageClient({
                 <p className="mt-1 break-keep text-[13px] leading-5 text-slate-500 dark:text-slate-300">
                   아래 버튼으로 로그인하면 이 종목의 AI 브리핑을 바로 확인할 수 있어요.
                 </p>
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <Link
+                    className="brand-outline-hover inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold"
+                    href="/login"
+                  >
+                    로그인 페이지로 이동
+                  </Link>
+                </div>
                 <div className="mt-3">
                   <AuthActions providers={aiProviders} />
                 </div>
@@ -1754,7 +1800,7 @@ export function AnalysisPageClient({
                         secondaryText={aiMomentumSummary}
                         tone="brand"
                       />
-                      <AiInsightCard label="가격 포인트" text={aiSummary.levels ?? ""} tone="default" />
+                      <AiInsightCard label="가격 포인트" text={aiLevelsSummary} tone="default" />
                     </div>
                   </div>
                   <div className="grid gap-3">
@@ -1775,9 +1821,40 @@ export function AnalysisPageClient({
                       <p className="mt-2 break-keep text-sm font-semibold leading-5 text-slate-900 dark:text-slate-50">
                         {companyContextHeadline}
                       </p>
-                      <p className="mt-1 break-keep text-[13px] leading-5 text-slate-700 dark:text-slate-200">
-                        {companyContextSupport}
-                      </p>
+                      <div className="mt-2 grid gap-2">
+                        <AiInsightCard
+                          label="기업 한줄"
+                          text={aiCompanySummary}
+                          secondaryText={companyContextBrief}
+                          tone="brand"
+                        />
+                        <AiInsightCard
+                          label="업계 흐름"
+                          text={aiIndustrySummary}
+                          secondaryText={companyContext.marketPosition}
+                          tone="default"
+                        />
+                        {earningsContext?.available ? (
+                          <AiInsightCard
+                            label="최근 실적·IR"
+                            text={earningsContext.summary}
+                            secondaryText={earningsContext.outlook}
+                            tone="default"
+                          />
+                        ) : null}
+                      </div>
+                      {earningsContext?.latest?.url ? (
+                        <div className="mt-2 flex justify-end">
+                          <a
+                            className="brand-outline-hover inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold"
+                            href={earningsContext.latest.url}
+                            rel="noreferrer"
+                            target="_blank"
+                          >
+                            최근 공시 보기
+                          </a>
+                        </div>
+                      ) : null}
                     </div>
                     <AiInsightCard
                       label="체크 포인트"
@@ -1804,6 +1881,8 @@ export function AnalysisPageClient({
             ) : null}
           </div>
         </section>
+
+        <AdSlot className="waterfall-item" label="광고" slot={analyzeAdSlot} />
       </div>
     </main>
   );

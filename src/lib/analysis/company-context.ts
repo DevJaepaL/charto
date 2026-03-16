@@ -592,10 +592,10 @@ function getDefaultContext(stock: StockLookupItem, profile: InstrumentProfile): 
       sector: "개별 성장주",
       businessSummary: "실적 기대와 수급 변화에 따라 가격이 크게 흔들릴 수 있는 개별 성장주 성격이 강합니다.",
       industryFlow: "코스닥 종목은 업종 모멘텀과 수급 변화가 주가에 빠르게 반영되는 경우가 많습니다.",
-      marketPosition: "실적 확인 이전에는 기대와 심리 변화에 크게 흔들릴 수 있어 기술적 점수도 보수적으로 해석할 필요가 있습니다.",
+      marketPosition: "기대와 수급 변화가 빠르게 반영될 수 있어 실적 흐름과 거래 분위기를 함께 보는 편이 좋습니다.",
       confidence: "low",
-      interpretWithCaution: true,
-      cautionNote: "업종 분류 근거가 약한 종목이라 기업 설명은 참고용으로만 보는 편이 좋습니다.",
+      interpretWithCaution: false,
+      cautionNote: null,
     };
   }
 
@@ -605,10 +605,10 @@ function getDefaultContext(stock: StockLookupItem, profile: InstrumentProfile): 
     sector: "개별 종목",
     businessSummary: "업종 흐름과 함께 개별 기업 이슈, 수급, 재료가 함께 반영되는 일반 상장 종목으로 보는 편이 자연스럽습니다.",
     industryFlow: "뚜렷한 업종 규칙이 없으면 지수보다 개별 재료와 수급의 영향이 더 크게 나타날 수 있습니다.",
-    marketPosition: "짧은 기간 급등락이 나오면 기술적 점수만으로는 부족할 수 있어 과한 해석은 피하는 편이 좋습니다.",
+    marketPosition: "기술적 신호와 함께 기업 공시, 수급, 업종 흐름을 같이 볼 때 판단이 더 또렷해집니다.",
     confidence: "low",
-    interpretWithCaution: true,
-    cautionNote: "업종 분류 근거가 약한 종목이라 기업 설명은 참고용으로만 보는 편이 좋습니다.",
+    interpretWithCaution: false,
+    cautionNote: null,
   };
 }
 
@@ -634,7 +634,7 @@ export function inferCompanyContext(stock: StockLookupItem): CompanyContext {
     interpretWithCaution: matchedRule.interpretWithCaution ?? false,
     cautionNote:
       matchedRule.interpretWithCaution ?? false
-        ? "단기 재료나 이벤트 영향이 커질 수 있어 추천 점수는 보수적으로 해석하는 편이 좋습니다."
+        ? "단기 재료와 이벤트 영향이 커질 수 있어 실적과 수급도 함께 확인하는 편이 좋습니다."
         : null,
   };
 }
@@ -660,7 +660,7 @@ export function buildOfficialContextFromIndustryCode(
     interpretWithCaution: rule.interpretWithCaution ?? false,
     cautionNote:
       rule.interpretWithCaution ?? false
-        ? "공식 업종 기준으로도 변동성이 클 수 있어 추천 점수는 보수적으로 해석하는 편이 좋습니다."
+        ? "공식 업종 기준으로도 변동성이 클 수 있어 실적과 수급 흐름을 함께 보는 편이 좋습니다."
         : null,
   };
 }

@@ -53,11 +53,11 @@ export function AnimatedLoadingStage({
   if (compact) {
     return (
       <div className="surface-card flex items-center gap-3 rounded-[16px] px-3.5 py-3 shadow-[0_14px_34px_rgba(15,23,42,0.08)] dark:shadow-[0_18px_38px_rgba(2,6,23,0.36)]">
-        <div className="relative flex h-[46px] w-[46px] items-center justify-center">
-        <div className="loading-orbit loading-orbit--sm" aria-hidden="true">
-          <span className="loading-ring loading-ring--outer" />
-          <span className="loading-ring loading-ring--inner" />
-        </div>
+        <div className="relative flex h-[46px] w-[46px] shrink-0 items-center justify-center">
+          <div className="loading-orbit loading-orbit--sm shrink-0" aria-hidden="true">
+            <span className="loading-ring loading-ring--outer" />
+            <span className="loading-ring loading-ring--inner" />
+          </div>
           {stock ? (
             <div className="absolute inset-0 flex items-center justify-center">
               <StockAvatar size="xs" stock={stock} />
@@ -82,9 +82,16 @@ export function AnimatedLoadingStage({
   return (
     <div className="loading-stage mx-auto max-w-2xl rounded-[24px] px-5 py-7 text-center md:rounded-[28px] md:px-8 md:py-9">
       <div className="mt-2 flex justify-center">
-        <div className="loading-orbit loading-orbit--lg" aria-hidden="true">
-          <span className="loading-ring loading-ring--outer" />
-          <span className="loading-ring loading-ring--inner" />
+        <div className="relative flex h-[112px] w-[112px] shrink-0 items-center justify-center">
+          <div className="loading-orbit loading-orbit--lg shrink-0" aria-hidden="true">
+            <span className="loading-ring loading-ring--outer" />
+            <span className="loading-ring loading-ring--inner" />
+          </div>
+          {stock ? (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <StockAvatar size="sm" stock={stock} />
+            </div>
+          ) : null}
         </div>
       </div>
       <div className="mt-5 loading-progress-dots" aria-hidden="true">

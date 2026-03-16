@@ -55,6 +55,38 @@ const requestSchema = z.object({
       cautionNote: z.string().nullable(),
     })
     .optional(),
+  earningsContext: z
+    .object({
+      available: z.boolean(),
+      latest: z
+        .object({
+          date: z.string(),
+          title: z.string(),
+          url: z.string(),
+          kind: z.enum(["earnings", "guidance", "ir", "filing"]),
+        })
+        .nullable(),
+      earnings: z
+        .object({
+          date: z.string(),
+          title: z.string(),
+          url: z.string(),
+          kind: z.enum(["earnings", "guidance", "ir", "filing"]),
+        })
+        .nullable(),
+      guidance: z
+        .object({
+          date: z.string(),
+          title: z.string(),
+          url: z.string(),
+          kind: z.enum(["earnings", "guidance", "ir", "filing"]),
+        })
+        .nullable(),
+      summary: z.string(),
+      outlook: z.string(),
+    })
+    .nullable()
+    .optional(),
 });
 
 export const runtime = "nodejs";
@@ -73,6 +105,7 @@ export async function POST(request: Request) {
       body.technical,
       body.signal,
       body.companyContext,
+      body.earningsContext,
     );
 
     return NextResponse.json(summary);

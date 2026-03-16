@@ -38,6 +38,24 @@ export interface CompanyContext {
   cautionNote: string | null;
 }
 
+export type EarningsDisclosureKind = "earnings" | "guidance" | "ir" | "filing";
+
+export interface EarningsDisclosureItem {
+  date: string;
+  title: string;
+  url: string;
+  kind: EarningsDisclosureKind;
+}
+
+export interface EarningsContext {
+  available: boolean;
+  latest: EarningsDisclosureItem | null;
+  earnings: EarningsDisclosureItem | null;
+  guidance: EarningsDisclosureItem | null;
+  summary: string;
+  outlook: string;
+}
+
 export interface Candle {
   time: number;
   label: string;
@@ -99,6 +117,8 @@ export interface AiSummary {
   trend?: string;
   momentum?: string;
   levels?: string;
+  company?: string;
+  industry?: string;
   business?: string;
   risk?: string;
   conclusion?: string;
@@ -120,6 +140,7 @@ export interface CandlesResponse {
 
 export interface TechnicalResponse extends CandlesResponse {
   companyContext: CompanyContext;
+  earningsContext: EarningsContext | null;
   technical: TechnicalSnapshot;
   signal: SignalSummary;
 }

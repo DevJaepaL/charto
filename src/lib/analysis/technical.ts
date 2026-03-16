@@ -379,26 +379,25 @@ function applySignalGuardrails(
   }
 
   if (companyContext.interpretWithCaution && !profile.isExchangeTradedProduct) {
-    score = pullScoreTowardNeutral(score, companyContext.confidence === "high" ? 10 : 18);
-    if (companyContext.cautionNote) {
+    score = pullScoreTowardNeutral(score, companyContext.confidence === "high" ? 6 : 10);
+    if (companyContext.cautionNote && companyContext.confidence === "high") {
       risks.unshift(companyContext.cautionNote);
     }
   }
 
   if (companyContext.confidence === "low") {
-    score = pullScoreTowardNeutral(score, 12);
-    risks.unshift("업종 분류 신뢰도가 낮아 기술적 점수는 참고용으로만 보는 편이 좋습니다.");
+    score = pullScoreTowardNeutral(score, 4);
   }
 
   const averageAbsoluteReturn = getAverageAbsoluteReturn(candles, 10);
   const averageIntradayRange = getAverageIntradayRange(candles, 5);
   const latestMove = Math.abs(snapshot.changePercent);
 
-  if (averageAbsoluteReturn >= 6 || averageIntradayRange >= 12 || latestMove >= 18) {
-    score = pullScoreTowardNeutral(score, 36);
+  if (averageAbsoluteReturn >= 8 || averageIntradayRange >= 14 || latestMove >= 22) {
+    score = pullScoreTowardNeutral(score, 24);
     risks.unshift("최근 급등락이 큰 종목이라 기술적 점수는 한 단계 보수적으로 해석합니다.");
-  } else if (averageAbsoluteReturn >= 3.5 || averageIntradayRange >= 7 || latestMove >= 10) {
-    score = pullScoreTowardNeutral(score, 18);
+  } else if (averageAbsoluteReturn >= 5 || averageIntradayRange >= 9 || latestMove >= 14) {
+    score = pullScoreTowardNeutral(score, 10);
     risks.unshift("최근 변동성이 큰 편이라 추격 매수·매도 판단은 보수적으로 보는 편이 좋습니다.");
   }
 

@@ -17,7 +17,7 @@ export function SitePageShell({
           className="text-sm font-semibold text-[var(--brand-strong)] transition-opacity hover:opacity-80"
           href="/"
         >
-          ← Charto 홈으로
+          ← 홈으로 돌아가기
         </Link>
         <h1 className="mt-5 text-2xl font-black tracking-tight text-slate-950 dark:text-slate-50 md:text-[2rem]">
           {title}

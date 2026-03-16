@@ -3,13 +3,21 @@ import { z } from "zod";
 
 import { resolveCompanyContext } from "@/lib/analysis/company-context.server";
 import { AI_DISCLAIMER } from "@/lib/constants";
-import type { AiSummary, CompanyContext, SignalSummary, StockLookupItem, TechnicalSnapshot } from "@/lib/types";
+import type {
+  AiSummary,
+  CompanyContext,
+  EarningsContext,
+  SignalSummary,
+  StockLookupItem,
+  TechnicalSnapshot,
+} from "@/lib/types";
 
 const aiResponseSchema = z.object({
   trend: z.string(),
   momentum: z.string(),
   levels: z.string(),
-  business: z.string(),
+  company: z.string(),
+  industry: z.string(),
   risk: z.string(),
   conclusion: z.string(),
 });
@@ -20,19 +28,20 @@ const AI_RESPONSE_JSON_SCHEMA = {
     trend: { type: "STRING" },
     momentum: { type: "STRING" },
     levels: { type: "STRING" },
-    business: { type: "STRING" },
+    company: { type: "STRING" },
+    industry: { type: "STRING" },
     risk: { type: "STRING" },
     conclusion: { type: "STRING" },
   },
-  required: ["trend", "momentum", "levels", "business", "risk", "conclusion"],
-  propertyOrdering: ["trend", "momentum", "levels", "business", "risk", "conclusion"],
+  required: ["trend", "momentum", "levels", "company", "industry", "risk", "conclusion"],
+  propertyOrdering: ["trend", "momentum", "levels", "company", "industry", "risk", "conclusion"],
 } as const;
 
 const DEFAULT_GEMINI_MODEL = "gemini-2.5-flash-lite";
 const AI_OUTPUT_TOKEN_BUDGETS = [240, 420] as const;
 const AI_CACHE_SUCCESS_TTL_MS = 10 * 60 * 1000;
 const AI_CACHE_FAILURE_TTL_MS = 60 * 1000;
-const AI_CACHE_FORMAT_VERSION = 4;
+const AI_CACHE_FORMAT_VERSION = 5;
 
 const GEMINI_MODEL_ALIASES: Record<string, string> = {
   "gemini-3.1-pro": DEFAULT_GEMINI_MODEL,
@@ -87,6 +96,16 @@ function finalizeAiSentence(text: string) {
   return normalized;
 }
 
+function trimTrailingSentenceEnding(text: string) {
+  return compactWhitespace(text).replace(/[.!?]+$/u, "").trim();
+}
+
+function hasTechnicalOverlap(text: string) {
+  return /(RSI|MACD|볼린저|지지선|저항선|거래량|현재가|모멘텀|추세|5일선|20일선|60일선|이평|이동평균|캔들)/i.test(
+    text,
+  );
+}
+
 export function compactAiField(text: string, maxLength: number) {
   const normalized = finalizeAiSentence(extractLeadSentence(text));
   if (normalized.length <= maxLength) {
@@ -102,20 +121,54 @@ export function compactAiField(text: string, maxLength: number) {
   return finalizeAiSentence(trimmed);
 }
 
-function normalizeAiPayload(payload: z.infer<typeof aiResponseSchema>) {
+function buildCompanyFallback(stock: StockLookupItem, companyContext: CompanyContext) {
+  const groupLabel = companyContext.group ? `${companyContext.group} 그룹의 ` : "";
+  const businessCore = trimTrailingSentenceEnding(companyContext.businessSummary);
+
+  return compactAiField(
+    `${stock.name}은 ${groupLabel}${companyContext.sector} 기업으로, ${businessCore}`,
+    66,
+  );
+}
+
+function buildIndustryFallback(companyContext: CompanyContext) {
+  return compactAiField(
+    `${companyContext.sector} 업종은 ${trimTrailingSentenceEnding(companyContext.industryFlow)}`,
+    64,
+  );
+}
+
+function normalizeAiPayload(
+  payload: z.infer<typeof aiResponseSchema>,
+  stock: StockLookupItem,
+  companyContext: CompanyContext,
+) {
+  const normalizedCompany = compactAiField(payload.company, 62);
+  const normalizedIndustry = compactAiField(payload.industry, 62);
+
   return {
     trend: compactAiField(payload.trend, 52),
     momentum: compactAiField(payload.momentum, 48),
     levels: compactAiField(payload.levels, 44),
-    business: compactAiField(payload.business, 58),
+    company: hasTechnicalOverlap(normalizedCompany)
+      ? buildCompanyFallback(stock, companyContext)
+      : normalizedCompany,
+    industry: hasTechnicalOverlap(normalizedIndustry)
+      ? buildIndustryFallback(companyContext)
+      : normalizedIndustry,
+    business: hasTechnicalOverlap(normalizedCompany)
+      ? buildCompanyFallback(stock, companyContext)
+      : normalizedCompany,
     risk: compactAiField(payload.risk, 50),
     conclusion: compactAiField(payload.conclusion, 58),
   };
 }
 
-function parseAiResponsePayload(text: string) {
+function parseAiResponsePayload(text: string, stock: StockLookupItem, companyContext: CompanyContext) {
   return normalizeAiPayload(
     aiResponseSchema.parse(JSON.parse(extractJson(text))),
+    stock,
+    companyContext,
   );
 }
 
@@ -124,6 +177,7 @@ function buildPrompt(
   technical: TechnicalSnapshot,
   signal: SignalSummary,
   companyContext: CompanyContext,
+  earningsContext?: EarningsContext | null,
 ) {
   return `
 너는 KOSPI & KOSDQ 주식 차트와 기업 및 해당 업종의 현재 추세 흐름을 파악하여 함께 설명하는 한국어 애널리스트다.
@@ -141,6 +195,9 @@ function buildPrompt(
 - 업계 흐름 힌트: ${companyContext.industryFlow}
 - 포지션 힌트: ${companyContext.marketPosition}
 - 보수 해석 메모: ${companyContext.cautionNote ?? "없음"}
+- 최근 실적 공시 요약: ${earningsContext?.summary ?? "없음"}
+- 최근 IR/전망 요약: ${earningsContext?.outlook ?? "없음"}
+- 최근 공시 제목: ${earningsContext?.latest?.title ?? "없음"}
 - 현재가: ${technical.currentPrice}
 - 등락률: ${technical.changePercent}
 - SMA5: ${technical.sma5}
@@ -166,7 +223,8 @@ function buildPrompt(
 작성 규칙:
 - 뉴스, 실적 발표, 공시, 목표주가처럼 입력에 없는 최신 사실은 단정하지 마라.
 - trend, momentum, levels는 차트와 기술지표 중심을 잘 활용하여 작성한다.
-- business는 그룹명과 업종명을 직접 넣고, 이 종목이 왜 그 업종 흐름의 영향을 받는지 1문장으로 쓴다.
+- company는 이 회사가 어떤 일을 하는 기업인지 설명한다. 차트 지표 설명은 금지한다.
+- industry는 이 회사가 속한 업종이 지금 어떤 흐름에 있는지 설명한다.
 - risk는 기술적 리스크와 함께 기업/업종 관점의 체크 포인트를 1~2문장으로 쓴다.
 - conclusion은 기술 흐름 + 기업 평가를 함께 묶은 한줄 결론으로 쓴다.
 - 문체는 딱딱한 리포트보다 앱에서 읽기 쉬운 자연스러운 한국어로 쓴다.
@@ -175,7 +233,10 @@ function buildPrompt(
 - 사용자가 카드에서 바로 읽을 수 있게 18~32자 안팎의 짧은 문장으로 쓴다.
 - 숫자를 반복해서 길게 늘어놓지 말고, 핵심 판단만 남긴다.
 - trend와 momentum은 서로 같은 표현을 반복하지 않는다.
-- business는 기술적 분석이 아니라 기업·업종 관점만 설명한다.
+- company와 industry에는 RSI, MACD, 추세, 거래량, 지지·저항 같은 차트 용어를 쓰지 마라.
+- company는 "무슨 회사인지"가 먼저 떠오르게 써라. 예: "반도체 공정 장비를 만드는 업체입니다."
+- industry는 "이 업종이 왜 주목받는지" 또는 "무슨 변수의 영향을 받는지"를 짧게 써라.
+- 최근 공시 요약이 있으면 company나 industry, risk에 반영하되 공시 제목에 없는 구체 숫자나 내용을 지어내지 마라.
 - ETF·ETN이면 개별 기업 실적이나 업황 평가처럼 쓰지 말고, 기초자산과 상품 구조 관점으로 짧게 설명한다.
 - 분류 신뢰도가 low면 단정형 표현을 피하고, 일반론 수준에서 짧게 설명한다.
 - 보수 해석 메모가 있으면 risk나 conclusion에 그 취지를 반영한다.
@@ -187,7 +248,8 @@ function buildPrompt(
 - trend: 추세 설명 1문장
 - momentum: 모멘텀 설명 1문장
 - levels: 지지/저항 설명 1문장
-- business: 기업 및 업종 흐름 설명 1문장
+- company: 기업 정체성 설명 1문장
+- industry: 업종 흐름 설명 1문장
 - risk: 리스크 설명 1문장
 - conclusion: 한줄 결론 1문장
 `;
@@ -246,6 +308,7 @@ function buildAiCacheKey(
   technical: TechnicalSnapshot,
   signal: SignalSummary,
   companyContext?: CompanyContext | null,
+  earningsContext?: EarningsContext | null,
 ) {
   return JSON.stringify({
     version: AI_CACHE_FORMAT_VERSION,
@@ -261,6 +324,15 @@ function buildAiCacheKey(
           group: companyContext.group,
           confidence: companyContext.confidence,
           cautionNote: companyContext.cautionNote,
+        }
+      : null,
+    earningsContext: earningsContext
+      ? {
+          latest: earningsContext.latest?.title ?? null,
+          earnings: earningsContext.earnings?.title ?? null,
+          guidance: earningsContext.guidance?.title ?? null,
+          summary: earningsContext.summary,
+          outlook: earningsContext.outlook,
         }
       : null,
   });
@@ -292,6 +364,7 @@ async function generateAiSummaryInternal(
   technical: TechnicalSnapshot,
   signal: SignalSummary,
   companyContext?: CompanyContext,
+  earningsContext?: EarningsContext | null,
 ): Promise<AiSummary> {
   const apiKeys = getGeminiApiKeys();
   if (!apiKeys.length) {
@@ -305,7 +378,7 @@ async function generateAiSummaryInternal(
   const configuredModel = process.env.GEMINI_MODEL?.trim() || DEFAULT_GEMINI_MODEL;
   const model = resolveGeminiModel(configuredModel);
   const resolvedCompanyContext = companyContext ?? (await resolveCompanyContext(stock));
-  const prompt = buildPrompt(stock, technical, signal, resolvedCompanyContext);
+  const prompt = buildPrompt(stock, technical, signal, resolvedCompanyContext, earningsContext);
   let lastError: unknown;
 
   try {
@@ -332,7 +405,7 @@ async function generateAiSummaryInternal(
           const finishReason = response.candidates?.[0]?.finishReason;
 
           try {
-            const payload = parseAiResponsePayload(text);
+            const payload = parseAiResponsePayload(text, stock, resolvedCompanyContext);
 
             return {
               available: true,
@@ -381,10 +454,11 @@ export async function generateAiSummary(
   technical: TechnicalSnapshot,
   signal: SignalSummary,
   companyContext?: CompanyContext,
+  earningsContext?: EarningsContext | null,
 ): Promise<AiSummary> {
   const configuredModel = process.env.GEMINI_MODEL?.trim() || DEFAULT_GEMINI_MODEL;
   const model = resolveGeminiModel(configuredModel);
-  const cacheKey = buildAiCacheKey(model, stock, technical, signal, companyContext);
+  const cacheKey = buildAiCacheKey(model, stock, technical, signal, companyContext, earningsContext);
   const cached = getCachedSummary(cacheKey);
   if (cached) {
     return cached;
@@ -395,7 +469,7 @@ export async function generateAiSummary(
     return inflight;
   }
 
-  const request = generateAiSummaryInternal(stock, technical, signal, companyContext)
+  const request = generateAiSummaryInternal(stock, technical, signal, companyContext, earningsContext)
     .then((summary) => {
       setCachedSummary(cacheKey, summary);
       return summary;
