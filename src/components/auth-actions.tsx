@@ -91,9 +91,9 @@ function AuthProviderButton({
           <span className="block text-sm font-black">{provider.name}</span>
           <span className="mt-0.5 block text-[12px] opacity-75">{meta.subcopy}</span>
         </span>
-        <span className="text-sm font-bold opacity-80 transition-transform group-hover:translate-x-0.5">
+        {/* <span className="text-sm font-bold opacity-80 transition-transform group-hover:translate-x-0.5">
           계속
-        </span>
+        </span> */}
       </button>
     );
   }
