@@ -801,7 +801,7 @@ function AiInsightCard({
         : "bg-[var(--brand-soft)] text-[var(--brand-strong)] dark:bg-white/[0.06] dark:text-slate-100";
 
   return (
-    <div className={`rounded-[14px] p-2.5 ${toneClass} md:rounded-[16px] md:p-3`}>
+    <div className={`rounded-[14px] px-3 py-2.75 ${toneClass} md:rounded-[16px] md:px-3 md:py-3`}>
       <div className={`inline-flex rounded-full px-2 py-0.75 text-[10px] font-bold tracking-[0.04em] ${labelClass}`}>
         {label}
       </div>
@@ -1708,7 +1708,7 @@ export function AnalysisPageClient({
           </div>
 
         <section
-          className={`waterfall-item ai-shell relative overflow-hidden rounded-[20px] p-3 md:rounded-[24px] md:p-4 ${revealPhase >= 7 ? "is-visible" : ""}`}
+          className={`waterfall-item ai-shell relative overflow-hidden rounded-[20px] px-3.5 py-3 md:rounded-[24px] md:p-4 ${revealPhase >= 7 ? "is-visible" : ""}`}
           style={{ "--waterfall-delay": "120ms" } as CSSProperties}
         >
           <div className="pointer-events-none absolute -right-16 -top-10 hidden h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(73,178,255,0.16)_0%,rgba(73,178,255,0)_72%)] dark:bg-[radial-gradient(circle,rgba(73,178,255,0.2)_0%,rgba(73,178,255,0)_72%)] md:block" />
@@ -1721,14 +1721,14 @@ export function AnalysisPageClient({
               차트 흐름과 기업 맥락만 짧게 정리합니다.
             </p>
           </div>
-          <div className="mt-2.5 space-y-2.5 text-sm leading-6 text-slate-600 dark:text-slate-300 md:mt-3 md:space-y-3">
+          <div className="mt-2.5 space-y-2.5 px-0.5 text-sm leading-6 text-slate-600 dark:text-slate-300 md:mt-3 md:space-y-3 md:px-0">
             {canUseAi ? (
-              <div className="surface-card rounded-[14px] p-2.5 md:rounded-[16px] md:p-3">
+              <div className="surface-card rounded-[14px] p-3 md:rounded-[16px] md:p-3">
                 <AuthActions isSignedIn providers={aiProviders} userName={aiUserName} />
               </div>
             ) : null}
             {!isAiAuthAvailable ? (
-              <div className="surface-card rounded-[14px] p-3 md:rounded-[16px] md:p-3.5">
+              <div className="surface-card rounded-[14px] p-3.5 md:rounded-[16px] md:p-3.5">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   로그인 기능 준비 중이에요.
                 </div>
@@ -1738,7 +1738,7 @@ export function AnalysisPageClient({
               </div>
             ) : null}
             {isAiAuthAvailable && !canUseAi ? (
-              <div className="surface-card rounded-[14px] p-3 md:rounded-[16px] md:p-3.5">
+              <div className="surface-card rounded-[14px] p-3.5 md:rounded-[16px] md:p-3.5">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   로그인 후 AI 브리핑을 볼 수 있어요
                 </div>
@@ -1759,7 +1759,7 @@ export function AnalysisPageClient({
               </div>
             ) : null}
             {canUseAi && !aiRequested ? (
-              <div className="surface-card rounded-[14px] p-3 md:rounded-[16px] md:p-3.5">
+              <div className="surface-card rounded-[14px] p-3.5 md:rounded-[16px] md:p-3.5">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   AI 브리핑을 바로 생성할 수 있어요.
                 </div>
@@ -1779,13 +1779,13 @@ export function AnalysisPageClient({
             {aiRequested && aiSummary?.available ? (
               <>
                 {aiState.loading ? (
-                  <div className="ai-glow rounded-[14px] border border-[rgba(73,178,255,0.14)] px-3 py-2.5 text-xs font-semibold text-slate-700 dark:border-[rgba(157,196,255,0.14)] dark:text-slate-100">
+                  <div className="ai-glow rounded-[14px] border border-[rgba(73,178,255,0.14)] px-3.5 py-2.5 text-xs font-semibold text-slate-700 dark:border-[rgba(157,196,255,0.14)] dark:text-slate-100">
                     AI 브리핑을 최신 데이터 기준으로 다시 정리하고 있습니다.
                   </div>
                 ) : null}
                 <div className="grid gap-2.5 xl:grid-cols-[minmax(0,1.1fr)_minmax(260px,0.9fr)] md:gap-3">
                   <div className="space-y-3">
-                    <div className="rounded-[14px] border border-[rgba(73,178,255,0.22)] bg-[linear-gradient(135deg,rgba(35,60,124,0.18),rgba(73,178,255,0.14),rgba(255,255,255,0.96))] p-3 dark:border-[rgba(157,196,255,0.2)] dark:bg-[linear-gradient(135deg,rgba(35,60,124,0.3),rgba(73,178,255,0.16),rgba(10,18,30,0.98))] md:rounded-[16px] md:p-3.5">
+                    <div className="rounded-[14px] border border-[rgba(73,178,255,0.22)] bg-[linear-gradient(135deg,rgba(35,60,124,0.18),rgba(73,178,255,0.14),rgba(255,255,255,0.96))] px-3.5 py-3 dark:border-[rgba(157,196,255,0.2)] dark:bg-[linear-gradient(135deg,rgba(35,60,124,0.3),rgba(73,178,255,0.16),rgba(10,18,30,0.98))] md:rounded-[16px] md:p-3.5">
                       <div className="inline-flex rounded-full bg-white/82 px-2.5 py-1 text-[11px] font-bold tracking-[0.04em] text-[var(--brand-strong)] dark:bg-white/[0.08] dark:text-sky-100">
                         한줄 결론
                       </div>
@@ -1804,7 +1804,7 @@ export function AnalysisPageClient({
                     </div>
                   </div>
                   <div className="grid gap-3">
-                    <div className="rounded-[14px] border border-[rgba(73,178,255,0.2)] bg-[var(--surface-card)] p-3 dark:border-[rgba(73,178,255,0.22)] dark:bg-white/[0.05] md:rounded-[16px] md:p-3.5">
+                    <div className="rounded-[14px] border border-[rgba(73,178,255,0.2)] bg-[var(--surface-card)] px-3.5 py-3 dark:border-[rgba(73,178,255,0.22)] dark:bg-white/[0.05] md:rounded-[16px] md:p-3.5">
                       <div className="flex flex-wrap items-center gap-2">
                         <div className="inline-flex rounded-full bg-[rgba(73,178,255,0.12)] px-2.5 py-1 text-[11px] font-bold tracking-[0.04em] text-[var(--brand-strong)] dark:bg-[rgba(73,178,255,0.14)] dark:text-sky-100">
                           기업·업종
@@ -1866,7 +1866,7 @@ export function AnalysisPageClient({
               </>
             ) : null}
             {aiRequested && aiSummary && !aiSummary.available && !aiState.loading ? (
-              <div className="rounded-[14px] border border-slate-200/80 bg-slate-50 p-3 dark:border-white/10 dark:bg-[var(--surface-3)] md:rounded-[16px] md:p-3.5">
+              <div className="rounded-[14px] border border-slate-200/80 bg-slate-50 px-3.5 py-3 dark:border-white/10 dark:bg-[var(--surface-3)] md:rounded-[16px] md:p-3.5">
                 <div className="font-semibold text-slate-800 dark:text-slate-100">AI 요약을 사용할 수 없습니다.</div>
                 <p className="mt-2 break-keep">
                   {getAiUnavailableCopy(aiSummary.reason)}
@@ -1874,7 +1874,7 @@ export function AnalysisPageClient({
               </div>
             ) : null}
             {aiRequested ? (
-              <div className="brand-note rounded-[14px] px-3 py-2.5 text-xs break-keep md:rounded-[16px] md:px-3.5 md:py-3">
+              <div className="brand-note rounded-[14px] px-3.5 py-2.5 text-xs break-keep md:rounded-[16px] md:px-3.5 md:py-3">
                 {aiSummary?.disclaimer ??
                   "이 분석은 기술적 지표를 바탕으로 한 참고 정보이며 투자 판단의 책임은 사용자에게 있습니다."}
               </div>

@@ -4,11 +4,14 @@ import { AdSlot } from "@/components/ad-slot";
 import { BrandLogo } from "@/components/brand-logo";
 import { MarketPulsePanel } from "@/components/market-pulse-panel";
 import { StockSearch } from "@/components/stock-search";
+import { getServerAuthSession } from "@/lib/auth";
 import { getFeaturedStocks } from "@/lib/stock-master";
 
-export default function Home() {
+export default async function Home() {
   const featured = getFeaturedStocks();
   const homeAdSlot = process.env.NEXT_PUBLIC_ADSENSE_HOME_SLOT?.trim() ?? "";
+  const session = await getServerAuthSession();
+  const userName = session?.user?.name?.trim() || "로그인 사용자";
 
   return (
     <main className="mx-auto max-w-6xl px-4 pb-8 pt-5 md:px-6 md:pb-12 md:pt-8">
@@ -20,7 +23,7 @@ export default function Home() {
               className="inline-flex items-center rounded-full border border-[rgba(var(--brand-rgb),0.24)] bg-[var(--surface-card)] px-4 py-2 text-[13px] font-bold text-[var(--brand-strong)] shadow-[0_8px_20px_rgba(15,23,42,0.05)] transition hover:border-[rgba(var(--brand-rgb),0.34)] hover:bg-[var(--interactive-hover)] md:px-4.5 md:py-2.5 md:text-sm"
               href="/login"
             >
-              로그인 하기
+              {session?.user ? `${userName}으로 로그인되어 있어요` : "로그인 하기"}
             </Link>
           </div>
           <div className="home-reveal text-[11px] font-semibold tracking-[0.08em] text-[var(--brand-strong)] [--reveal-delay:120ms] md:text-[12px]">
