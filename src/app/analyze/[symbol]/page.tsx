@@ -45,7 +45,7 @@ export default async function AnalyzePage({
   const cookieStore = await cookies();
   const isAiUserSignedIn = Boolean(session?.user);
   const shouldAutoFetchAi = isAiUserSignedIn && getGeminiApiKeyCount() > 1;
-  const favoriteUserKey = session?.user?.email?.trim() || session?.user?.name?.trim() || null;
+  const favoriteUserKey = session?.user?.id?.trim() || null;
   const hasSeenIntro = cookieStore.get("charto_analyze_intro_seen")?.value === "1";
 
   return (

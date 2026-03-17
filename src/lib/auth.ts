@@ -71,6 +71,7 @@ function updateTokenName(
   token: JWT,
   params: {
     provider?: SupportedProvider;
+    providerAccountId?: string | null;
     user?: { name?: string | null; email?: string | null } | null;
     profile?:
       | {
@@ -97,6 +98,17 @@ function updateTokenName(
   });
 
   token.name = nextName;
+  const resolvedProvider = params.provider ?? (typeof token.authProvider === "string" ? token.authProvider : null);
+  const resolvedAccountId =
+    params.providerAccountId ??
+    (params.profile?.id !== null && params.profile?.id !== undefined ? String(params.profile.id) : null) ??
+    (typeof token.sub === "string" ? token.sub : null);
+
+  if (resolvedProvider && resolvedAccountId) {
+    token.authProvider = resolvedProvider;
+    token.authUserKey = `${resolvedProvider}:${resolvedAccountId}`;
+  }
+
   return token;
 }
 
@@ -149,7 +161,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: provider.clientSecret,
       authorization: {
         params: {
-          scope: "profile_nickname profile_image account_email",
+          scope: "profile_nickname profile_image",
         },
       },
       profile(profile) {
@@ -176,6 +188,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, account, profile }) {
       return updateTokenName(token, {
         provider: (account?.provider as SupportedProvider | undefined) ?? undefined,
+        providerAccountId: account?.providerAccountId ?? null,
         user: user
           ? {
               name: user.name ?? null,
@@ -187,6 +200,7 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (session.user) {
+        session.user.id = typeof token.authUserKey === "string" ? token.authUserKey : token.sub ?? null;
         session.user.name =
           resolveDisplayName({
             tokenName: typeof token.name === "string" ? token.name : null,

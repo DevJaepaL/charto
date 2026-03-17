@@ -13,7 +13,7 @@ export default async function Home() {
   const homeAdSlot = process.env.NEXT_PUBLIC_ADSENSE_HOME_SLOT?.trim() ?? "";
   const session = await getServerAuthSession();
   const userName = session?.user?.name?.trim() || "로그인 사용자";
-  const favoriteUserKey = session?.user?.email?.trim() || session?.user?.name?.trim() || null;
+  const favoriteUserKey = session?.user?.id?.trim() || null;
 
   return (
     <main className="mx-auto max-w-6xl px-4 pb-8 pt-5 md:px-6 md:pb-12 md:pt-8">

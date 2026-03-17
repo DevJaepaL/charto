@@ -36,7 +36,7 @@ function toStockLookupItem(row: FavoriteRow): StockLookupItem {
 }
 
 function getSessionUserKey(session: Awaited<ReturnType<typeof getServerAuthSession>>) {
-  return session?.user?.email?.trim() || session?.user?.name?.trim() || null;
+  return session?.user?.id?.trim() || null;
 }
 
 async function getFavoriteStocksFromDb(userKey: string) {
@@ -195,4 +195,3 @@ export async function DELETE(request: Request) {
     );
   }
 }
-
