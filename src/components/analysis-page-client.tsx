@@ -1485,10 +1485,10 @@ export function AnalysisPageClient({
                 {favoriteUserKey ? (
                   <button
                     aria-pressed={isFavorite}
-                    className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold shadow-[0_10px_24px_rgba(15,23,42,0.06)] transition-all md:px-3 md:py-1.25 md:text-[11px] ${
+                    className={`inline-flex items-center gap-1.5 rounded-full border px-2.75 py-1.1 text-[10px] font-extrabold shadow-[0_12px_28px_rgba(15,23,42,0.08)] transition-all md:px-3.25 md:py-1.35 md:text-[11px] ${
                       isFavorite
-                        ? "border-rose-200 bg-rose-50 text-rose-700 shadow-[0_12px_28px_rgba(240,66,81,0.16)] dark:border-rose-400/20 dark:bg-rose-500/14 dark:text-rose-100"
-                        : "border-[rgba(var(--brand-rgb),0.22)] bg-[rgba(var(--brand-rgb),0.08)] text-[var(--brand-strong)] shadow-[0_12px_28px_rgba(35,60,124,0.08)] dark:border-sky-400/20 dark:bg-sky-500/10 dark:text-sky-100"
+                        ? "border-rose-200 bg-rose-50 text-rose-700 shadow-[0_14px_32px_rgba(240,66,81,0.16)] dark:border-rose-400/24 dark:bg-rose-500/16 dark:text-rose-100"
+                        : "border-[rgba(var(--brand-rgb),0.32)] bg-[rgba(var(--brand-rgb),0.14)] text-[var(--brand-strong)] shadow-[0_14px_30px_rgba(35,60,124,0.12)] ring-1 ring-[rgba(var(--brand-rgb),0.08)] dark:border-sky-400/28 dark:bg-sky-500/14 dark:text-sky-50"
                     }`}
                     type="button"
                     onClick={async () => {
@@ -1497,13 +1497,13 @@ export function AnalysisPageClient({
                     }}
                   >
                     <span
-                      className={`inline-flex h-4.5 w-4.5 items-center justify-center rounded-full md:h-5 md:w-5 ${
+                      className={`inline-flex h-5 w-5 items-center justify-center rounded-full md:h-5.5 md:w-5.5 ${
                         isFavorite
-                          ? "bg-rose-100 text-rose-600 dark:bg-rose-500/18 dark:text-rose-100"
-                          : "bg-white/85 text-[var(--brand-strong)] dark:bg-white/12 dark:text-sky-100"
+                          ? "bg-rose-100 text-rose-600 dark:bg-rose-500/20 dark:text-rose-100"
+                          : "bg-white text-[var(--brand-strong)] shadow-[0_4px_14px_rgba(35,60,124,0.12)] dark:bg-white/14 dark:text-sky-100"
                       }`}
                     >
-                      {isFavorite ? <IconHeartFilled size={12} /> : <IconHeart size={12} />}
+                      {isFavorite ? <IconHeartFilled size={13} /> : <IconHeart size={13} />}
                     </span>
                     <span>{isFavorite ? "관심종목 저장됨" : "관심종목 추가"}</span>
                   </button>

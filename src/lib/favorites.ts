@@ -122,12 +122,15 @@ export function getFavoritesEventName() {
 }
 
 export async function toggleFavoriteStockForUser(userKey: string, stock: StockLookupItem) {
+  const current = readFavoriteStocks(userKey);
+  const exists = current.some((item) => item.symbol === stock.symbol);
+
   const remoteItems = await requestFavorites("/api/favorites", {
-    method: "POST",
+    method: exists ? "DELETE" : "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(stock),
+    body: JSON.stringify(exists ? { symbol: stock.symbol } : stock),
   });
 
   if (remoteItems) {
