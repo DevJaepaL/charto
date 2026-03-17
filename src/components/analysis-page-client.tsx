@@ -2,7 +2,7 @@
 
 import { type CSSProperties, type ReactNode, useEffect, useReducer, useRef, useState } from "react";
 import Link from "next/link";
-import { IconHome2, IconSparkles } from "@tabler/icons-react";
+import { IconHeart, IconHeartFilled, IconHome2, IconSparkles } from "@tabler/icons-react";
 import { createPortal } from "react-dom";
 
 import { AdSlot } from "@/components/ad-slot";
@@ -13,6 +13,12 @@ import {
   formatCompanyContextHeadline,
   inferCompanyContext,
 } from "@/lib/analysis/company-context";
+import {
+  getFavoritesEventName,
+  isFavoriteStock,
+  readFavoriteStocksForUser,
+  toggleFavoriteStockForUser,
+} from "@/lib/favorites";
 import { getCompanyContextVisuals } from "@/lib/company-context-visuals";
 import { StockChart } from "@/components/stock-chart";
 import { StockSearch } from "@/components/stock-search";
@@ -40,12 +46,26 @@ interface AnalysisPageClientProps {
   aiProviders: Array<{ id: "google" | "kakao"; name: string }>;
   aiUserName?: string | null;
   isAiUserSignedIn: boolean;
+  favoriteUserKey?: string | null;
+  hasSeenIntro?: boolean;
   featured: StockLookupItem[];
   stock: StockLookupItem;
   initialTechnicalPayload: TechnicalResponse | null;
   initialRecommendationSignal: SignalSummary | null;
   initialError: string | null;
   shouldAutoFetchAi: boolean;
+}
+
+function getIntroSeenState(hasSeenIntro: boolean) {
+  if (hasSeenIntro || typeof window === "undefined") {
+    return hasSeenIntro;
+  }
+
+  const introCookieName = "charto_analyze_intro_seen";
+  return (
+    document.cookie.includes(`${introCookieName}=1`) ||
+    window.sessionStorage.getItem(introCookieName) === "1"
+  );
 }
 
 async function fetchJson<T>(input: RequestInfo, init?: RequestInit) {
@@ -1043,6 +1063,8 @@ export function AnalysisPageClient({
   aiProviders,
   aiUserName,
   isAiUserSignedIn,
+  favoriteUserKey,
+  hasSeenIntro = false,
   featured,
   stock,
   initialTechnicalPayload,
@@ -1091,17 +1113,66 @@ export function AnalysisPageClient({
     initialRecommendationSignal,
   );
   const [aiRequested, setAiRequested] = useState(isAiUserSignedIn ? shouldAutoFetchAi : false);
-  const [minIntroReady, setMinIntroReady] = useState(false);
+  const introAlreadySeen = getIntroSeenState(hasSeenIntro);
+  const [minIntroReady, setMinIntroReady] = useState(introAlreadySeen);
+  const [shouldShowIntro] = useState(!introAlreadySeen);
+  const [isFavorite, setIsFavorite] = useState(() =>
+    favoriteUserKey ? isFavoriteStock(favoriteUserKey, stock.symbol) : false,
+  );
   const [revealPhase, setRevealPhase] = useState(0);
   const skipInitialDataFetch = useRef(Boolean(initialTechnicalPayload && !initialError));
 
   useEffect(() => {
+    if (!shouldShowIntro) {
+      return;
+    }
+
+    const introCookieName = "charto_analyze_intro_seen";
+
     const timeoutId = window.setTimeout(() => {
       setMinIntroReady(true);
+      window.sessionStorage.setItem(introCookieName, "1");
+      document.cookie = `${introCookieName}=1; path=/; max-age=${60 * 60 * 24 * 30}; samesite=lax`;
     }, 4300);
 
     return () => window.clearTimeout(timeoutId);
-  }, []);
+  }, [shouldShowIntro]);
+
+  useEffect(() => {
+    if (!favoriteUserKey) {
+      return;
+    }
+
+    let cancelled = false;
+
+    void readFavoriteStocksForUser(favoriteUserKey).then((items) => {
+      if (!cancelled) {
+        setIsFavorite(items.some((item) => item.symbol === stock.symbol));
+      }
+    });
+
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key?.startsWith("charto:favorites:")) {
+        setIsFavorite(isFavoriteStock(favoriteUserKey, stock.symbol));
+      }
+    };
+
+    const handleCustom = (event: Event) => {
+      const customEvent = event as CustomEvent<{ userKey?: string }>;
+      if (!customEvent.detail?.userKey || customEvent.detail.userKey === favoriteUserKey) {
+        setIsFavorite(isFavoriteStock(favoriteUserKey, stock.symbol));
+      }
+    };
+
+    window.addEventListener("storage", handleStorage);
+    window.addEventListener(getFavoritesEventName(), handleCustom as EventListener);
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener(getFavoritesEventName(), handleCustom as EventListener);
+    };
+  }, [favoriteUserKey, stock.symbol]);
 
   useEffect(() => {
     if (skipInitialDataFetch.current) {
@@ -1367,7 +1438,7 @@ export function AnalysisPageClient({
     },
   ];
 
-  if (isInitialLoading || !minIntroReady) {
+  if (shouldShowIntro && (isInitialLoading || !minIntroReady)) {
     return <AnalyzeInitialLoading stock={stock} />;
   }
 
@@ -1411,6 +1482,32 @@ export function AnalysisPageClient({
                 <span className="inline-flex items-center rounded-full bg-[var(--surface-pill)] px-2 py-0.75 font-semibold text-slate-600 dark:bg-white/[0.06] dark:text-slate-200">
                   {stock.market}
                 </span>
+                {favoriteUserKey ? (
+                  <button
+                    aria-pressed={isFavorite}
+                    className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold shadow-[0_10px_24px_rgba(15,23,42,0.06)] transition-all md:px-3 md:py-1.25 md:text-[11px] ${
+                      isFavorite
+                        ? "border-rose-200 bg-rose-50 text-rose-700 shadow-[0_12px_28px_rgba(240,66,81,0.16)] dark:border-rose-400/20 dark:bg-rose-500/14 dark:text-rose-100"
+                        : "border-[rgba(var(--brand-rgb),0.22)] bg-[rgba(var(--brand-rgb),0.08)] text-[var(--brand-strong)] shadow-[0_12px_28px_rgba(35,60,124,0.08)] dark:border-sky-400/20 dark:bg-sky-500/10 dark:text-sky-100"
+                    }`}
+                    type="button"
+                    onClick={async () => {
+                      const nextItems = await toggleFavoriteStockForUser(favoriteUserKey, stock);
+                      setIsFavorite(nextItems.some((item) => item.symbol === stock.symbol));
+                    }}
+                  >
+                    <span
+                      className={`inline-flex h-4.5 w-4.5 items-center justify-center rounded-full md:h-5 md:w-5 ${
+                        isFavorite
+                          ? "bg-rose-100 text-rose-600 dark:bg-rose-500/18 dark:text-rose-100"
+                          : "bg-white/85 text-[var(--brand-strong)] dark:bg-white/12 dark:text-sky-100"
+                      }`}
+                    >
+                      {isFavorite ? <IconHeartFilled size={12} /> : <IconHeart size={12} />}
+                    </span>
+                    <span>{isFavorite ? "관심종목 저장됨" : "관심종목 추가"}</span>
+                  </button>
+                ) : null}
               </div>
             </div>
             </div>

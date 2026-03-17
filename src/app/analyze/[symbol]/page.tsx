@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { AnalysisPageClient } from "@/components/analysis-page-client";
@@ -41,14 +42,19 @@ export default async function AnalyzePage({
   }
 
   const session = await getServerAuthSession();
+  const cookieStore = await cookies();
   const isAiUserSignedIn = Boolean(session?.user);
   const shouldAutoFetchAi = isAiUserSignedIn && getGeminiApiKeyCount() > 1;
+  const favoriteUserKey = session?.user?.email?.trim() || session?.user?.name?.trim() || null;
+  const hasSeenIntro = cookieStore.get("charto_analyze_intro_seen")?.value === "1";
 
   return (
     <AnalysisPageClient
       aiProviders={configuredAuthProviders.map(({ id, name }) => ({ id, name }))}
       aiUserName={session?.user?.name}
+      favoriteUserKey={favoriteUserKey}
       featured={getFeaturedStocks()}
+      hasSeenIntro={hasSeenIntro}
       initialError={null}
       initialRecommendationSignal={null}
       initialTechnicalPayload={null}

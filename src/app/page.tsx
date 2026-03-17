@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { AdSlot } from "@/components/ad-slot";
 import { BrandLogo } from "@/components/brand-logo";
+import { FavoriteStocksPanel } from "@/components/favorite-stocks-panel";
 import { MarketPulsePanel } from "@/components/market-pulse-panel";
 import { StockSearch } from "@/components/stock-search";
 import { getServerAuthSession } from "@/lib/auth";
@@ -12,6 +13,7 @@ export default async function Home() {
   const homeAdSlot = process.env.NEXT_PUBLIC_ADSENSE_HOME_SLOT?.trim() ?? "";
   const session = await getServerAuthSession();
   const userName = session?.user?.name?.trim() || "로그인 사용자";
+  const favoriteUserKey = session?.user?.email?.trim() || session?.user?.name?.trim() || null;
 
   return (
     <main className="mx-auto max-w-6xl px-4 pb-8 pt-5 md:px-6 md:pb-12 md:pt-8">
@@ -40,6 +42,7 @@ export default async function Home() {
           <div className="home-reveal mt-4 w-full [--reveal-delay:340ms]">
             <StockSearch featured={featured} variant="compact" />
           </div>
+          <FavoriteStocksPanel userKey={favoriteUserKey} userName={session?.user?.name ?? null} />
           <div className="home-reveal mt-4 w-full [--reveal-delay:420ms]">
             <MarketPulsePanel />
           </div>

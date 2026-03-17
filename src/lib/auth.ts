@@ -149,7 +149,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: provider.clientSecret,
       authorization: {
         params: {
-          scope: "profile_nickname profile_image",
+          scope: "profile_nickname profile_image account_email",
         },
       },
       profile(profile) {
