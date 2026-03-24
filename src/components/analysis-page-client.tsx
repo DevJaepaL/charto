@@ -874,7 +874,7 @@ function buildAiLevelsSummary(
 
 function AnalyzeInitialLoading({ stock }: { stock: StockLookupItem }) {
   return (
-    <main className="mx-auto flex min-h-[calc(100vh-132px)] max-w-5xl items-center px-4 pb-12 pt-5 md:px-6 md:pt-8">
+    <main className="page-mobile-shell mx-auto flex min-h-[calc(100vh-148px)] items-center px-3.5 pb-8 pt-3.5 md:px-3.5 md:pb-10 md:pt-4">
       <section className="board-panel w-full rounded-[14px] p-4 md:rounded-[16px] md:p-6">
         <AnimatedLoadingStage stock={stock} />
       </section>
@@ -1443,7 +1443,7 @@ export function AnalysisPageClient({
   }
 
   return (
-    <main className="mx-auto max-w-[1260px] px-3.5 pb-8 pt-3.5 md:px-6 md:pb-12 md:pt-5">
+    <main className="page-mobile-shell mx-auto px-3.5 pb-10 pt-3.5 md:px-3.5 md:pb-12 md:pt-4">
       <div
         key={`${stock.symbol}:${loadedSelectionKey ?? "ready"}`}
         className="flex flex-col gap-3.5 md:gap-4"
@@ -1512,7 +1512,7 @@ export function AnalysisPageClient({
             </div>
             </div>
               <div
-                className={`waterfall-item mt-2 grid gap-2 xl:grid-cols-[minmax(0,1fr)_minmax(320px,344px)] xl:items-stretch ${revealPhase >= 3 ? "is-visible" : ""}`}
+                className={`waterfall-item mt-2 grid gap-2 ${revealPhase >= 3 ? "is-visible" : ""}`}
                 style={{ "--waterfall-delay": "80ms" } as CSSProperties}
               >
             <div className="surface-card h-full rounded-[10px] p-2.5 md:rounded-[12px] md:p-3">
@@ -1616,7 +1616,7 @@ export function AnalysisPageClient({
                 <div className="mb-2 text-[9px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
                   신호 보드
                 </div>
-                <div className="grid gap-1.5 sm:grid-cols-2 xl:grid-cols-4">
+                <div className="grid grid-cols-2 gap-1.5">
                   {headerSignalItems.map((item) => (
                     <SignalRail
                       key={item.label}
@@ -1656,11 +1656,11 @@ export function AnalysisPageClient({
           </section>
         ) : null}
 
-        <div className="grid gap-3.5 xl:grid-cols-[minmax(0,1.72fr)_minmax(280px,0.92fr)] xl:items-start">
+        <div className="grid gap-3.5">
             <section
               className={`waterfall-item board-panel self-start overflow-hidden rounded-[12px] p-2.5 md:rounded-[14px] md:p-3 ${revealPhase >= 5 ? "is-visible" : ""}`}
             >
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex flex-col gap-3">
               <div className="min-w-0">
                 <h2 className="text-[15px] font-bold text-slate-950 dark:text-slate-50 md:text-[17px]">차트</h2>
               </div>
@@ -1736,7 +1736,7 @@ export function AnalysisPageClient({
                   className={`waterfall-item board-panel overflow-hidden rounded-[12px] p-2.5 md:rounded-[14px] md:p-3 ${revealPhase >= 6 ? "is-visible" : ""}`}
                   style={{ "--waterfall-delay": "80ms" } as CSSProperties}
                 >
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="flex flex-col gap-3">
                 <div className="min-w-0">
                   <h2 className="text-[15px] font-bold text-slate-950 dark:text-slate-50 md:text-[17px]">근거와 리스크</h2>
                 </div>
@@ -1869,7 +1869,7 @@ export function AnalysisPageClient({
                     AI 브리핑을 최신 데이터 기준으로 다시 정리하고 있습니다.
                   </div>
                 ) : null}
-                <div className="grid gap-2.5 xl:grid-cols-[minmax(0,1.1fr)_minmax(260px,0.9fr)] md:gap-3">
+                <div className="grid gap-2.5 md:gap-3">
                   <div className="space-y-3">
                     <div className="rounded-[10px] border border-[rgba(73,178,255,0.22)] bg-[linear-gradient(135deg,rgba(35,60,124,0.14),rgba(73,178,255,0.1),rgba(255,255,255,0.98))] px-3.5 py-3 dark:border-[rgba(157,196,255,0.2)] dark:bg-[linear-gradient(135deg,rgba(35,60,124,0.22),rgba(73,178,255,0.12),rgba(10,18,30,0.98))] md:rounded-[12px] md:p-3.5">
                       <div className="inline-flex rounded-full bg-white/82 px-2.5 py-1 text-[11px] font-bold tracking-[0.04em] text-[var(--brand-strong)] dark:bg-white/[0.08] dark:text-sky-100">
@@ -1879,7 +1879,7 @@ export function AnalysisPageClient({
                         {aiSummary.conclusion}
                       </p>
                     </div>
-                    <div className="grid gap-3 xl:grid-cols-2">
+                    <div className="grid gap-3">
                       <AiInsightCard
                         label="차트 흐름"
                         text={aiChartSummary}

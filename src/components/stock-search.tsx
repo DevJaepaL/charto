@@ -133,7 +133,7 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
   const hero = variant === "hero";
 
   return (
-    <div className={compact || inline ? "w-full" : "w-full max-w-3xl"}>
+    <div className="w-full">
       <div
         className={`search-dock relative ${
           inline
@@ -211,7 +211,7 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
             <div className="flex items-center justify-between px-3 py-2 text-xs font-medium text-slate-500 dark:text-white/56">
               <span className="inline-flex items-center gap-1.5">
                 {!query.trim() ? <IconFlameFilled size={12} className="text-orange-500" /> : null}
-                <span>{query.trim() ? "검색 결과" : "현재 많은 사람들이 검색한 종목이에요"}</span>
+                <span>{query.trim() ? "검색 결과" : "많은 사람들이 검색한 종목이에요."}</span>
               </span>
               {query.trim() && searchState.error ? (
                 <span className="text-rose-500">{searchState.error}</span>

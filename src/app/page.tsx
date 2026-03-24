@@ -13,10 +13,10 @@ export default async function Home() {
   const userKey = session?.user?.id?.trim() || null;
 
   return (
-    <main className="home-shell relative mx-auto max-w-[1240px] overflow-hidden px-4 pb-14 pt-4 md:px-6 md:pb-20 md:pt-6">
-      <div className="pointer-events-none absolute left-[-10%] top-12 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(93,148,255,0.14)_0%,rgba(93,148,255,0)_72%)] blur-3xl dark:bg-[radial-gradient(circle,rgba(93,148,255,0.18)_0%,rgba(93,148,255,0)_72%)]" />
-      <div className="pointer-events-none absolute right-[-12%] top-32 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(112,211,255,0.12)_0%,rgba(112,211,255,0)_72%)] blur-3xl dark:bg-[radial-gradient(circle,rgba(112,211,255,0.14)_0%,rgba(112,211,255,0)_72%)]" />
-      <section className="relative">
+    <main className="home-shell page-mobile-shell relative mx-auto min-h-[calc(100vh-160px)] overflow-hidden px-4 pb-12 pt-4 md:px-4 md:pb-14 md:pt-5">
+      <div className="pointer-events-none absolute left-[-12%] top-10 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(93,148,255,0.12)_0%,rgba(93,148,255,0)_72%)] blur-3xl dark:bg-[radial-gradient(circle,rgba(93,148,255,0.16)_0%,rgba(93,148,255,0)_72%)]" />
+      <div className="pointer-events-none absolute right-[-18%] top-28 h-60 w-60 rounded-full bg-[radial-gradient(circle,rgba(112,211,255,0.08)_0%,rgba(112,211,255,0)_72%)] blur-3xl dark:bg-[radial-gradient(circle,rgba(112,211,255,0.1)_0%,rgba(112,211,255,0)_72%)]" />
+      <section className="relative flex min-h-full flex-col gap-6">
         <div className="home-reveal flex items-center justify-between gap-3 [--reveal-delay:40ms]">
           <BrandLogo size="md" withBadge={false} />
           <Link className="home-login-chip" href="/login">
@@ -24,9 +24,9 @@ export default async function Home() {
           </Link>
         </div>
 
-        <div className="mx-auto grid max-w-[1120px] gap-10 pb-10 pt-14 md:min-h-[calc(100vh-12rem)] md:grid-cols-[minmax(0,0.95fr)_minmax(390px,0.85fr)] md:items-center md:gap-14 md:pb-14 md:pt-10">
-          <div className="home-reveal max-w-[320px] [--reveal-delay:120ms]">
-            <h1 className="font-korean-display max-w-[280px] text-[1.375rem] font-bold leading-[1.62] text-slate-950 dark:text-slate-50 md:max-w-[320px] md:text-[1.375rem]">
+        <div className="flex flex-1 flex-col justify-center gap-6 pb-4 pt-8">
+          <div className="home-reveal max-w-[18rem] [--reveal-delay:120ms]">
+            <h1 className="font-korean-display text-[1.375rem] font-bold leading-[1.6] text-slate-950 dark:text-slate-50">
               국내 증시 종목을
               <br />
               기술적으로 분석해드려요.
