@@ -47,25 +47,12 @@ interface AnalysisPageClientProps {
   aiUserName?: string | null;
   isAiUserSignedIn: boolean;
   favoriteUserKey?: string | null;
-  hasSeenIntro?: boolean;
   featured: StockLookupItem[];
   stock: StockLookupItem;
   initialTechnicalPayload: TechnicalResponse | null;
   initialRecommendationSignal: SignalSummary | null;
   initialError: string | null;
   shouldAutoFetchAi: boolean;
-}
-
-function getIntroSeenState(hasSeenIntro: boolean) {
-  if (hasSeenIntro || typeof window === "undefined") {
-    return hasSeenIntro;
-  }
-
-  const introCookieName = "charto_analyze_intro_seen";
-  return (
-    document.cookie.includes(`${introCookieName}=1`) ||
-    window.sessionStorage.getItem(introCookieName) === "1"
-  );
 }
 
 async function fetchJson<T>(input: RequestInfo, init?: RequestInit) {
@@ -1064,7 +1051,6 @@ export function AnalysisPageClient({
   aiUserName,
   isAiUserSignedIn,
   favoriteUserKey,
-  hasSeenIntro = false,
   featured,
   stock,
   initialTechnicalPayload,
@@ -1113,9 +1099,7 @@ export function AnalysisPageClient({
     initialRecommendationSignal,
   );
   const [aiRequested, setAiRequested] = useState(isAiUserSignedIn ? shouldAutoFetchAi : false);
-  const introAlreadySeen = getIntroSeenState(hasSeenIntro);
-  const [minIntroReady, setMinIntroReady] = useState(introAlreadySeen);
-  const [shouldShowIntro] = useState(!introAlreadySeen);
+  const [minIntroReady, setMinIntroReady] = useState(false);
   const [isFavorite, setIsFavorite] = useState(() =>
     favoriteUserKey ? isFavoriteStock(favoriteUserKey, stock.symbol) : false,
   );
@@ -1123,20 +1107,14 @@ export function AnalysisPageClient({
   const skipInitialDataFetch = useRef(Boolean(initialTechnicalPayload && !initialError));
 
   useEffect(() => {
-    if (!shouldShowIntro) {
-      return;
-    }
-
-    const introCookieName = "charto_analyze_intro_seen";
+    setMinIntroReady(false);
 
     const timeoutId = window.setTimeout(() => {
       setMinIntroReady(true);
-      window.sessionStorage.setItem(introCookieName, "1");
-      document.cookie = `${introCookieName}=1; path=/; max-age=${60 * 60 * 24 * 30}; samesite=lax`;
     }, 4300);
 
     return () => window.clearTimeout(timeoutId);
-  }, [shouldShowIntro]);
+  }, [stock.symbol]);
 
   useEffect(() => {
     if (!favoriteUserKey) {
@@ -1438,7 +1416,7 @@ export function AnalysisPageClient({
     },
   ];
 
-  if (shouldShowIntro && (isInitialLoading || !minIntroReady)) {
+  if (isInitialLoading || !minIntroReady) {
     return <AnalyzeInitialLoading stock={stock} />;
   }
 
