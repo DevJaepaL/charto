@@ -516,7 +516,7 @@ const OFFICIAL_CONTEXT_RULES: OfficialContextRule[] = [
     sector: "엔터테인먼트",
     businessSummary: "공연과 콘텐츠, 레저 활동 수요, 팬덤 지표가 실적에 반영되는 업종입니다.",
     industryFlow: "이벤트와 흥행 모멘텀에 따라 업종 전체 심리가 크게 달라질 수 있습니다.",
-    marketPosition: "이벤트 편차가 커 변동성이 큰 섹터에요.",
+    marketPosition: "이벤트 편차가 커 변동성이 큰 섹터에요. 등락폭에 조심하세요.",
     interpretWithCaution: true,
   },
 ];
