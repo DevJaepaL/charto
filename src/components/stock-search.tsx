@@ -32,7 +32,7 @@ async function getTrendingStocks(signal: AbortSignal) {
   });
 
   if (!response.ok) {
-    throw new Error("거래대금 상위 종목을 불러오지 못했습니다.");
+    throw new Error("거래대금 상위 종목을 불러오지 못했어요.");
   }
 
   const payload = (await response.json()) as MarketRankingResponse;
