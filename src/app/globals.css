@@ -83,9 +83,7 @@ body {
   font-family: var(--font-sans);
   word-break: keep-all;
   overflow-x: hidden;
-  background:
-    radial-gradient(circle at top, rgba(var(--brand-rgb), 0.06), transparent 34%),
-    var(--surface-0);
+  background: var(--surface-0);
 }
 
 button,
@@ -121,9 +119,7 @@ select:focus-visible {
 
 .app-shell {
   min-height: 100vh;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0)) 0 0 / 100% 320px no-repeat,
-    var(--shell-gradient);
+  background: var(--shell-gradient);
   overflow-x: clip;
 }
 
@@ -256,10 +252,8 @@ select:focus-visible {
 
 .search-dock {
   border: 1px solid rgba(18, 26, 42, 0.14);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 248, 250, 0.98)) padding-box,
-    linear-gradient(135deg, rgba(15, 23, 42, 0.14), rgba(73, 178, 255, 0.12)) border-box;
-  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
 }
 
 .home-login-chip {
@@ -272,7 +266,7 @@ select:focus-visible {
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--text-main);
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+  box-shadow: none;
 }
 
 .font-korean-display {
@@ -280,11 +274,7 @@ select:focus-visible {
 }
 
 .home-search-stage {
-  border-radius: 14px;
-  border: 1px solid var(--line-soft);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(248, 249, 251, 0.92));
-  padding: 0.9rem;
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  padding: 0;
 }
 
 .home-favorites-strip {
@@ -317,7 +307,7 @@ select:focus-visible {
 .board-panel {
   border-radius: 12px;
   border: 1px solid var(--line-soft);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 249, 251, 0.96));
+  background: rgba(255, 255, 255, 0.98);
   box-shadow: 0 16px 34px rgba(15, 23, 42, 0.075);
 }
 
@@ -758,10 +748,8 @@ select:focus-visible {
 }
 
 .dark .search-dock {
-  background:
-    linear-gradient(180deg, rgba(10, 12, 16, 0.98), rgba(12, 15, 20, 0.98)) padding-box,
-    linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(94, 194, 255, 0.16)) border-box;
-  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.34);
+  background: #080d14;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
 }
 
 .dark .home-login-chip,
@@ -772,7 +760,7 @@ select:focus-visible {
 
 .dark .home-search-stage,
 .dark .board-panel {
-  background: linear-gradient(180deg, rgba(10, 12, 16, 0.98), rgba(12, 15, 20, 0.98));
+  background: rgba(10, 12, 16, 0.98);
   box-shadow: 0 20px 44px rgba(0, 0, 0, 0.32);
 }
 

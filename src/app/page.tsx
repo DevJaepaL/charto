@@ -14,13 +14,11 @@ export default async function Home() {
 
   return (
     <main className="home-shell page-mobile-shell relative mx-auto min-h-[calc(100vh-160px)] overflow-hidden px-4 pb-12 pt-4 md:px-4 md:pb-14 md:pt-5">
-      <div className="pointer-events-none absolute left-[-12%] top-10 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(93,148,255,0.12)_0%,rgba(93,148,255,0)_72%)] blur-3xl dark:bg-[radial-gradient(circle,rgba(93,148,255,0.16)_0%,rgba(93,148,255,0)_72%)]" />
-      <div className="pointer-events-none absolute right-[-18%] top-28 h-60 w-60 rounded-full bg-[radial-gradient(circle,rgba(112,211,255,0.08)_0%,rgba(112,211,255,0)_72%)] blur-3xl dark:bg-[radial-gradient(circle,rgba(112,211,255,0.1)_0%,rgba(112,211,255,0)_72%)]" />
       <section className="relative flex min-h-full flex-col gap-6">
         <div className="home-reveal flex items-center justify-between gap-3 [--reveal-delay:40ms]">
           <BrandLogo size="md" withBadge={false} />
           <Link className="home-login-chip" href="/login">
-            {session?.user ? `${userName}으로 로그인되어 있어요` : "로그인 하기"}
+            {session?.user ? `${userName}으로 로그인되어 있어요` : "로그인하기"}
           </Link>
         </div>
 
