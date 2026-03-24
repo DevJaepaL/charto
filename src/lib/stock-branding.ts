@@ -224,7 +224,7 @@ function buildGeneratedLogo(monogram: string, gradientFrom: string, gradientTo: 
       <rect x="5" y="5" width="54" height="54" rx="16" fill="url(#g)" />
       <circle cx="49" cy="15" r="8" fill="white" fill-opacity=".24" />
       <path d="M17 46c8.5-11 17.8-17.2 30-20.6" stroke="white" stroke-opacity=".26" stroke-width="2.4" stroke-linecap="round"/>
-      <text x="32" y="39" fill="#0F172A" font-size="${safeMonogram.length >= 3 ? 15 : 21}" font-weight="800" text-anchor="middle" font-family="Noto Sans KR, Apple SD Gothic Neo, Malgun Gothic, sans-serif" letter-spacing="-.04em">${safeMonogram}</text>
+      <text x="32" y="39" fill="#0F172A" font-size="${safeMonogram.length >= 3 ? 15 : 21}" font-weight="800" text-anchor="middle" font-family="JetBrains Mono, Pretendard Variable, Pretendard, Apple SD Gothic Neo, Malgun Gothic, sans-serif" letter-spacing="-.04em">${safeMonogram}</text>
     </svg>
   `;
 

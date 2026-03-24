@@ -2,6 +2,7 @@
 
 import { useDeferredValue, useEffect, useReducer, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { IconFlameFilled } from "@tabler/icons-react";
 
 import { AnimatedLoadingStage } from "@/components/animated-loading-stage";
 import { StockAvatar } from "@/components/stock-avatar";
@@ -25,11 +26,13 @@ async function getSuggestions(query: string, signal: AbortSignal) {
   return payload.items;
 }
 
-async function getLiveFeatured(signal: AbortSignal) {
-  const response = await fetch("/api/market/rankings?mode=value", { signal });
+async function getTrendingStocks(signal: AbortSignal) {
+  const response = await fetch("/api/market/rankings?mode=value", {
+    signal,
+  });
 
   if (!response.ok) {
-    throw new Error("실시간 거래대금 상위 데이터를 불러오지 못했습니다.");
+    throw new Error("거래대금 상위 종목을 불러오지 못했습니다.");
   }
 
   const payload = (await response.json()) as MarketRankingResponse;
@@ -68,7 +71,7 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
     results: featured,
     error: null,
   });
-  const [liveFeatured, setLiveFeatured] = useState<StockLookupItem[]>(featured);
+  const [trendingItems, setTrendingItems] = useState<StockLookupItem[]>(featured);
   const [isPending, startTransition] = useTransition();
   const [isFocused, setIsFocused] = useState(false);
   const [pendingTarget, setPendingTarget] = useState<StockLookupItem | null>(null);
@@ -76,14 +79,14 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
   useEffect(() => {
     const controller = new AbortController();
 
-    getLiveFeatured(controller.signal)
+    getTrendingStocks(controller.signal)
       .then((items) => {
         if (items.length) {
-          setLiveFeatured(items);
+          setTrendingItems(items);
         }
       })
       .catch(() => {
-        setLiveFeatured(featured);
+        setTrendingItems(featured);
       });
 
     return () => controller.abort();
@@ -111,7 +114,7 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
     return () => controller.abort();
   }, [deferredQuery]);
 
-  const activeItems = query.trim() ? searchState.results : liveFeatured;
+  const activeItems = query.trim() ? searchState.results : trendingItems;
 
   const submitSearch = (item?: StockLookupItem) => {
     const target = item ?? activeItems[0];
@@ -127,29 +130,30 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
 
   const compact = variant === "compact";
   const inline = variant === "inline";
+  const hero = variant === "hero";
 
   return (
     <div className={compact || inline ? "w-full" : "w-full max-w-3xl"}>
       <div
-        className={`glass-card relative ${
+        className={`search-dock relative ${
           inline
             ? "rounded-[8px] p-0.5 md:rounded-[10px]"
             : compact
-              ? "rounded-[10px] p-0.5 md:rounded-[12px]"
-              : "rounded-[12px] p-1.5 md:rounded-[16px] md:p-2"
+              ? "rounded-[14px] p-1 md:rounded-[16px]"
+              : "rounded-[16px] p-1.5 md:rounded-[18px] md:p-2"
         }`}
       >
         <div
-          className={`grid grid-cols-[minmax(0,1fr)_auto] items-center bg-[var(--surface-card)] ${
-            inline ? "rounded-[8px] md:rounded-[10px]" : compact ? "rounded-[10px] md:rounded-[12px]" : "rounded-[12px] md:rounded-[14px]"
+          className={`grid ${hero ? "grid-cols-1" : "grid-cols-[minmax(0,1fr)_auto]"} items-center border border-black/6 bg-[rgba(255,255,255,0.88)] text-slate-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.44)] dark:border-white/6 dark:bg-[#0b1320] dark:text-white dark:shadow-none ${
+            inline ? "rounded-[8px] md:rounded-[10px]" : compact ? "rounded-[12px] md:rounded-[14px]" : "rounded-[14px] md:rounded-[16px]"
           } ${
-            inline ? "gap-1 p-1" : compact ? "gap-1 p-1.5" : "gap-1.5 p-1.5"
+            inline ? "gap-1 p-1" : compact ? "gap-2 p-2" : "gap-2.5 p-2.5"
           }`}
         >
-          <div className={`flex min-w-0 items-center ${inline ? "gap-1.5 px-2 py-1" : compact ? "gap-1.5 px-2.5 py-1.5" : "gap-2 px-2.5 py-1.5"}`}>
+          <div className={`flex min-w-0 items-center ${inline ? "gap-1.5 px-2 py-1" : compact ? "gap-2 px-3.5 py-2.5" : "gap-2.5 px-4 py-3"}`}>
             <svg
               aria-hidden
-              className={`${inline ? "size-3.5" : compact ? "size-4" : "size-4.5"} shrink-0 text-slate-400 dark:text-slate-500`}
+              className={`${inline ? "size-3.5" : compact ? "size-4" : "size-4.5"} shrink-0 text-slate-400 dark:text-white/44`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -159,14 +163,14 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
             </svg>
             <input
               aria-label="종목 검색"
-              className={`w-full min-w-0 bg-transparent text-slate-900 outline-none placeholder:text-sm placeholder:text-slate-400 dark:text-slate-100 dark:placeholder:text-slate-500 md:placeholder:text-base ${
+              className={`w-full min-w-0 bg-transparent text-slate-900 outline-none placeholder:text-sm placeholder:text-slate-400 md:placeholder:text-base dark:text-white dark:placeholder:text-white/34 ${
                 inline
                   ? "text-[12px] placeholder:text-[10px] md:text-[12px] md:placeholder:text-[11px]"
-                  : compact
-                    ? "text-[12.5px] placeholder:text-[10.5px] md:text-[13px] md:placeholder:text-[11px]"
-                    : "text-[14px] placeholder:text-[11px] md:text-[15px] md:placeholder:text-[12px]"
+                    : compact
+                      ? "text-[14px] placeholder:text-[11px] md:text-[15px] md:placeholder:text-[12px]"
+                      : "text-[15px] placeholder:text-[12px] md:text-[17px] md:placeholder:text-[13px]"
               }`}
-              placeholder="종목명 또는 종목코드 검색"
+              placeholder="삼성전자 또는 005930"
               value={query}
               onBlur={() => setTimeout(() => setIsFocused(false), 120)}
               onChange={(event) => setQuery(event.target.value)}
@@ -179,31 +183,36 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
               }}
             />
           </div>
-          <button
-            className={`brand-button shrink-0 whitespace-nowrap rounded-md font-semibold ${
-              inline
-                ? "px-2 py-1 text-[10px] min-w-[52px]"
-                : compact
-                  ? "px-2.5 py-1.5 text-[10px] min-w-[58px]"
-                  : "px-3 py-1.5 text-[11px] min-w-[64px]"
-            }`}
-            type="button"
-            onClick={() => submitSearch()}
-          >
-            {isPending ? "분석 중..." : "검색"}
-          </button>
+          {!hero ? (
+            <button
+              className={`brand-button shrink-0 whitespace-nowrap rounded-[10px] font-semibold ${
+                inline
+                  ? "px-2 py-1 text-[10px] min-w-[52px]"
+                  : compact
+                    ? "px-4 py-2 text-[12px] min-w-[86px]"
+                    : "px-5 py-2.5 text-[13px] min-w-[112px]"
+              }`}
+              type="button"
+              onClick={() => submitSearch()}
+            >
+              {isPending ? "이동 중..." : "분석 보기"}
+            </button>
+          ) : null}
         </div>
 
         {isPending && pendingTarget ? (
-          <div className="absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-[rgba(248,251,255,0.92)] backdrop-blur-sm dark:bg-[rgba(10,14,20,0.84)]">
+          <div className="absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-[rgba(247,244,238,0.92)] backdrop-blur-sm dark:bg-[rgba(10,14,20,0.84)]">
             <AnimatedLoadingStage compact stock={pendingTarget} />
           </div>
         ) : null}
 
         {(isFocused || query.trim()) && (
-          <div className="surface-card mt-2.5 rounded-[16px] p-2 md:rounded-[20px]">
-            <div className="flex items-center justify-between px-3 py-2 text-xs font-medium text-slate-500 dark:text-slate-300">
-              <span>{query.trim() ? "검색 결과" : "실시간 거래대금 상위"}</span>
+          <div className="mt-3 rounded-[14px] border border-black/8 bg-[rgba(255,255,255,0.96)] p-3 text-slate-900 shadow-[0_26px_60px_rgba(13,20,33,0.12)] md:rounded-[16px] dark:border-white/10 dark:bg-[#0b1320] dark:text-white dark:shadow-[0_26px_60px_rgba(3,7,14,0.28)]">
+            <div className="flex items-center justify-between px-3 py-2 text-xs font-medium text-slate-500 dark:text-white/56">
+              <span className="inline-flex items-center gap-1.5">
+                {!query.trim() ? <IconFlameFilled size={12} className="text-orange-500" /> : null}
+                <span>{query.trim() ? "검색 결과" : "현재 많은 사람들이 검색한 종목이에요"}</span>
+              </span>
               {query.trim() && searchState.error ? (
                 <span className="text-rose-500">{searchState.error}</span>
               ) : null}
@@ -212,7 +221,7 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
               {activeItems.map((item) => (
                 <button
                   key={`${item.market}-${item.symbol}`}
-                  className="brand-soft-hover grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[14px] px-3 py-2.5 text-left transition-colors md:rounded-[16px]"
+                  className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[12px] border border-black/6 bg-[rgba(247,248,250,0.96)] px-3.5 py-3 text-left transition-colors hover:bg-white md:rounded-[14px] dark:border-white/6 dark:bg-white/[0.03] dark:hover:bg-white/[0.08]"
                   type="button"
                   onMouseDown={(event) => event.preventDefault()}
                   onClick={() => submitSearch(item)}
@@ -220,21 +229,23 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
                   <div className="flex min-w-0 items-center gap-3">
                     <StockAvatar size="sm" stock={item} />
                     <div className="min-w-0">
-                      <div className="overflow-hidden text-sm font-semibold leading-5 text-slate-900 dark:text-slate-100 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
+                      <div className="overflow-hidden text-sm font-semibold leading-5 text-slate-900 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] dark:text-white">
                         {item.name}
                       </div>
-                      <div className="mt-1 truncate text-xs text-slate-500 dark:text-slate-400 sm:text-sm">
-                        {item.symbol} · {item.market}
+                      <div className="mt-1 truncate text-xs text-slate-500 sm:text-sm dark:text-white/54">
+                        <span>{item.symbol}</span>
+                        <span className="mx-1">·</span>
+                        <span>{item.market}</span>
                       </div>
                     </div>
                   </div>
-                  <div className="surface-pill hidden rounded-full px-2.5 py-1 text-xs font-medium text-slate-600 dark:border-white/10 dark:bg-white/6 dark:text-slate-200 sm:inline-flex">
-                    보기
+                  <div className="hidden rounded-full border border-black/8 bg-white/72 px-2.5 py-1 text-xs font-medium text-slate-600 sm:inline-flex dark:border-white/10 dark:bg-white/8 dark:text-white/76">
+                    분석 보기
                   </div>
                 </button>
               ))}
               {!activeItems.length ? (
-                <div className="rounded-[18px] px-3 py-6 text-center text-sm text-slate-500 dark:text-slate-300">
+                <div className="rounded-[18px] px-3 py-6 text-center text-sm text-slate-500 dark:text-white/54">
                   일치하는 종목이 없습니다.
                 </div>
               ) : null}

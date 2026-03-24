@@ -12,11 +12,11 @@ interface StockAvatarProps {
 }
 
 const sizeClassName = {
-  xs: "h-8 w-8 rounded-[10px]",
-  sm: "h-10 w-10 rounded-[14px]",
-  md: "h-12 w-12 rounded-[16px]",
-  lg: "h-14 w-14 rounded-[18px]",
-  xl: "h-20 w-20 rounded-[24px]",
+  xs: "h-8 w-8 rounded-[8px]",
+  sm: "h-10 w-10 rounded-[10px]",
+  md: "h-12 w-12 rounded-[12px]",
+  lg: "h-14 w-14 rounded-[14px]",
+  xl: "h-20 w-20 rounded-[18px]",
 } as const;
 
 const logoPaddingClassName = {

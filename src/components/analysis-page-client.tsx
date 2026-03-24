@@ -312,7 +312,7 @@ function PerformanceChip({ label, value }: { label: string; value: number | null
   const toneClass = getQuoteTextToneClass(tone);
 
   return (
-    <div className="surface-card rounded-[8px] px-1.5 py-1.25 md:rounded-[14px] md:px-2.5 md:py-2.25">
+    <div className="surface-card rounded-[8px] px-1.5 py-1.25 md:rounded-[10px] md:px-2.5 md:py-2.25">
       <div className="text-[8px] font-semibold tracking-[0.04em] text-slate-500 dark:text-slate-400 md:text-[10px]">
         {label}
       </div>
@@ -398,9 +398,9 @@ function MetricCard({
 }) {
   return (
     <div
-      className={`min-w-0 rounded-[14px] ${compact ? "p-2" : "p-2.5"} ${getMetricToneClass(
+      className={`min-w-0 rounded-[10px] ${compact ? "p-2" : "p-2.5"} ${getMetricToneClass(
         tone,
-      )} md:rounded-[16px] md:p-3`}
+      )} md:rounded-[12px] md:p-3`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className={`${compact ? "text-[10px]" : "text-[11px]"} font-semibold text-slate-500 dark:text-slate-300`}>
@@ -586,7 +586,7 @@ function PrimaryQuoteCard({
   const detailToneClass = getQuoteTextToneClass(detailTone);
 
   return (
-    <div className={`surface-card-strong rounded-[10px] px-2.5 py-2 md:rounded-[16px] md:px-3.5 md:py-3 ${className ?? ""}`}>
+    <div className={`surface-card-strong rounded-[10px] px-2.5 py-2 md:rounded-[12px] md:px-3.5 md:py-3 ${className ?? ""}`}>
       <div className="text-[9px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-300 md:text-[10px]">현재가</div>
       <div className="mt-1 flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -689,7 +689,7 @@ function RecommendationCard({
 
   return (
     <div
-      className={`relative z-20 min-w-0 rounded-[10px] px-2.5 py-2 ${recommendation.cardClassName} md:rounded-[16px] md:px-3.5 md:py-3 ${className ?? ""}`}
+      className={`relative z-20 min-w-0 rounded-[10px] px-2.5 py-2 ${recommendation.cardClassName} md:rounded-[12px] md:px-3.5 md:py-3 ${className ?? ""}`}
     >
       <div className="flex items-center justify-between gap-3">
         <div className="text-[9px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-300 md:text-[10px]">
@@ -740,10 +740,10 @@ function RecommendationCard({
           {open && tooltipStyle && typeof document !== "undefined"
             ? createPortal(
                 <div
-                  className="rounded-[14px] border border-[var(--brand-soft-strong)] bg-[var(--surface-card)] px-3 py-3 text-[11px] leading-5 text-slate-600 shadow-[0_22px_60px_rgba(15,23,42,0.16)] dark:border-white/10 dark:bg-[var(--surface-1)] dark:text-slate-300 dark:shadow-[0_24px_64px_rgba(2,6,23,0.42)]"
+                  className="rounded-[12px] border border-[var(--brand-soft-strong)] bg-[var(--surface-card)] px-3 py-3 text-[11px] leading-5 text-slate-600 shadow-[0_22px_60px_rgba(15,23,42,0.16)] dark:border-white/10 dark:bg-[var(--surface-1)] dark:text-slate-300 dark:shadow-[0_24px_64px_rgba(2,6,23,0.42)]"
                   style={tooltipStyle}
                 >
-              <div className="mb-3 rounded-[14px] bg-[var(--surface-card-strong)] p-3 dark:bg-white/[0.04]">
+              <div className="mb-3 rounded-[10px] bg-[var(--surface-card-strong)] p-3 dark:bg-white/[0.04]">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="text-[11px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-400">
@@ -821,7 +821,7 @@ function AiInsightCard({
         : "bg-[var(--brand-soft)] text-[var(--brand-strong)] dark:bg-white/[0.06] dark:text-slate-100";
 
   return (
-    <div className={`rounded-[14px] px-3 py-2.75 ${toneClass} md:rounded-[16px] md:px-3 md:py-3`}>
+    <div className={`rounded-[10px] px-3 py-2.75 ${toneClass} md:rounded-[12px] md:px-3 md:py-3`}>
       <div className={`inline-flex rounded-full px-2 py-0.75 text-[10px] font-bold tracking-[0.04em] ${labelClass}`}>
         {label}
       </div>
@@ -839,7 +839,7 @@ function AiInsightCard({
 
 function AiLoadingCard() {
   return (
-    <div className="ai-glow rounded-[18px] px-4 py-4 text-sm text-slate-600 shadow-[0_18px_42px_rgba(35,60,124,0.12)] dark:text-slate-200">
+    <div className="ai-glow rounded-[12px] px-4 py-4 text-sm text-slate-600 shadow-[0_18px_42px_rgba(35,60,124,0.12)] dark:text-slate-200">
       <div className="ai-gradient-text text-xs font-semibold tracking-[0.12em]">
         AI 브리핑
       </div>
@@ -875,7 +875,7 @@ function buildAiLevelsSummary(
 function AnalyzeInitialLoading({ stock }: { stock: StockLookupItem }) {
   return (
     <main className="mx-auto flex min-h-[calc(100vh-132px)] max-w-5xl items-center px-4 pb-12 pt-5 md:px-6 md:pt-8">
-      <section className="glass-card w-full rounded-[24px] p-4 md:rounded-[28px] md:p-6">
+      <section className="board-panel w-full rounded-[14px] p-4 md:rounded-[16px] md:p-6">
         <AnimatedLoadingStage stock={stock} />
       </section>
     </main>
@@ -1014,7 +1014,7 @@ function SignalRail({
   const rail = getToneRailClasses(tone);
 
   return (
-    <div className="rounded-[10px] bg-[var(--surface-card)] px-2 py-1.75 dark:bg-white/[0.04] md:rounded-[16px] md:px-3 md:py-2.5">
+    <div className="rounded-[10px] bg-[var(--surface-card)] px-2 py-1.75 dark:bg-white/[0.04] md:rounded-[12px] md:px-3 md:py-2.5">
       <div className="flex items-center justify-between gap-3">
         <div className="text-[8px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-400 md:text-[10px]">
           {label}
@@ -1443,7 +1443,7 @@ export function AnalysisPageClient({
   }
 
   return (
-    <main className="mx-auto max-w-6xl px-3.5 pb-8 pt-3.5 md:px-6 md:pb-12 md:pt-5">
+    <main className="mx-auto max-w-[1260px] px-3.5 pb-8 pt-3.5 md:px-6 md:pb-12 md:pt-5">
       <div
         key={`${stock.symbol}:${loadedSelectionKey ?? "ready"}`}
         className="flex flex-col gap-3.5 md:gap-4"
@@ -1464,7 +1464,7 @@ export function AnalysisPageClient({
         </div>
 
         <section
-          className={`waterfall-item glass-card relative z-10 overflow-visible rounded-[14px] p-2 md:rounded-[22px] md:p-4 ${revealPhase >= 2 ? "is-visible" : ""}`}
+          className={`waterfall-item board-panel relative z-10 overflow-visible rounded-[12px] p-2.5 md:rounded-[14px] md:p-3 ${revealPhase >= 2 ? "is-visible" : ""}`}
         >
             <div
               className={`waterfall-item flex min-w-0 items-start gap-3 ${revealPhase >= 2 ? "is-visible" : ""}`}
@@ -1515,7 +1515,7 @@ export function AnalysisPageClient({
                 className={`waterfall-item mt-2 grid gap-2 xl:grid-cols-[minmax(0,1fr)_minmax(320px,344px)] xl:items-stretch ${revealPhase >= 3 ? "is-visible" : ""}`}
                 style={{ "--waterfall-delay": "80ms" } as CSSProperties}
               >
-            <div className="surface-card h-full rounded-[12px] p-2 md:rounded-[18px] md:p-3">
+            <div className="surface-card h-full rounded-[10px] p-2.5 md:rounded-[12px] md:p-3">
               <div className="flex items-start gap-3">
                 <div
                   className="inline-flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-[10px] md:h-12 md:w-12 md:rounded-[14px]"
@@ -1598,7 +1598,7 @@ export function AnalysisPageClient({
             </div>
               </div>
              <div
-               className={`waterfall-item mt-2 surface-card rounded-[12px] p-2 md:mt-3 md:rounded-[18px] md:p-3 ${revealPhase >= 4 ? "is-visible" : ""}`}
+               className={`waterfall-item surface-card mt-2 rounded-[10px] p-2.5 md:mt-3 md:rounded-[12px] md:p-3 ${revealPhase >= 4 ? "is-visible" : ""}`}
                style={{ "--waterfall-delay": "120ms" } as CSSProperties}
              >
               <div className="text-[9px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
@@ -1629,7 +1629,7 @@ export function AnalysisPageClient({
                   ))}
                 </div>
               </div>
-              <div className="mt-2 rounded-[12px] bg-[var(--surface-card-strong)] px-2 py-2 dark:bg-white/[0.04]">
+              <div className="mt-2 rounded-[10px] bg-[var(--surface-card-strong)] px-2.5 py-2.5 dark:bg-white/[0.04]">
                 <div className="text-[9px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
                   업종 포인트
                 </div>
@@ -1642,7 +1642,7 @@ export function AnalysisPageClient({
 
         {error ? (
           <section
-            className={`waterfall-item glass-card rounded-[32px] p-8 text-center ${revealPhase >= 2 ? "is-visible" : ""}`}
+            className={`waterfall-item board-panel rounded-[14px] p-8 text-center ${revealPhase >= 2 ? "is-visible" : ""}`}
           >
             <div className="text-lg font-semibold text-slate-900">데이터를 불러오지 못했습니다.</div>
             <p className="mt-2 break-keep text-sm text-slate-500">{error}</p>
@@ -1658,14 +1658,11 @@ export function AnalysisPageClient({
 
         <div className="grid gap-3.5 xl:grid-cols-[minmax(0,1.72fr)_minmax(280px,0.92fr)] xl:items-start">
             <section
-              className={`waterfall-item glass-card self-start overflow-hidden rounded-[14px] p-2.5 md:rounded-[24px] md:p-4 ${revealPhase >= 5 ? "is-visible" : ""}`}
+              className={`waterfall-item board-panel self-start overflow-hidden rounded-[12px] p-2.5 md:rounded-[14px] md:p-3 ${revealPhase >= 5 ? "is-visible" : ""}`}
             >
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
-                <h2 className="text-[15px] font-bold text-slate-950 dark:text-slate-50 md:text-[17px]">가격 차트</h2>
-                <p className="mt-1 hidden break-keep text-xs leading-5 text-slate-500 dark:text-slate-300 md:block">
-                  일봉 기준으로 전체 흐름을 확인할 수 있습니다.
-                </p>
+                <h2 className="text-[15px] font-bold text-slate-950 dark:text-slate-50 md:text-[17px]">차트</h2>
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <div className="rounded-full bg-[var(--surface-pill)] px-1.75 py-0.5 text-[9px] font-semibold text-slate-600 dark:bg-white/[0.06] dark:text-slate-200">
@@ -1678,7 +1675,7 @@ export function AnalysisPageClient({
               </div>
             </div>
 
-            <div className="relative mt-2 max-w-full overflow-hidden rounded-[14px] bg-[var(--surface-3)] p-1 md:mt-3 md:rounded-[20px] md:p-2">
+            <div className="board-stage relative mt-2 max-w-full overflow-hidden rounded-[10px] p-1 md:mt-3 md:rounded-[12px] md:p-2">
               {isRefreshing ? (
                 <div className="pointer-events-none absolute right-3 top-3 z-10">
                   <RefreshingBadge />
@@ -1688,7 +1685,7 @@ export function AnalysisPageClient({
                 <StockChart candles={candlesPayload.candles} />
               ) : (
                 <div
-                  className={`flex h-[300px] flex-col items-center justify-center rounded-[18px] px-6 text-center md:h-[390px] ${
+                  className={`flex h-[300px] flex-col items-center justify-center rounded-[10px] px-6 text-center md:h-[390px] ${
                     chartUnavailable
                       ? "bg-slate-100 text-slate-600 dark:bg-white/[0.05] dark:text-slate-200"
                       : "bg-slate-50 text-slate-400 dark:bg-[var(--surface-3)] dark:text-slate-400"
@@ -1736,19 +1733,16 @@ export function AnalysisPageClient({
 
             <div className="grid gap-3.5">
                 <section
-                  className={`waterfall-item glass-card overflow-hidden rounded-[14px] p-2.5 md:rounded-[24px] md:p-4 ${revealPhase >= 6 ? "is-visible" : ""}`}
+                  className={`waterfall-item board-panel overflow-hidden rounded-[12px] p-2.5 md:rounded-[14px] md:p-3 ${revealPhase >= 6 ? "is-visible" : ""}`}
                   style={{ "--waterfall-delay": "80ms" } as CSSProperties}
                 >
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0">
-                  <h2 className="text-[15px] font-bold text-slate-950 dark:text-slate-50 md:text-[17px]">한눈에 보기</h2>
-                  <p className="mt-1 hidden break-keep text-xs leading-5 text-slate-500 dark:text-slate-300 md:block">
-                    차트 옆에서 핵심 신호와 지표를 바로 확인합니다.
-                  </p>
+                  <h2 className="text-[15px] font-bold text-slate-950 dark:text-slate-50 md:text-[17px]">근거와 리스크</h2>
                 </div>
               </div>
               <div className="mt-2.5 space-y-2.5 md:mt-3 md:space-y-3">
-                <div className="surface-card rounded-[12px] p-2 dark:bg-white/[0.04] md:rounded-[18px] md:p-3">
+                <div className="surface-card rounded-[10px] p-2.5 dark:bg-white/[0.04] md:rounded-[12px] md:p-3">
                   <div className="text-[13px] font-semibold text-slate-700 dark:text-slate-100">핵심 근거</div>
                   <ul className="mt-1.5 space-y-1.25 text-[11px] leading-4.5 text-slate-600 dark:text-slate-300 md:mt-2.5 md:text-[13px]">
                     {visibleReasons.length ? (
@@ -1764,7 +1758,7 @@ export function AnalysisPageClient({
                     )}
                   </ul>
                 </div>
-                <div className="surface-card-strong rounded-[12px] p-2 dark:bg-[var(--surface-3)] md:rounded-[18px] md:p-3">
+                <div className="surface-card-strong rounded-[10px] p-2.5 dark:bg-[var(--surface-3)] md:rounded-[12px] md:p-3">
                   <div className="text-[13px] font-semibold text-slate-700 dark:text-slate-100">주의 포인트</div>
                   <ul className="mt-1.5 space-y-1.25 text-[11px] leading-4.5 text-slate-600 dark:text-slate-300 md:mt-2.5 md:text-[13px]">
                     {visibleRisks.length ? (
@@ -1805,27 +1799,22 @@ export function AnalysisPageClient({
           </div>
 
         <section
-          className={`waterfall-item ai-shell relative overflow-hidden rounded-[20px] px-3.5 py-3 md:rounded-[24px] md:p-4 ${revealPhase >= 7 ? "is-visible" : ""}`}
+          className={`waterfall-item ai-shell relative overflow-hidden rounded-[14px] px-3.5 py-3 md:rounded-[16px] md:p-4 ${revealPhase >= 7 ? "is-visible" : ""}`}
           style={{ "--waterfall-delay": "120ms" } as CSSProperties}
         >
-          <div className="pointer-events-none absolute -right-16 -top-10 hidden h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(73,178,255,0.16)_0%,rgba(73,178,255,0)_72%)] dark:bg-[radial-gradient(circle,rgba(73,178,255,0.2)_0%,rgba(73,178,255,0)_72%)] md:block" />
-          <div className="pointer-events-none absolute left-0 top-0 hidden h-28 w-28 rounded-full bg-[radial-gradient(circle,rgba(35,60,124,0.12)_0%,rgba(35,60,124,0)_72%)] dark:bg-[radial-gradient(circle,rgba(35,60,124,0.2)_0%,rgba(35,60,124,0)_74%)] md:block" />
           <div className="relative min-w-0">
             <h2 className="ai-gradient-text text-base font-black tracking-tight md:text-lg">
               AI 브리핑
             </h2>
-            <p className="mt-1.5 hidden max-w-xl break-keep text-xs leading-5 text-slate-600 dark:text-slate-300 md:block">
-              차트 흐름과 기업 맥락만 짧게 정리합니다.
-            </p>
           </div>
           <div className="mt-2.5 space-y-2.5 px-0.5 text-sm leading-6 text-slate-600 dark:text-slate-300 md:mt-3 md:space-y-3 md:px-0">
             {canUseAi ? (
-              <div className="surface-card rounded-[14px] p-3 md:rounded-[16px] md:p-3">
+              <div className="surface-card rounded-[10px] p-3 md:rounded-[12px] md:p-3">
                 <AuthActions isSignedIn providers={aiProviders} userName={aiUserName} />
               </div>
             ) : null}
             {!isAiAuthAvailable ? (
-              <div className="surface-card rounded-[14px] p-3.5 md:rounded-[16px] md:p-3.5">
+              <div className="surface-card rounded-[10px] p-3.5 md:rounded-[12px] md:p-3.5">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   로그인 기능 준비 중이에요.
                 </div>
@@ -1835,7 +1824,7 @@ export function AnalysisPageClient({
               </div>
             ) : null}
             {isAiAuthAvailable && !canUseAi ? (
-              <div className="surface-card rounded-[14px] p-3.5 md:rounded-[16px] md:p-3.5">
+              <div className="surface-card rounded-[10px] p-3.5 md:rounded-[12px] md:p-3.5">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   로그인 후 AI 브리핑을 볼 수 있어요
                 </div>
@@ -1856,7 +1845,7 @@ export function AnalysisPageClient({
               </div>
             ) : null}
             {canUseAi && !aiRequested ? (
-              <div className="surface-card rounded-[14px] p-3.5 md:rounded-[16px] md:p-3.5">
+              <div className="surface-card rounded-[10px] p-3.5 md:rounded-[12px] md:p-3.5">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
                   AI 브리핑을 바로 생성할 수 있어요.
                 </div>
@@ -1876,13 +1865,13 @@ export function AnalysisPageClient({
             {aiRequested && aiSummary?.available ? (
               <>
                 {aiState.loading ? (
-                  <div className="ai-glow rounded-[14px] border border-[rgba(73,178,255,0.14)] px-3.5 py-2.5 text-xs font-semibold text-slate-700 dark:border-[rgba(157,196,255,0.14)] dark:text-slate-100">
+                  <div className="ai-glow rounded-[10px] border border-[rgba(73,178,255,0.14)] px-3.5 py-2.5 text-xs font-semibold text-slate-700 dark:border-[rgba(157,196,255,0.14)] dark:text-slate-100">
                     AI 브리핑을 최신 데이터 기준으로 다시 정리하고 있습니다.
                   </div>
                 ) : null}
                 <div className="grid gap-2.5 xl:grid-cols-[minmax(0,1.1fr)_minmax(260px,0.9fr)] md:gap-3">
                   <div className="space-y-3">
-                    <div className="rounded-[14px] border border-[rgba(73,178,255,0.22)] bg-[linear-gradient(135deg,rgba(35,60,124,0.18),rgba(73,178,255,0.14),rgba(255,255,255,0.96))] px-3.5 py-3 dark:border-[rgba(157,196,255,0.2)] dark:bg-[linear-gradient(135deg,rgba(35,60,124,0.3),rgba(73,178,255,0.16),rgba(10,18,30,0.98))] md:rounded-[16px] md:p-3.5">
+                    <div className="rounded-[10px] border border-[rgba(73,178,255,0.22)] bg-[linear-gradient(135deg,rgba(35,60,124,0.14),rgba(73,178,255,0.1),rgba(255,255,255,0.98))] px-3.5 py-3 dark:border-[rgba(157,196,255,0.2)] dark:bg-[linear-gradient(135deg,rgba(35,60,124,0.22),rgba(73,178,255,0.12),rgba(10,18,30,0.98))] md:rounded-[12px] md:p-3.5">
                       <div className="inline-flex rounded-full bg-white/82 px-2.5 py-1 text-[11px] font-bold tracking-[0.04em] text-[var(--brand-strong)] dark:bg-white/[0.08] dark:text-sky-100">
                         한줄 결론
                       </div>
@@ -1901,7 +1890,7 @@ export function AnalysisPageClient({
                     </div>
                   </div>
                   <div className="grid gap-3">
-                    <div className="rounded-[14px] border border-[rgba(73,178,255,0.2)] bg-[var(--surface-card)] px-3.5 py-3 dark:border-[rgba(73,178,255,0.22)] dark:bg-white/[0.05] md:rounded-[16px] md:p-3.5">
+                    <div className="rounded-[10px] border border-[rgba(73,178,255,0.2)] bg-[var(--surface-card)] px-3.5 py-3 dark:border-[rgba(73,178,255,0.22)] dark:bg-white/[0.05] md:rounded-[12px] md:p-3.5">
                       <div className="flex flex-wrap items-center gap-2">
                         <div className="inline-flex rounded-full bg-[rgba(73,178,255,0.12)] px-2.5 py-1 text-[11px] font-bold tracking-[0.04em] text-[var(--brand-strong)] dark:bg-[rgba(73,178,255,0.14)] dark:text-sky-100">
                           기업·업종
@@ -1963,7 +1952,7 @@ export function AnalysisPageClient({
               </>
             ) : null}
             {aiRequested && aiSummary && !aiSummary.available && !aiState.loading ? (
-              <div className="rounded-[14px] border border-slate-200/80 bg-slate-50 px-3.5 py-3 dark:border-white/10 dark:bg-[var(--surface-3)] md:rounded-[16px] md:p-3.5">
+              <div className="rounded-[10px] border border-slate-200/80 bg-slate-50 px-3.5 py-3 dark:border-white/10 dark:bg-[var(--surface-3)] md:rounded-[12px] md:p-3.5">
                 <div className="font-semibold text-slate-800 dark:text-slate-100">AI 요약을 사용할 수 없습니다.</div>
                 <p className="mt-2 break-keep">
                   {getAiUnavailableCopy(aiSummary.reason)}
@@ -1971,7 +1960,7 @@ export function AnalysisPageClient({
               </div>
             ) : null}
             {aiRequested ? (
-              <div className="brand-note rounded-[14px] px-3.5 py-2.5 text-xs break-keep md:rounded-[16px] md:px-3.5 md:py-3">
+              <div className="brand-note rounded-[10px] px-3.5 py-2.5 text-xs break-keep md:rounded-[12px] md:px-3.5 md:py-3">
                 {aiSummary?.disclaimer ??
                   "이 분석은 기술적 지표를 바탕으로 한 참고 정보이며 투자 판단의 책임은 사용자에게 있습니다."}
               </div>
