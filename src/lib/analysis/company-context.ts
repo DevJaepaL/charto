@@ -55,7 +55,7 @@ const CONTEXT_RULES: CompanyContextRule[] = [
     sector: "전력·전선",
     businessSummary: "전력망 투자, 북미 인프라 발주, 변압기·케이블 수급이 기업 가치에 직접 연결되는 업종입니다.",
     industryFlow: "전력 인프라 증설과 수주 잔고 확대 기대가 강할 때 업종 프리미엄이 빠르게 붙는 경향이 있습니다.",
-    marketPosition: "수주 기대와 전력 설비 투자 심리가 이어질수록 강세 탄력이 붙기 쉬운 구조입니다.",
+    marketPosition: "수주 기대와 전력 설비 투자 심리가 이어질수록 강세 탄력이 붙기 쉬운 구조에요.",
   },
   {
     match: /(현대차|기아|모비스|만도|현대로템|HL만도)/,
@@ -69,13 +69,13 @@ const CONTEXT_RULES: CompanyContextRule[] = [
     sector: "태양광·신재생에너지",
     businessSummary: "태양광 셀·모듈 수요와 설치 시장 분위기, 정책 지원, 전력 인프라 투자에 민감한 신재생에너지 기업입니다.",
     industryFlow: "태양광 업종은 설치 수요 회복과 정책 지원 기대가 살아날 때 업종 심리가 빠르게 개선되는 편입니다.",
-    marketPosition: "전방 설치 수요와 수익성 개선 신호가 확인될수록 밸류에이션이 재평가되기 쉬운 구조입니다.",
+    marketPosition: "전방 설치 수요와 수익성 개선 신호가 확인될수록 밸류에이션이 재평가되기 쉬운 구조에요.",
   },
   {
     match: /(이차전지|LG에너지솔루션|삼성SDI|SK아이이테크놀로지|에코프로|에코프로비엠|포스코퓨처엠|엘앤에프|천보|코스모신소재|대주전자재료)/,
     sector: "2차전지",
-    businessSummary: "밸류에이션 변동성이 크고 전기차 수요, 소재 가격, 고객사 증설 속도에 따라 심리가 크게 움직입니다.",
-    industryFlow: "2차전지는 수요 기대가 회복될 때 강하게 반등하지만, 증설 부담이나 판가 둔화 우려에도 민감합니다.",
+    businessSummary: "밸류에이션 변동성이 크고 전기차 수요, 소재 가격, 고객사 증설 속도에 따라 심리가 크게 움직여요.",
+    industryFlow: "2차전지는 수요 기대가 회복될 때 강하게 반등하지만, 증설 부담이나 판가 둔화 우려에도 민감해요.",
     marketPosition: "기대와 실망이 빠르게 반영되는 성장주 성격이 강해 추세 확인이 특히 중요합니다.",
   },
   {
@@ -83,7 +83,7 @@ const CONTEXT_RULES: CompanyContextRule[] = [
     sector: "정유·에너지",
     businessSummary: "국제유가, 정제마진, 환율, 지정학 변수에 따라 주가가 빠르게 흔들릴 수 있는 업종입니다.",
     industryFlow: "정유·에너지는 국제유가 급등락과 지정학 이슈에 따라 단기 심리가 크게 변하는 편입니다.",
-    marketPosition: "단기 재료에 과민하게 반응하는 경우가 많아 기술적 점수는 보수적으로 해석하는 편이 좋습니다.",
+    marketPosition: "단기 재료에 과민하게 반응하는 경우가 많아 기술적 점수는 보수적으로 해석하는 편이 좋아요.",
     interpretWithCaution: true,
   },
   {
@@ -91,7 +91,7 @@ const CONTEXT_RULES: CompanyContextRule[] = [
     sector: "화학",
     businessSummary: "원재료 가격과 스프레드, 전방 수요 회복, 증설 부담에 따라 실적 변동성이 커지는 업종입니다.",
     industryFlow: "화학주는 경기 회복과 원가 안정 기대가 붙을 때 반등 탄력이 커지지만 시황 둔화에도 민감합니다.",
-    marketPosition: "업황 방향성이 명확해질 때 재평가가 빠르게 진행되지만, 사이클 둔화 구간에서는 보수적으로 보는 편이 좋습니다.",
+    marketPosition: "업황 방향성이 명확해질 때 재평가가 빠르게 진행되지만, 사이클 둔화 구간에서는 보수적으로 보는 편이 좋아요.",
   },
   {
     match: /(바이오|제약|셀트리온|유한양행|삼성바이오로직스|한미약품|알테오젠|펩트론|보로노이|에이비엘바이오)/,
@@ -462,7 +462,7 @@ const OFFICIAL_CONTEXT_RULES: OfficialContextRule[] = [
     sector: "소프트웨어·AI",
     businessSummary: "기업용 소프트웨어와 서비스 계약, AI 기대감이 밸류에이션에 반영되는 업종입니다.",
     industryFlow: "성장 기대가 먼저 움직일 수 있어 업종 심리가 빠르게 달라지는 편입니다.",
-    marketPosition: "실적 확인 전까지는 기대가 앞설 수 있어 보수적으로 보는 편이 좋습니다.",
+    marketPosition: "실적 확인 전까지는 기대가 앞설 수 있어요.",
     interpretWithCaution: true,
   },
   {
@@ -477,14 +477,14 @@ const OFFICIAL_CONTEXT_RULES: OfficialContextRule[] = [
     sector: "금융",
     businessSummary: "금리와 자산 건전성, 거래대금, 주주환원 정책이 핵심 변수인 업종입니다.",
     industryFlow: "배당과 자사주 기대, 실적 안정성이 부각될 때 방어주 매력이 커질 수 있습니다.",
-    marketPosition: "밸류에이션 재평가에는 실적 안정성과 주주환원 신뢰가 같이 필요합니다.",
+    marketPosition: "밸류에이션 재평가에는 실적 안정성과 주주환원 신뢰가 같이 필요해요.",
   },
   {
     match: /^68/,
     sector: "리츠·부동산",
     businessSummary: "자산 가치와 임대료 흐름, 금리, 배당 안정성이 중요한 자산형 업종입니다.",
     industryFlow: "금리 안정 기대와 배당 선호가 커질 때 상대적으로 주목받는 편입니다.",
-    marketPosition: "일반 성장주와 다른 방식으로 해석해야 해 추천 점수도 보수적으로 보는 편이 좋습니다.",
+    marketPosition: "일반 성장주와 다른 방식으로 해석해야 해 추천 점수는 보수적으로 보는 편이 좋아요.",
     interpretWithCaution: true,
   },
   {
@@ -516,7 +516,7 @@ const OFFICIAL_CONTEXT_RULES: OfficialContextRule[] = [
     sector: "엔터테인먼트",
     businessSummary: "공연과 콘텐츠, 레저 활동 수요, 팬덤 지표가 실적에 반영되는 업종입니다.",
     industryFlow: "이벤트와 흥행 모멘텀에 따라 업종 전체 심리가 크게 달라질 수 있습니다.",
-    marketPosition: "이벤트 편차가 커 변동성이 큰 편이라 점수를 보수적으로 보는 편이 좋습니다.",
+    marketPosition: "이벤트 편차가 커 변동성이 큰 섹터에요.",
     interpretWithCaution: true,
   },
 ];
