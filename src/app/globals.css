@@ -559,8 +559,7 @@ select:focus-visible {
 
 .home-reveal {
   opacity: 0;
-  animation: charto-fade-up 620ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  animation-delay: var(--reveal-delay, 0ms);
+  transform: translateY(14px);
   will-change: opacity, transform;
 }
 

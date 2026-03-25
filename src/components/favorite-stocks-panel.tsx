@@ -68,7 +68,7 @@ export function FavoriteStocksPanel({ userKey, userName }: FavoriteStocksPanelPr
   }
 
   return (
-    <section className="surface-card home-reveal mt-4 rounded-[16px] p-3 [--reveal-delay:390ms] md:rounded-[20px] md:p-4">
+    <section className="surface-card mt-4 rounded-[16px] p-3 md:rounded-[20px] md:p-4">
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2 text-[11px] font-bold tracking-[0.06em] text-[var(--brand-strong)] md:text-[12px]">

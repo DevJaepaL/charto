@@ -52,176 +52,101 @@ export function HomePageClient({
       return;
     }
 
-    void import("animejs").then(({ createScope, createTimeline, splitText, stagger }) => {
+    void import("animejs").then(({ createScope, createTimeline, stagger }) => {
       if (cancelled || !sectionRef.current) {
         return;
       }
 
       const scope = createScope({ root: sectionRef.current }).add(() => {
-        const brandWords = Array.from(
-          sectionRef.current?.querySelectorAll<HTMLElement>("[data-home-brand-word]") ?? [],
-        );
-        const titleLines = Array.from(
-          sectionRef.current?.querySelectorAll<HTMLElement>("[data-home-title-line]") ?? [],
-        );
-        const brandSplitters = brandWords.map((word) => splitText(word, { chars: true }));
-        const titleSplitters = titleLines.map((line) => splitText(line, { chars: true }));
-        const brandChars = brandSplitters.flatMap((splitter) => splitter.chars);
-        const titleChars = titleSplitters.flatMap((splitter) => splitter.chars);
-
         const timeline = createTimeline({
           defaults: {
-            duration: 860,
+            duration: 680,
             ease: "outExpo",
           },
         });
 
         timeline
           .add(
-            brandChars,
+            "[data-home-brand-shell]",
             {
               opacity: [0, 1],
-              translateY: ["1.4rem", 0],
-              rotateX: ["-88deg", "0deg"],
-              filter: ["blur(10px)", "blur(0px)"],
-              delay: stagger(34),
-              duration: 920,
+              translateY: [14, 0],
+              scale: [0.985, 1],
+              duration: 760,
             },
             0,
+          )
+          .add(
+            "[data-home-brand-block]",
+            {
+              opacity: [0.78, 1],
+              filter: ["blur(6px)", "blur(0px)"],
+              duration: 620,
+            },
+            40,
           )
           .add(
             "[data-home-brand-orb]",
             {
               opacity: [0, 1],
-              scale: [0.68, 1],
-              delay: stagger(120),
-              duration: 760,
+              scale: [0.82, 1],
+              delay: stagger(140),
+              duration: 840,
             },
             80,
           )
           .add(
-            titleChars,
+            "[data-home-brand-underline]",
             {
               opacity: [0, 1],
-              translateY: ["0.8rem", 0],
-              rotateX: ["-88deg", "0deg"],
-              delay: stagger(24),
-              duration: 640,
+              scaleX: [0.72, 1],
+              duration: 620,
             },
-            220,
+            120,
+          )
+          .add(
+            "[data-home-title-block]",
+            {
+              opacity: [0, 1],
+              translateY: [14, 0],
+              duration: 620,
+            },
+            160,
           )
           .add(
             "[data-home-search-shell]",
             {
               opacity: [0, 1],
-              translateY: [28, 0],
-              scale: [0.94, 1],
+              translateY: [16, 0],
               duration: 620,
             },
-            320,
+            240,
           )
           .add(
-            "[data-home-favorites-shell]",
+            "[data-home-preview-shell]",
             {
               opacity: [0, 1],
               translateY: [18, 0],
-              duration: 520,
+              scale: [0.985, 1],
+              duration: 680,
             },
-            400,
-          )
-          .add(
-            "[data-home-preview-card]",
-            {
-              opacity: [0, 1],
-              translateY: [36, 0],
-              scale: [0.93, 1],
-              rotateX: ["16deg", "0deg"],
-              duration: 780,
-            },
-            480,
+            320,
           )
           .add(
             "[data-home-login-copy]",
             {
               opacity: [0, 1],
-              translateY: [18, 0],
-              duration: 520,
+              translateY: [12, 0],
+              duration: 560,
             },
-            560,
-          )
-          .add(
-            "[data-home-preview-section]",
-            {
-              opacity: [0, 1],
-              translateY: [18, 0],
-              delay: stagger(110),
-              duration: 520,
-            },
-            620,
-          )
-          .add(
-            "[data-home-preview-pill]",
-            {
-              opacity: [0, 1],
-              translateX: [-16, 0],
-              delay: stagger(70),
-              duration: 460,
-            },
-            680,
-          )
-          .add(
-            "[data-home-preview-bar]",
-            {
-              opacity: [0.22, 1],
-              scaleY: [0.18, 1],
-              delay: stagger(42),
-              duration: 760,
-              ease: "outBack(1.7)",
-            },
-            740,
-          )
-          .add(
-            "[data-home-preview-progress]",
-            {
-              scaleX: [0, 1],
-              duration: 880,
-            },
-            820,
-          )
-          .add(
-            "[data-home-preview-point]",
-            {
-              opacity: [0, 1],
-              translateX: [-18, 0],
-              delay: stagger(95),
-              duration: 520,
-            },
-            880,
-          )
-          .add(
-            '[data-home-preview-orb="primary"]',
-            {
-              opacity: [0, 1],
-              scale: [0.65, 1],
-              duration: 720,
-            },
-            620,
-          )
-          .add(
-            '[data-home-preview-orb="secondary"]',
-            {
-              opacity: [0, 1],
-              scale: [0.65, 1],
-              duration: 720,
-            },
-            700,
+            400,
           );
 
         const ambient = createTimeline({
           loop: true,
           alternate: true,
           defaults: {
-            duration: 2600,
+            duration: 3400,
             ease: "inOutSine",
           },
         })
@@ -265,12 +190,21 @@ export function HomePageClient({
         return () => {
           ambient.revert();
           timeline.revert();
-          brandSplitters.forEach((splitter) => splitter.revert());
-          titleSplitters.forEach((splitter) => splitter.revert());
         };
       });
 
       revert = () => scope.revert();
+    }).catch(() => {
+      if (!sectionRef.current) {
+        return;
+      }
+
+      sectionRef.current
+        .querySelectorAll<HTMLElement>(".home-reveal")
+        .forEach((element) => {
+          element.style.opacity = "1";
+          element.style.transform = "none";
+        });
     });
 
     return () => {
@@ -283,7 +217,7 @@ export function HomePageClient({
     <main className="home-shell page-mobile-shell relative mx-auto min-h-[calc(100vh-160px)] overflow-hidden px-4 pb-12 pt-4">
       <section key={entryKey} ref={sectionRef} className="relative flex min-h-full flex-col gap-6">
         <div className="flex flex-1 flex-col items-center justify-center gap-6 pb-4 pt-8">
-          <div className="home-reveal relative w-full max-w-[22rem] text-center [--reveal-delay:120ms]">
+          <div className="home-reveal relative w-full max-w-[22rem] text-center [--reveal-delay:120ms]" data-home-brand-shell>
             <div
               aria-hidden="true"
               className="pointer-events-none absolute -left-5 -top-4 h-20 w-20 rounded-full bg-[rgba(73,178,255,0.16)] blur-2xl"
@@ -296,22 +230,25 @@ export function HomePageClient({
             />
             <div className="relative flex flex-col items-center">
               <div
-                className='font-korean-display text-[3.05rem] font-bold leading-none tracking-[-0.6px] text-transparent [background-image:linear-gradient(135deg,#20304b_0%,#314a75_48%,#4f78b9_100%)] bg-clip-text dark:[background-image:linear-gradient(135deg,#f5f8fc_0%,#d7e5f8_38%,#9fc0eb_100%)]'
-                data-home-brand-word
-                style={{ textShadow: "0 14px 28px rgba(49,74,117,0.14)" }}
+                className="font-korean-display text-[3.05rem] font-bold leading-none tracking-[-0.6px] text-[#314a75] dark:text-slate-50"
+                data-home-brand-block
+                style={{ textShadow: "0 12px 24px rgba(49,74,117,0.1)" }}
               >
                 Charto
               </div>
-              <div className="mt-2 h-[3px] w-24 rounded-full bg-[linear-gradient(90deg,rgba(32,48,75,0.12),rgba(79,120,185,0.72),rgba(79,120,185,0.24))]" />
+              <div
+                className="mt-2 h-[3px] w-24 rounded-full bg-[linear-gradient(90deg,rgba(49,74,117,0.12),rgba(79,120,185,0.5),rgba(79,120,185,0.12))]"
+                data-home-brand-underline
+              />
             </div>
           </div>
 
-          <div className="home-reveal w-full max-w-[18rem] text-center [--reveal-delay:180ms]">
+          <div className="home-reveal w-full max-w-[18rem] text-center [--reveal-delay:180ms]" data-home-title-block>
             <h1 className="font-korean-display text-[1.18rem] font-bold leading-[1.6] text-slate-950 dark:text-slate-50">
-              <span className="block" data-home-title-line>
+              <span className="block">
                 국내 증시 종목을
               </span>
-              <span className="block" data-home-title-line>
+              <span className="block">
                 기술적으로 분석해드려요.
               </span>
             </h1>
@@ -324,7 +261,7 @@ export function HomePageClient({
             </div>
           </div>
 
-          <div className="home-reveal w-full max-w-[20.5rem] [--reveal-delay:320ms]">
+          <div className="home-reveal w-full max-w-[20.5rem] [--reveal-delay:320ms]" data-home-preview-shell>
             <HeroPreviewCard />
           </div>
 
