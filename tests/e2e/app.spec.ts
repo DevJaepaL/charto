@@ -5,7 +5,6 @@ test("homepage and analysis page render in demo mode", async ({ page }) => {
 
   await expect(page.getByRole("heading", { name: /국내 증시 종목을/i })).toBeVisible();
   await expect(page.getByLabel("종목 검색")).toBeVisible();
-  await expect(page.getByText("분석 미리보기")).toBeVisible();
   await expect(page.getByText("오늘 가장 많이 본 흐름")).toHaveCount(0);
 
   await page.goto("/analyze/005930");

@@ -7,13 +7,14 @@ import { usePathname } from "next/navigation";
 import { HeroPreviewCard } from "@/components/hero-preview-card";
 import { HomeFavoritesStrip } from "@/components/home-favorites-strip";
 import { StockSearch } from "@/components/stock-search";
-import type { StockLookupItem } from "@/lib/types";
+import type { StockLookupItem, TechnicalResponse } from "@/lib/types";
 
 interface HomePageClientProps {
   featured: StockLookupItem[];
   userKey: string | null;
   userName: string;
   isSignedIn: boolean;
+  preview: TechnicalResponse | null;
 }
 
 export function HomePageClient({
@@ -21,6 +22,7 @@ export function HomePageClient({
   userKey,
   userName,
   isSignedIn,
+  preview,
 }: HomePageClientProps) {
   const pathname = usePathname();
   const hasMountedRef = useRef(false);
@@ -58,6 +60,7 @@ export function HomePageClient({
       }
 
       const scope = createScope({ root: sectionRef.current }).add(() => {
+        const hasPreview = Boolean(sectionRef.current?.querySelector("[data-home-preview-shell]"));
         const timeline = createTimeline({
           defaults: {
             duration: 680,
@@ -121,8 +124,10 @@ export function HomePageClient({
               duration: 620,
             },
             240,
-          )
-          .add(
+          );
+
+        if (hasPreview) {
+          timeline.add(
             "[data-home-preview-shell]",
             {
               opacity: [0, 1],
@@ -131,16 +136,18 @@ export function HomePageClient({
               duration: 680,
             },
             320,
-          )
-          .add(
-            "[data-home-login-copy]",
-            {
-              opacity: [0, 1],
-              translateY: [12, 0],
-              duration: 560,
-            },
-            400,
           );
+        }
+
+        timeline.add(
+          "[data-home-login-copy]",
+          {
+            opacity: [0, 1],
+            translateY: [12, 0],
+            duration: 560,
+          },
+          hasPreview ? 400 : 320,
+        );
 
         const ambient = createTimeline({
           loop: true,
@@ -261,12 +268,14 @@ export function HomePageClient({
             </div>
           </div>
 
-          <div className="home-reveal w-full max-w-[20.5rem] [--reveal-delay:320ms]" data-home-preview-shell>
-            <HeroPreviewCard />
-          </div>
+          {preview ? (
+            <div className="home-reveal w-full max-w-[20.5rem] [--reveal-delay:320ms]" data-home-preview-shell>
+              <HeroPreviewCard preview={preview} />
+            </div>
+          ) : null}
 
           <div
-            className="home-reveal w-full max-w-[20.5rem] px-1 text-center text-[12px] leading-5 text-slate-500 dark:text-slate-300 [--reveal-delay:360ms]"
+            className="home-reveal w-full max-w-[20.5rem] px-1 text-center text-[12px] leading-5 text-slate-500 dark:text-slate-300 [--reveal-delay:300ms]"
             data-home-login-copy
           >
             {isSignedIn ? (
