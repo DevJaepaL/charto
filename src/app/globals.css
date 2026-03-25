@@ -748,17 +748,25 @@ select:focus-visible {
 }
 
 .dark .search-dock {
-  background: #080d14;
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
+  background: var(--surface-0);
+  box-shadow: none;
 }
 
-.dark .home-login-chip,
-.dark .home-favorite-chip {
+.dark .home-login-chip {
   background: rgba(255, 255, 255, 0.03);
   box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22);
 }
 
-.dark .home-search-stage,
+.dark .home-favorite-chip {
+  background: var(--surface-0);
+  box-shadow: none;
+}
+
+.dark .home-search-stage {
+  background: transparent;
+  box-shadow: none;
+}
+
 .dark .board-panel {
   background: rgba(10, 12, 16, 0.98);
   box-shadow: 0 20px 44px rgba(0, 0, 0, 0.32);

@@ -144,7 +144,7 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
         }`}
       >
         <div
-          className={`grid ${hero ? "grid-cols-1" : "grid-cols-[minmax(0,1fr)_auto]"} items-center border border-black/6 bg-white text-slate-900 dark:border-white/8 dark:bg-[#080d14] dark:text-white ${
+          className={`grid ${hero ? "grid-cols-1" : "grid-cols-[minmax(0,1fr)_auto]"} items-center border border-black/6 bg-white text-slate-900 dark:border-white/8 dark:bg-[var(--surface-0)] dark:text-white ${
             inline ? "rounded-[10px] md:rounded-[12px]" : compact ? "rounded-[12px] md:rounded-[14px]" : "rounded-[16px] md:rounded-[18px]"
           } ${
             inline ? "gap-1 p-1" : compact ? "gap-2 p-2" : "gap-2 p-2.5"
