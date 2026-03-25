@@ -109,12 +109,12 @@ export function MarketPulsePanel() {
   }, [activeMode, activePayload]);
 
   return (
-    <div className="soft-panel rounded-[8px] p-0.75 md:rounded-[14px] md:p-1.25">
-      <div className="text-[9px] font-bold text-slate-800 dark:text-slate-100 md:text-[11px]">
+    <div className="soft-panel rounded-[8px] p-0.75 md:rounded-[14px] md:p-1.25" data-home-pulse-panel>
+      <div className="text-[9px] font-bold text-slate-800 dark:text-slate-100 md:text-[11px]" data-home-pulse-title>
         <b>오늘 가장 많이 본 흐름</b>
       </div>
 
-      <div className="mt-1.5 md:mt-2">
+      <div className="mt-1.5 md:mt-2" data-home-pulse-tabs>
         <div className="grid grid-cols-3 gap-0.5 rounded-[7px] bg-[var(--surface-card-strong)] p-0.5 md:rounded-[9px]">
           {MODES.map((mode) => {
             const active = mode.value === activeMode;

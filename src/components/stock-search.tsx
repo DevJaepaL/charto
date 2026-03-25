@@ -140,17 +140,17 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
             ? "rounded-[10px] p-0.5 md:rounded-[12px]"
             : compact
               ? "rounded-[14px] p-1 md:rounded-[16px]"
-              : "rounded-[18px] p-1 md:rounded-[20px] md:p-1.5"
+              : "rounded-[18px] p-1"
         }`}
       >
         <div
           className={`grid ${hero ? "grid-cols-1" : "grid-cols-[minmax(0,1fr)_auto]"} items-center border border-black/6 bg-white text-slate-900 dark:border-white/8 dark:bg-[var(--surface-0)] dark:text-white ${
-            inline ? "rounded-[10px] md:rounded-[12px]" : compact ? "rounded-[12px] md:rounded-[14px]" : "rounded-[16px] md:rounded-[18px]"
+            inline ? "rounded-[10px] md:rounded-[12px]" : compact ? "rounded-[12px] md:rounded-[14px]" : "rounded-[16px]"
           } ${
-            inline ? "gap-1 p-1" : compact ? "gap-2 p-2" : "gap-2 p-2.5"
+            inline ? "gap-1 p-1" : compact ? "gap-2 p-2" : "gap-1.5 p-2"
           }`}
         >
-          <div className={`flex min-w-0 items-center ${inline ? "gap-1.5 px-2 py-1" : compact ? "gap-2 px-3.5 py-2.5" : "gap-3 px-4 py-3.5"}`}>
+          <div className={`flex min-w-0 items-center ${inline ? "gap-1.5 px-2 py-1" : compact ? "gap-2 px-3.5 py-2.5" : "gap-3 px-4 py-3"}`}>
             <svg
               aria-hidden
               className={`${inline ? "size-3.5" : compact ? "size-4" : "size-4.5"} shrink-0 text-slate-400 dark:text-white/38`}
@@ -168,7 +168,7 @@ export function StockSearch({ featured, variant = "hero" }: StockSearchProps) {
                   ? "text-[12px] placeholder:text-[10px] md:text-[12px] md:placeholder:text-[11px]"
                     : compact
                       ? "text-[14px] placeholder:text-[11px] md:text-[15px] md:placeholder:text-[12px]"
-                      : "text-[15px] placeholder:text-[12px] md:text-[16px] md:placeholder:text-[13px]"
+                      : "text-[15px] placeholder:text-[12px]"
               }`}
               placeholder="삼성전자 또는 005930"
               value={query}

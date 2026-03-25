@@ -29,7 +29,7 @@ export function BrandLogo({
         </span>
       ) : null}
       <span
-        className={`font-black uppercase leading-none tracking-[-0.08em] text-[var(--brand-strong)] transition-transform group-hover:-translate-y-0.5 ${
+        className={`font-black uppercase tracking-[-0.08em] leading-none text-[var(--brand-strong)] transition-transform group-hover:-translate-y-0.5 ${
           isSmall ? "text-xl" : "text-2xl md:text-[1.75rem]"
         }`}
       >

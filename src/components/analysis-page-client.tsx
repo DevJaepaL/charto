@@ -711,7 +711,9 @@ function RecommendationCard({
           <button
             aria-expanded={open}
             aria-label={open ? "추천 점수 설명 닫기" : "추천 점수 설명 보기"}
-            className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[rgba(73,178,255,0.18)] text-sky-700 shadow-[0_10px_24px_rgba(73,178,255,0.24)] ring-1 ring-[rgba(73,178,255,0.18)] transition-colors hover:bg-[rgba(73,178,255,0.28)] dark:bg-[rgba(73,178,255,0.2)] dark:text-sky-100 dark:shadow-[0_12px_26px_rgba(18,40,72,0.34)] dark:ring-[rgba(157,196,255,0.16)] dark:hover:bg-[rgba(73,178,255,0.3)] md:h-8 md:w-8"
+            className={`inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/55 bg-[linear-gradient(135deg,#2346a6_0%,#49b2ff_52%,#7b61ff_100%)] text-white shadow-[0_14px_28px_rgba(73,178,255,0.34),0_6px_14px_rgba(35,60,124,0.2),inset_0_1px_0_rgba(255,255,255,0.4)] ring-1 ring-[rgba(73,178,255,0.14)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.04] hover:shadow-[0_18px_34px_rgba(73,178,255,0.4),0_8px_18px_rgba(35,60,124,0.24),inset_0_1px_0_rgba(255,255,255,0.46)] active:translate-y-0 active:scale-[0.98] dark:border-white/20 dark:bg-[linear-gradient(135deg,rgba(35,60,124,0.96)_0%,rgba(73,178,255,0.94)_48%,rgba(123,97,255,0.94)_100%)] dark:text-white dark:shadow-[0_18px_34px_rgba(18,40,72,0.46),0_8px_18px_rgba(2,6,23,0.38),inset_0_1px_0_rgba(255,255,255,0.24)] dark:ring-[rgba(157,196,255,0.18)] dark:hover:shadow-[0_22px_40px_rgba(32,84,167,0.5),0_10px_20px_rgba(2,6,23,0.42),inset_0_1px_0_rgba(255,255,255,0.28)] md:h-9 md:w-9 ${
+              open ? "scale-[1.03] shadow-[0_20px_38px_rgba(73,178,255,0.42),0_10px_22px_rgba(35,60,124,0.26),inset_0_1px_0_rgba(255,255,255,0.46)] dark:shadow-[0_24px_42px_rgba(32,84,167,0.54),0_12px_24px_rgba(2,6,23,0.44),inset_0_1px_0_rgba(255,255,255,0.3)]" : ""
+            }`}
             type="button"
             onClick={() => {
               setPinnedOpen((current) => !current);
@@ -722,7 +724,7 @@ function RecommendationCard({
               }
             }}
           >
-            <IconSparkles size={16} stroke={2.1} />
+            <IconSparkles size={17} stroke={2.15} />
           </button>
           {open && tooltipStyle && typeof document !== "undefined"
             ? createPortal(
