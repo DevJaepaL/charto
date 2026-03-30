@@ -68,11 +68,6 @@ export default function RootLayout({
       </head>
       <body className="bg-[var(--surface-0)] text-[var(--text-main)] antialiased">
         <div className="app-shell flex min-h-screen flex-col">
-          <div className="px-4 pt-3 md:px-5 md:pt-4">
-            <div className="mx-auto max-w-[30rem] rounded-[12px] border border-amber-200/80 bg-amber-50/90 px-4 py-2 text-center text-[11px] font-medium text-amber-900 dark:border-amber-400/18 dark:bg-amber-500/10 dark:text-amber-100">
-              초기 개발 버전으로 일부 기능이 불안정할 수 있습니다.
-            </div>
-          </div>
           <div className="flex-1">{children}</div>
           <footer className="px-4 pb-8 pt-4 text-xs text-slate-500 dark:text-slate-400 md:px-5">
             <div className="mx-auto flex max-w-[30rem] flex-col items-center justify-center gap-2.5 border-t border-slate-200/70 pt-4 text-center dark:border-white/10">
