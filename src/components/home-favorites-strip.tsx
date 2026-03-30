@@ -13,11 +13,11 @@ interface HomeFavoritesStripProps {
 }
 
 export function HomeFavoritesStrip({ userKey }: HomeFavoritesStripProps) {
+  const [loadedUserKey, setLoadedUserKey] = useState<string | null>(null);
   const [items, setItems] = useState<StockLookupItem[]>([]);
 
   useEffect(() => {
     if (!userKey || typeof window === "undefined") {
-      setItems([]);
       return;
     }
 
@@ -26,6 +26,7 @@ export function HomeFavoritesStrip({ userKey }: HomeFavoritesStripProps) {
     const syncFavorites = async () => {
       const nextItems = await readFavoriteStocksForUser(userKey);
       if (active) {
+        setLoadedUserKey(userKey);
         setItems(nextItems);
       }
     };
@@ -49,11 +50,12 @@ export function HomeFavoritesStrip({ userKey }: HomeFavoritesStripProps) {
     };
   }, [userKey]);
 
-  if (!userKey || !items.length) {
+  const visibleItems = loadedUserKey === userKey ? items.slice(0, 4) : [];
+
+  if (!userKey || !visibleItems.length) {
     return null;
   }
 
-  const visibleItems = items.slice(0, 4);
   const extraCount = Math.max(items.length - visibleItems.length, 0);
 
   return (

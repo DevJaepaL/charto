@@ -1101,7 +1101,7 @@ export function AnalysisPageClient({
     initialRecommendationSignal,
   );
   const [aiRequested, setAiRequested] = useState(isAiUserSignedIn ? shouldAutoFetchAi : false);
-  const [minIntroReady, setMinIntroReady] = useState(false);
+  const [introReadySymbol, setIntroReadySymbol] = useState<string | null>(null);
   const [isFavorite, setIsFavorite] = useState(() =>
     favoriteUserKey ? isFavoriteStock(favoriteUserKey, stock.symbol) : false,
   );
@@ -1109,10 +1109,8 @@ export function AnalysisPageClient({
   const skipInitialDataFetch = useRef(Boolean(initialTechnicalPayload && !initialError));
 
   useEffect(() => {
-    setMinIntroReady(false);
-
     const timeoutId = window.setTimeout(() => {
-      setMinIntroReady(true);
+      setIntroReadySymbol(stock.symbol);
     }, 4300);
 
     return () => window.clearTimeout(timeoutId);
@@ -1244,6 +1242,7 @@ export function AnalysisPageClient({
   const technical = technicalPayload?.technical;
   const chartUnavailable = Boolean(candlesPayload?.chartUnavailable);
   const isInitialLoading = !candlesPayload && !error;
+  const minIntroReady = introReadySymbol === stock.symbol;
   const currentSelectionKey = `${stock.symbol}:${DEFAULT_INTERVAL}:${DEFAULT_RANGE}`;
   const loadedSelectionKey = technicalPayload
     ? `${stock.symbol}:${technicalPayload.interval}:${technicalPayload.range}`
@@ -1304,6 +1303,17 @@ export function AnalysisPageClient({
   const scoreComparisonLabel = "전일 대비";
   const visibleReasons = signal?.reasons.slice(0, 2) ?? [];
   const visibleRisks = signal?.risks.slice(0, 1) ?? [];
+  const hasMeaningfulAnalysisContent = Boolean(
+    technicalPayload &&
+      !technicalPayload.isDemo &&
+      !chartUnavailable &&
+      hasValidQuote &&
+      technicalPayload.candles.length > 0 &&
+      technical &&
+      signal &&
+      (visibleReasons.length > 0 || visibleRisks.length > 0),
+  );
+  const shouldShowAnalyzeAd = Boolean(analyzeAdSlot) && !error && hasMeaningfulAnalysisContent;
   const aiChartSummary = aiSummary?.trend ?? aiSummary?.momentum ?? "";
   const aiMomentumSummary =
     aiSummary?.trend && aiSummary?.momentum && aiSummary.trend !== aiSummary.momentum
@@ -1948,7 +1958,9 @@ export function AnalysisPageClient({
           </div>
         </section>
 
-        <AdSlot className="waterfall-item" label="광고" slot={analyzeAdSlot} />
+        {shouldShowAnalyzeAd ? (
+          <AdSlot className="waterfall-item" label="광고" slot={analyzeAdSlot} />
+        ) : null}
       </div>
     </main>
   );
