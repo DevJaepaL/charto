@@ -33,30 +33,6 @@ pnpm context:sync
 pnpm dev
 ```
 
-## Environment
-
-- `KIS_APP_KEY`
-- `KIS_APP_SECRET`
-- `KIS_ENV`
-- `GEMINI_API_KEY` 또는 `GEMINI_API_KEYS`
-- `GEMINI_MODEL`
-- `OPENDART_API_KEY`
-- `AUTH_SECRET`
-- `AUTH_GOOGLE_ID`
-- `AUTH_GOOGLE_SECRET`
-- `AUTH_KAKAO_ID`
-- `AUTH_KAKAO_SECRET`
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `ADSENSE_PUBLISHER_ID`
-- `NEXT_PUBLIC_ADSENSE_CLIENT`
-- `NEXT_PUBLIC_ADSENSE_HOME_SLOT`
-- `NEXT_PUBLIC_ADSENSE_ANALYZE_SLOT`
-
-키가 없으면 일부 기능은 데모 모드로 동작합니다.
-`pnpm context:sync`를 실행하면 Open DART 업종 메타데이터를 미리 생성해 더 안정적으로 분류합니다.
-
-Supabase로 관심종목을 저장하려면 [`supabase/favorite_stocks.sql`](./supabase/favorite_stocks.sql)을 실행한 뒤 위 두 개의 Supabase env를 등록하면 됩니다.
 
 ## Validate
 
