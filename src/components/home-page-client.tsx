@@ -241,7 +241,7 @@ export function HomePageClient({
                 data-home-brand-block
                 style={{ textShadow: "0 12px 24px rgba(49,74,117,0.1)" }}
               >
-                Charto
+                CHARTO
               </div>
               <div
                 className="mt-2 h-[3px] w-24 rounded-full bg-[linear-gradient(90deg,rgba(49,74,117,0.12),rgba(79,120,185,0.5),rgba(79,120,185,0.12))]"
