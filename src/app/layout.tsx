@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 
 import { ThemeToggle } from "@/components/theme-toggle";
-import { getAdSenseClientId } from "@/lib/adsense";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -36,8 +34,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const adSenseClientId = getAdSenseClientId();
-
   return (
     <html lang="ko" className="dark" data-theme="dark" suppressHydrationWarning>
       <head>
@@ -57,14 +53,6 @@ export default function RootLayout({
             __html: `(function(){try{var stored=localStorage.getItem('charto-theme');var theme=stored||'dark';if(!stored){localStorage.setItem('charto-theme',theme);}document.documentElement.classList.toggle('dark',theme==='dark');document.documentElement.dataset.theme=theme;}catch(e){document.documentElement.classList.add('dark');document.documentElement.dataset.theme='dark';}})();`,
           }}
         />
-        {adSenseClientId ? (
-          <Script
-            async
-            crossOrigin="anonymous"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adSenseClientId}`}
-            strategy="afterInteractive"
-          />
-        ) : null}
       </head>
       <body className="bg-[var(--surface-0)] text-[var(--text-main)] antialiased">
         <div className="app-shell flex min-h-screen flex-col">

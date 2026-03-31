@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { AdSenseScript } from "@/components/adsense-script";
 import { AnalysisPageClient } from "@/components/analysis-page-client";
 import { getGeminiApiKeyCount } from "@/lib/analysis/ai-summary";
 import { configuredAuthProviders, getServerAuthSession } from "@/lib/auth";
@@ -46,17 +47,20 @@ export default async function AnalyzePage({
   const favoriteUserKey = session?.user?.id?.trim() || null;
 
   return (
-    <AnalysisPageClient
-      aiProviders={configuredAuthProviders.map(({ id, name }) => ({ id, name }))}
-      aiUserName={session?.user?.name}
-      favoriteUserKey={favoriteUserKey}
-      featured={getFeaturedStocks()}
-      initialError={null}
-      initialRecommendationSignal={null}
-      initialTechnicalPayload={null}
-      isAiUserSignedIn={isAiUserSignedIn}
-      shouldAutoFetchAi={shouldAutoFetchAi}
-      stock={stock}
-    />
+    <>
+      <AdSenseScript />
+      <AnalysisPageClient
+        aiProviders={configuredAuthProviders.map(({ id, name }) => ({ id, name }))}
+        aiUserName={session?.user?.name}
+        favoriteUserKey={favoriteUserKey}
+        featured={getFeaturedStocks()}
+        initialError={null}
+        initialRecommendationSignal={null}
+        initialTechnicalPayload={null}
+        isAiUserSignedIn={isAiUserSignedIn}
+        shouldAutoFetchAi={shouldAutoFetchAi}
+        stock={stock}
+      />
+    </>
   );
 }
