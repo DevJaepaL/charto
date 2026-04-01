@@ -1439,11 +1439,11 @@ export function AnalysisPageClient({
         className="flex flex-col gap-3.5 md:gap-4"
       >
         <div
-          className={`waterfall-item search-dock flex items-center gap-2 rounded-[18px] px-2 py-2 md:gap-2.5 md:px-2.5 md:py-2.5 ${revealPhase >= 1 ? "is-visible" : ""}`}
+          className={`waterfall-item flex items-center gap-2 md:gap-2.5 ${revealPhase >= 1 ? "is-visible" : ""}`}
         >
           <Link
             aria-label="홈으로 이동"
-            className="brand-soft-hover inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[12px] text-[var(--brand-strong)] dark:text-slate-100 md:h-10 md:w-10 md:rounded-[14px]"
+            className="brand-soft-hover inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-[10px] text-[var(--brand-strong)] dark:text-slate-100 md:h-10 md:w-10 md:rounded-[14px]"
             href="/"
           >
             <IconHome2 size={15} stroke={2} />
@@ -1454,18 +1454,24 @@ export function AnalysisPageClient({
         </div>
 
         <section
-          className={`waterfall-item detail-stage relative z-10 overflow-visible p-3 md:p-3.5 ${revealPhase >= 2 ? "is-visible" : ""}`}
+          className={`waterfall-item board-panel relative z-10 overflow-visible rounded-[12px] p-2.5 md:rounded-[14px] md:p-3 ${revealPhase >= 2 ? "is-visible" : ""}`}
         >
-          <div className="relative">
             <div
-              className={`waterfall-item ${revealPhase >= 2 ? "is-visible" : ""}`}
+              className={`waterfall-item flex min-w-0 items-start gap-3 ${revealPhase >= 2 ? "is-visible" : ""}`}
               style={{ "--waterfall-delay": "120ms" } as CSSProperties}
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/82 px-3 py-1 text-[10px] font-semibold tracking-[0.12em] text-slate-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-200">
-                  <span className="inline-flex h-2 w-2 rounded-full bg-[var(--accent-cyan)]" />
-                  국내 종목 스냅샷
-                </div>
+            <StockAvatar size="sm" stock={stock} />
+            <div className="min-w-0 flex-1">
+              <h1 className="mt-0.5 break-keep text-[1rem] font-extrabold tracking-tight text-slate-950 dark:text-slate-50 md:mt-1 md:text-[1.7rem]">
+                {stock.name}
+              </h1>
+              <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[10px] md:text-[12px]">
+                <span className="inline-flex items-center rounded-full bg-[var(--surface-pill)] px-2 py-0.75 font-semibold text-slate-600 dark:bg-white/[0.06] dark:text-slate-200">
+                  {stock.symbol}
+                </span>
+                <span className="inline-flex items-center rounded-full bg-[var(--surface-pill)] px-2 py-0.75 font-semibold text-slate-600 dark:bg-white/[0.06] dark:text-slate-200">
+                  {stock.market}
+                </span>
                 {favoriteUserKey ? (
                   <button
                     aria-pressed={isFavorite}
@@ -1493,27 +1499,41 @@ export function AnalysisPageClient({
                   </button>
                 ) : null}
               </div>
-
-              <div className="mt-4 flex items-start gap-3">
-                <StockAvatar size="sm" stock={stock} />
+            </div>
+            </div>
+              <div
+                className={`waterfall-item mt-2 grid gap-2 ${revealPhase >= 3 ? "is-visible" : ""}`}
+                style={{ "--waterfall-delay": "80ms" } as CSSProperties}
+              >
+            <div className="surface-card h-full rounded-[10px] p-2.5 md:rounded-[12px] md:p-3">
+              <div className="flex items-start gap-3">
+                <div
+                  className="inline-flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-[10px] md:h-12 md:w-12 md:rounded-[14px]"
+                  style={companyContextVisuals.headlineStyle as CSSProperties}
+                >
+                  <span
+                    className="inline-flex h-6 w-6 items-center justify-center rounded-[8px] md:h-8 md:w-8 md:rounded-[10px]"
+                    style={companyContextVisuals.headlineIconStyle}
+                  >
+                    <HeadlineIcon size={16} stroke={companyContextVisuals.sectorIconStroke} />
+                  </span>
+                </div>
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-1.5 text-[10px] md:text-[12px]">
-                    <span className="inline-flex items-center rounded-full bg-[var(--surface-pill)] px-2 py-0.75 font-semibold text-slate-600 dark:bg-white/[0.06] dark:text-slate-200">
-                      {stock.symbol}
-                    </span>
-                    <span className="inline-flex items-center rounded-full bg-[var(--surface-pill)] px-2 py-0.75 font-semibold text-slate-600 dark:bg-white/[0.06] dark:text-slate-200">
-                      {stock.market}
-                    </span>
-                    <div className={`inline-flex items-center rounded-full px-2 py-0.75 text-[9px] font-semibold ${signalBiasMeta.className}`}>
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <div className="text-[9px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                        종목 정보
+                      </div>
+                      <p className="mt-1 break-keep text-[11px] font-bold leading-4 text-slate-900 dark:text-slate-50 md:text-[14px] md:leading-5">
+                        {companyContextHeadline}
+                      </p>
+                    </div>
+                     <div
+                       className={`shrink-0 rounded-full px-2 py-0.75 text-[9px] font-semibold ${signalBiasMeta.className}`}
+                     >
                       {signalBiasMeta.label}
                     </div>
                   </div>
-                  <h1 className="mt-2 break-keep text-[1.12rem] font-extrabold tracking-tight text-slate-950 dark:text-slate-50 md:text-[1.75rem]">
-                    {stock.name}
-                  </h1>
-                  <p className="mt-2 break-keep text-[12px] font-bold leading-5 text-slate-900 dark:text-slate-50 md:text-[14px] md:leading-5.5">
-                    {companyContextHeadline}
-                  </p>
                   <div className="mt-2 flex flex-wrap items-center gap-1.5">
                     <div
                       className="inline-flex items-center gap-1 rounded-full px-1.75 py-0.5 text-[9px] font-semibold [background-color:var(--chip-bg)] [color:var(--chip-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] dark:[background-color:var(--chip-bg-dark)] dark:[color:var(--chip-text-dark)]"
@@ -1534,109 +1554,81 @@ export function AnalysisPageClient({
                       {companyContext.sector}
                     </div>
                   </div>
-                  <p className="mt-2 break-keep text-[11px] leading-5 text-slate-600 dark:text-slate-300 md:text-[13px] md:leading-5.5">
+                  <p className="mt-1.5 break-keep text-[11px] leading-4.5 text-slate-500 dark:text-slate-300 md:text-[13px] md:leading-5.5">
                     {companyContextBrief}
                   </p>
                 </div>
               </div>
             </div>
-
-            <div
-              className={`waterfall-item mt-3 grid gap-2.5 ${revealPhase >= 3 ? "is-visible" : ""}`}
-              style={{ "--waterfall-delay": "80ms" } as CSSProperties}
-            >
-              <div className="grid min-w-0 grid-cols-2 auto-rows-fr gap-2.5">
-                <PrimaryQuoteCard
-                  className="h-full"
-                  price={hasValidQuote && quote ? formatPrice(quote.currentPrice) : "-"}
-                  detail={
-                    hasValidQuote && quote
-                      ? `전일 대비 ${formatPercent(quote.changePercent)} (${formatSignedPrice(quote.change)})`
-                      : undefined
-                  }
-                  detailTone={quoteTone}
+             <div className="grid min-w-0 grid-cols-2 auto-rows-fr gap-2.5">
+              <PrimaryQuoteCard
+                className="order-1 h-full"
+                price={hasValidQuote && quote ? formatPrice(quote.currentPrice) : "-"}
+                detail={
+                  hasValidQuote && quote
+                    ? `전일 대비 ${formatPercent(quote.changePercent)} (${formatSignedPrice(quote.change)})`
+                    : undefined
+                }
+                detailTone={quoteTone}
+              />
+              {recommendationSignal && recommendation ? (
+                <RecommendationCard
+                  className="order-2 h-full"
+                  recommendation={recommendation}
+                  score={recommendationSignal.score}
+                  signal={recommendationSignal}
+                  comparisonLabel={scoreComparisonLabel}
                 />
-                {recommendationSignal && recommendation ? (
-                  <RecommendationCard
-                    className="h-full"
-                    recommendation={recommendation}
-                    score={recommendationSignal.score}
-                    signal={recommendationSignal}
-                    comparisonLabel={scoreComparisonLabel}
-                  />
-                ) : null}
-                <div className="col-span-2 grid gap-1.5 sm:grid-cols-3 sm:gap-2">
-                  <PerformanceChip label="올해 수익률" value={ytdReturn} />
-                  <PerformanceChip label="최근 1개월" value={monthlyReturn} />
-                  <PerformanceChip label="최근 1주" value={weeklyReturn} />
-                </div>
-              </div>
-
-              <div
-                className={`waterfall-item grid gap-2.5 ${revealPhase >= 4 ? "is-visible" : ""}`}
-                style={{ "--waterfall-delay": "120ms" } as CSSProperties}
-              >
-                <div className="detail-focus-card rounded-[12px] px-3 py-3">
-                  <div className="flex items-start gap-3">
-                    <div
-                      className="inline-flex h-8.5 w-8.5 shrink-0 items-center justify-center rounded-[10px] md:h-12 md:w-12 md:rounded-[14px]"
-                      style={companyContextVisuals.headlineStyle as CSSProperties}
-                    >
-                      <span
-                        className="inline-flex h-6 w-6 items-center justify-center rounded-[8px] md:h-8 md:w-8 md:rounded-[10px]"
-                        style={companyContextVisuals.headlineIconStyle}
-                      >
-                        <HeadlineIcon size={16} stroke={companyContextVisuals.sectorIconStroke} />
-                      </span>
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="text-[9px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                        종목 정보
-                      </div>
-                      <p className="mt-1 break-keep text-[11px] font-bold leading-4.5 text-slate-900 dark:text-slate-50 md:text-[14px] md:leading-5">
-                        {companyContext.marketPosition}
-                      </p>
-                      {shouldShowContextCaution ? (
-                        <div className="mt-2 rounded-[12px] bg-[rgba(251,191,36,0.12)] px-2.5 py-2 text-[9px] font-medium leading-4 text-amber-800 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] dark:bg-[rgba(217,119,6,0.16)] dark:text-amber-100 md:px-3 md:text-[10px] md:leading-5">
-                          {companyContext.cautionNote}
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid gap-2.5 sm:grid-cols-2">
-                  <div className="detail-focus-card rounded-[12px] px-3 py-3">
-                    <div className="text-[9px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                      업종 포인트
-                    </div>
-                    <p className="mt-1.5 break-keep text-[11px] leading-4.5 text-slate-600 dark:text-slate-300 md:text-[12px] md:leading-5">
-                      {companyContext.industryFlow}
-                    </p>
-                  </div>
-
-                  <div className="detail-focus-card rounded-[12px] px-3 py-3">
-                    <div className="mb-2 text-[9px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
-                      신호 보드
-                    </div>
-                    <div className="grid grid-cols-2 gap-1.5">
-                      {headerSignalItems.map((item) => (
-                        <SignalRail
-                          key={item.label}
-                          label={item.label}
-                          value={item.value}
-                          helper={item.helper}
-                          percent={item.percent}
-                          tone={item.tone}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
+              ) : null}
+              <div className="order-3 col-span-2 grid gap-1.5 sm:grid-cols-3 sm:gap-2">
+                <PerformanceChip label="올해 수익률" value={ytdReturn} />
+                <PerformanceChip label="최근 1개월" value={monthlyReturn} />
+                <PerformanceChip label="최근 1주" value={weeklyReturn} />
               </div>
             </div>
-          </div>
-        </section>
+              </div>
+             <div
+               className={`waterfall-item surface-card mt-2 rounded-[10px] p-2.5 md:mt-3 md:rounded-[12px] md:p-3 ${revealPhase >= 4 ? "is-visible" : ""}`}
+               style={{ "--waterfall-delay": "120ms" } as CSSProperties}
+             >
+              <div className="text-[9px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                기업 포인트
+              </div>
+              <p className="mt-1.5 break-keep text-[10px] leading-4 text-slate-600 dark:text-slate-300 md:text-[12px] md:leading-5">
+                {companyContext.marketPosition}
+              </p>
+              {shouldShowContextCaution ? (
+                <div className="mt-2 rounded-[12px] bg-[rgba(251,191,36,0.12)] px-2.5 py-2 text-[9px] font-medium leading-4 text-amber-800 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] dark:bg-[rgba(217,119,6,0.16)] dark:text-amber-100 md:px-3 md:text-[10px] md:leading-5">
+                  {companyContext.cautionNote}
+                </div>
+              ) : null}
+              <div className="mt-3">
+                <div className="mb-2 text-[9px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                  신호 보드
+                </div>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {headerSignalItems.map((item) => (
+                    <SignalRail
+                      key={item.label}
+                      label={item.label}
+                      value={item.value}
+                      helper={item.helper}
+                      percent={item.percent}
+                      tone={item.tone}
+                    />
+                  ))}
+                </div>
+              </div>
+              <div className="mt-2 rounded-[10px] bg-[var(--surface-card-strong)] px-2.5 py-2.5 dark:bg-white/[0.04]">
+                <div className="text-[9px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                  업종 포인트
+                </div>
+                <p className="mt-1 break-keep text-[11px] leading-4.5 text-slate-600 dark:text-slate-300">
+                  {companyContext.industryFlow}
+                </p>
+              </div>
+            </div>
+          </section>
 
         {error ? (
           <section

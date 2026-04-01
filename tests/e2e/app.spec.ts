@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("homepage and analysis page render in demo mode", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page.getByRole("heading", { name: /국내 종목의 흐름을/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /국내 증시 종목을/i })).toBeVisible();
   await expect(page.getByLabel("종목 검색")).toBeVisible();
   await expect(page.getByText("오늘 가장 많이 본 흐름")).toHaveCount(0);
 
