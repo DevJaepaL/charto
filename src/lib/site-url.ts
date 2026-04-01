@@ -1,4 +1,4 @@
-const FALLBACK_SITE_URL = "https://charto-tawny.vercel.app";
+const FALLBACK_SITE_URL = "https://www.charto.space";
 
 function normalizeSiteUrl(value: string | undefined) {
   const trimmed = value?.trim();
@@ -16,6 +16,7 @@ export function getSiteUrl() {
   return (
     normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL) ||
     normalizeSiteUrl(process.env.SITE_URL) ||
+    normalizeSiteUrl(process.env.NEXTAUTH_URL) ||
     normalizeSiteUrl(process.env.VERCEL_PROJECT_PRODUCTION_URL) ||
     FALLBACK_SITE_URL
   );
