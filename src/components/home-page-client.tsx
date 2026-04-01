@@ -28,7 +28,6 @@ export function HomePageClient({
   const hasMountedRef = useRef(false);
   const sectionRef = useRef<HTMLElement | null>(null);
   const [entryKey, setEntryKey] = useState(0);
-  const featuredLinks = featured.slice(0, 10);
 
   useEffect(() => {
     if (pathname !== "/") {
@@ -266,31 +265,6 @@ export function HomePageClient({
             <StockSearch featured={featured.slice(0, 8)} variant="hero" />
             <div data-home-favorites-shell>
               <HomeFavoritesStrip userKey={userKey} />
-            </div>
-          </div>
-
-          <div className="w-full max-w-[21.5rem]">
-            <div className="rounded-[18px] border border-slate-200/80 bg-white/92 p-3 shadow-[0_14px_36px_rgba(15,23,42,0.08)] dark:border-white/10 dark:bg-[rgba(8,13,20,0.82)] dark:shadow-[0_18px_42px_rgba(3,7,14,0.22)]">
-              <div className="text-[11px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-400">
-                대표 종목 바로가기
-              </div>
-              <nav
-                aria-label="대표 종목 분석 링크"
-                className="mt-2.5 flex flex-wrap gap-2"
-              >
-                {featuredLinks.map((item) => (
-                  <Link
-                    key={item.symbol}
-                    className="inline-flex items-center rounded-full border border-slate-200/80 bg-slate-50 px-3 py-1.5 text-[11px] font-semibold text-slate-700 transition-colors hover:border-slate-300 hover:bg-slate-100 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-200 dark:hover:bg-white/[0.07]"
-                    href={`/analyze/${item.symbol}`}
-                  >
-                    {item.name}
-                    <span className="ml-1 text-[10px] text-slate-400 dark:text-slate-500">
-                      {item.symbol}
-                    </span>
-                  </Link>
-                ))}
-              </nav>
             </div>
           </div>
 

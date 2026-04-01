@@ -39,6 +39,16 @@ export function getStockBySymbol(symbol: string) {
   return STOCKS.find((item) => item.symbol === symbol) ?? null;
 }
 
+export function getAllStocks() {
+  return [...STOCKS].sort((left, right) => {
+    if (left.market !== right.market) {
+      return left.market.localeCompare(right.market, "en");
+    }
+
+    return left.name.localeCompare(right.name, "ko-KR");
+  });
+}
+
 export function getFeaturedStocks() {
   return STOCKS.filter((item) => FEATURED_SET.has(item.symbol)).sort(
     (left, right) =>

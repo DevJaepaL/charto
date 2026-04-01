@@ -96,6 +96,9 @@ export default function RootLayout({
                 <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/contact">
                   문의
                 </Link>
+                <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/stocks">
+                  전체 종목
+                </Link>
                 <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/login">
                   로그인
                 </Link>
