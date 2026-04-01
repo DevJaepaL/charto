@@ -7,6 +7,10 @@ import { configuredAuthProviders, getServerAuthSession, isAuthEnabled } from "@/
 export const metadata: Metadata = {
   title: "로그인",
   description: "Charto 로그인 및 AI 브리핑 사용 안내",
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export default async function LoginPage() {

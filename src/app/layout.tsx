@@ -2,11 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Analytics } from "@vercel/analytics/next";
 
+import { JsonLdScript } from "@/components/json-ld";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { getSiteUrl, getSiteUrlObject } from "@/lib/site-url";
 import "./globals.css";
 
+const siteUrl = getSiteUrl();
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://charto.vercel.app"),
+  metadataBase: getSiteUrlObject(),
   title: {
     default: "CHARTO | 국내 증시 차트를 추적해보세요.",
     template: "%s | Charto",
@@ -28,6 +32,25 @@ export const metadata: Metadata = {
       "국내 증시 종목별 기술지표 분석과 AI 요약까지 확인하는 국내 주식 분석 툴",
   },
 };
+
+const rootStructuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Charto",
+    url: siteUrl,
+    inLanguage: "ko-KR",
+    description:
+      "국내 주식 차트를 바탕으로 각종 보조지표 분석과 AI 요약을 한 화면에서 확인하는 기술 분석 웹앱",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Charto",
+    url: siteUrl,
+    logo: `${siteUrl}/icon.svg`,
+  },
+] as const;
 
 export default function RootLayout({
   children,
@@ -53,6 +76,7 @@ export default function RootLayout({
             __html: `(function(){try{var stored=localStorage.getItem('charto-theme');var theme=stored||'dark';if(!stored){localStorage.setItem('charto-theme',theme);}document.documentElement.classList.toggle('dark',theme==='dark');document.documentElement.dataset.theme=theme;}catch(e){document.documentElement.classList.add('dark');document.documentElement.dataset.theme='dark';}})();`,
           }}
         />
+        <JsonLdScript data={rootStructuredData} id="charto-structured-data" />
       </head>
       <body className="bg-[var(--surface-0)] text-[var(--text-main)] antialiased">
         <div className="app-shell flex min-h-screen flex-col">

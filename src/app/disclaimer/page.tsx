@@ -5,6 +5,10 @@ import { SitePageShell } from "@/components/site-page-shell";
 export const metadata: Metadata = {
   title: "면책 고지",
   description: "Charto 투자 관련 면책 고지",
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export default function DisclaimerPage() {

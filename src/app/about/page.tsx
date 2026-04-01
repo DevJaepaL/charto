@@ -5,6 +5,9 @@ import { SitePageShell } from "@/components/site-page-shell";
 export const metadata: Metadata = {
   title: "서비스 소개",
   description: "Charto 서비스 소개와 제공 범위를 안내합니다.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 export default function AboutPage() {

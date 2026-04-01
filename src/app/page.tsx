@@ -1,7 +1,18 @@
+import type { Metadata } from "next";
+
 import { HomePageClient } from "@/components/home-page-client";
 import { loadTechnicalResponse } from "@/lib/analysis/load-analysis-data";
 import { getServerAuthSession } from "@/lib/auth";
 import { getFeaturedStocks } from "@/lib/stock-master";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    url: "/",
+  },
+};
 
 async function getHomePreview() {
   const featured = getFeaturedStocks();
