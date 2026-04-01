@@ -16,20 +16,39 @@ interface StockChartProps {
   candles: Candle[];
 }
 
-function getDefaultVisibleBars(totalBars: number) {
-  if (totalBars <= 80) {
+function getDefaultVisibleBars(totalBars: number, isMobile: boolean) {
+  if (totalBars <= 14) {
     return totalBars;
   }
 
+  if (totalBars <= 32) {
+    return isMobile ? Math.max(12, totalBars - 4) : Math.max(14, totalBars - 2);
+  }
+
+  if (totalBars <= 80) {
+    return isMobile ? 22 : 30;
+  }
+
   if (totalBars <= 180) {
-    return 80;
+    return isMobile ? 36 : 52;
   }
 
   if (totalBars <= 360) {
-    return 100;
+    return isMobile ? 48 : 68;
   }
 
-  return 120;
+  return isMobile ? 64 : 84;
+}
+
+function getDefaultVisibleLogicalRange(totalBars: number, isMobile: boolean) {
+  const visibleBars = getDefaultVisibleBars(totalBars, isMobile);
+  const leftPadding = isMobile ? 0.35 : 0.6;
+  const rightOffset = isMobile ? 0.65 : 1.1;
+
+  return {
+    from: Math.max(-0.5, totalBars - visibleBars - leftPadding),
+    to: totalBars - 1 + rightOffset,
+  };
 }
 
 export function StockChart({ candles }: StockChartProps) {
@@ -123,11 +142,9 @@ export function StockChart({ candles }: StockChartProps) {
       })),
     );
 
-    const visibleBars = getDefaultVisibleBars(candles.length);
-    chart.timeScale().setVisibleLogicalRange({
-      from: Math.max(0, candles.length - visibleBars),
-      to: candles.length + 2,
-    });
+    chart.timeScale().setVisibleLogicalRange(
+      getDefaultVisibleLogicalRange(candles.length, isMobile),
+    );
 
     const resizeObserver = new ResizeObserver(() => {
       chart.applyOptions({
