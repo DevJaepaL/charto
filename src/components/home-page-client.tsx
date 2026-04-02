@@ -243,10 +243,10 @@ export function HomePageClient({
               >
                 CHARTO
               </div>
-              <div
+              {/* <div
                 className="mt-2 h-[3px] w-24 rounded-full bg-[linear-gradient(90deg,rgba(49,74,117,0.12),rgba(79,120,185,0.5),rgba(79,120,185,0.12))]"
                 data-home-brand-underline
-              />
+              /> */}
             </div>
           </div>
 
