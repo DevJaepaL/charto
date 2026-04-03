@@ -56,6 +56,50 @@ describe("evaluateAccumulationCandidate", () => {
     expect(result?.priceChangePercent5d).toBeCloseTo(2.33, 2);
   });
 
+  it("keeps stocks when 5-day cumulative accumulation is positive even with only two strong inflow days", () => {
+    const result = evaluateAccumulationCandidate(stock, [
+      {
+        date: "20260402",
+        close: 101_000,
+        changePercent: 1.1,
+        foreignNetBuyAmount: 1_300_000_000,
+        institutionNetBuyAmount: 900_000_000,
+      },
+      {
+        date: "20260401",
+        close: 99_900,
+        changePercent: 0.4,
+        foreignNetBuyAmount: 800_000_000,
+        institutionNetBuyAmount: 500_000_000,
+      },
+      {
+        date: "20260331",
+        close: 99_500,
+        changePercent: -0.6,
+        foreignNetBuyAmount: -100_000_000,
+        institutionNetBuyAmount: -100_000_000,
+      },
+      {
+        date: "20260330",
+        close: 100_100,
+        changePercent: -0.5,
+        foreignNetBuyAmount: -50_000_000,
+        institutionNetBuyAmount: -50_000_000,
+      },
+      {
+        date: "20260327",
+        close: 100_600,
+        changePercent: -0.4,
+        foreignNetBuyAmount: -40_000_000,
+        institutionNetBuyAmount: -30_000_000,
+      },
+    ]);
+
+    expect(result).not.toBeNull();
+    expect(result?.positiveDays).toBe(2);
+    expect(result?.combinedNetBuyAmount5d).toBe(3_130_000_000);
+  });
+
   it("rejects stocks that already moved too sharply", () => {
     const result = evaluateAccumulationCandidate(stock, [
       {

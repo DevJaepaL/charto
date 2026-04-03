@@ -115,7 +115,7 @@ test("home shows quiet accumulation stocks when the API returns candidates", asy
     await route.fulfill({
       contentType: "application/json",
       body: JSON.stringify({
-        label: "조용히 매집중인 종목",
+        label: "외인 & 기관이 매집중인 종목",
         source: "kis",
         windowDays: 5,
         asOf: "2026-04-02T09:00:00.000Z",
@@ -133,7 +133,7 @@ test("home shows quiet accumulation stocks when the API returns candidates", asy
             combinedNetBuyAmount5d: 6000000000,
             positiveDays: 4,
             priceChangePercent5d: 2.31,
-            reason: "최근 5거래일 중 4일 외인·기관 동시 순매수",
+            reason: "최근 5거래일 중 4일 외인·기관 수급 우위",
             rankScore: 123,
           },
         ],
@@ -143,7 +143,7 @@ test("home shows quiet accumulation stocks when the API returns candidates", asy
 
   await page.goto("/");
 
-  await expect(page.getByText("조용히 매집중인 종목")).toBeVisible();
+  await expect(page.getByText("외인 & 기관이 매집중인 종목")).toBeVisible();
   await expect(page.getByRole("link", { name: /삼성전자/i })).toBeVisible();
-  await expect(page.getByText("최근 5거래일 중 4일 외인·기관 동시 순매수")).toBeVisible();
+  await expect(page.getByText("최근 5거래일 중 4일 외인·기관 수급 우위")).toBeVisible();
 });

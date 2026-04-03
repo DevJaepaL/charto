@@ -15,7 +15,7 @@ async function getQuietAccumulation(signal: AbortSignal) {
   });
 
   if (!response.ok) {
-    throw new Error("조용한 매집 종목을 불러오지 못했습니다.");
+    throw new Error("외인·기관 매집 종목을 불러오지 못했습니다.");
   }
 
   return (await response.json()) as AccumulationResponse;
@@ -24,6 +24,9 @@ async function getQuietAccumulation(signal: AbortSignal) {
 export function QuietAccumulationPanel() {
   const [payload, setPayload] = useState<AccumulationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const sectionTitle = payload?.label ?? "외인 & 기관이 매집중인 종목";
+  const sectionDescription =
+    payload?.notice ?? "최근 5거래일 누적으로 외인과 기관이 함께 순매수 우위인 종목이에요.";
 
   useEffect(() => {
     const controller = new AbortController();
@@ -38,7 +41,7 @@ export function QuietAccumulationPanel() {
           return;
         }
 
-        setError("조용한 매집 종목을 불러오지 못했습니다.");
+        setError("외인·기관 매집 종목을 불러오지 못했습니다.");
       });
 
     return () => controller.abort();
@@ -50,10 +53,10 @@ export function QuietAccumulationPanel() {
         <div className="min-w-0">
           <div className="inline-flex items-center gap-2 text-[11px] font-black tracking-[0.08em] text-[var(--brand-strong)] md:text-[12px]">
             <IconBuildingBank size={14} />
-            <span>조용히 매집중인 종목</span>
+            <span>{sectionTitle}</span>
           </div>
           <p className="mt-1.5 break-keep text-[12px] leading-5 text-slate-500 dark:text-slate-300 md:text-[13px]">
-            최근 5거래일 동안 외인과 기관 수급이 함께 이어졌지만 주가가 아직 과열로 튀지 않은 종목이에요.
+            {sectionDescription}
           </p>
         </div>
         <div className="rounded-full bg-[var(--surface-pill)] px-2.5 py-1 text-[10px] font-semibold text-slate-600 dark:bg-white/[0.06] dark:text-slate-200">
@@ -80,7 +83,7 @@ export function QuietAccumulationPanel() {
 
       {payload && !payload.items.length ? (
         <div className="mt-3 rounded-[14px] bg-[var(--surface-card-strong)] px-3 py-3 text-[12px] leading-5 text-slate-500 dark:bg-white/[0.04] dark:text-slate-300 md:text-[13px]">
-          아직 조건에 맞는 종목이 많지 않아요. 장중 수급이 다시 들어오면 여기서 바로 보여드릴게요.
+          지금은 외인·기관 누적 순매수가 뚜렷한 종목이 많지 않아요. 장중 수급이 들어오면 여기서 바로 보여드릴게요.
         </div>
       ) : null}
 

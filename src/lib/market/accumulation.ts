@@ -8,6 +8,10 @@ const ACCUMULATION_WINDOW_DAYS = 5;
 const ACCUMULATION_HOME_LIMIT = 6;
 const ACCUMULATION_CANDIDATE_LIMIT = 20;
 const ACCUMULATION_CACHE_TTL_MS = 5 * 60_000;
+const ACCUMULATION_LABEL = "외인 & 기관이 매집중인 종목";
+const ACCUMULATION_MIN_POSITIVE_DAYS = 2;
+const ACCUMULATION_MAX_PRICE_CHANGE_PERCENT = 12;
+const ACCUMULATION_MAX_DAILY_ABS_CHANGE = 7;
 const FOREIGN_INSTITUTION_SCREEN_CODE = "16449";
 const FOREIGN_INSTITUTION_MARKET_CODE = "V";
 
@@ -98,11 +102,11 @@ function isEligibleAccumulationStock(stock: StockLookupItem) {
 
 function buildDemoAccumulationResponse(): AccumulationResponse {
   return {
-    label: "조용히 매집중인 종목",
+    label: ACCUMULATION_LABEL,
     source: "demo",
     windowDays: ACCUMULATION_WINDOW_DAYS,
     asOf: new Date().toISOString(),
-    notice: "실시간 수급 연동이 준비되지 않아 조용한 매집 후보를 아직 보여드리지 않아요.",
+    notice: "최근 5거래일 누적으로 외인과 기관이 함께 순매수 우위인 종목을 추려서 보여줘요.",
     items: [],
   };
 }
@@ -287,12 +291,13 @@ export function evaluateAccumulationCandidate(
   }, 0);
 
   const qualifies =
-    positiveDays >= 3 &&
+    positiveDays >= ACCUMULATION_MIN_POSITIVE_DAYS &&
     foreignNetBuyAmount5d > 0 &&
     institutionNetBuyAmount5d > 0 &&
     combinedNetBuyAmount5d > 0 &&
-    (priceChangePercent5d === null || Math.abs(priceChangePercent5d) <= 10) &&
-    maxDailyAbsChange <= 6;
+    (priceChangePercent5d === null ||
+      Math.abs(priceChangePercent5d) <= ACCUMULATION_MAX_PRICE_CHANGE_PERCENT) &&
+    maxDailyAbsChange <= ACCUMULATION_MAX_DAILY_ABS_CHANGE;
 
   if (!qualifies) {
     return null;
@@ -312,7 +317,7 @@ export function evaluateAccumulationCandidate(
     positiveDays,
     priceChangePercent5d:
       priceChangePercent5d === null ? null : Number(priceChangePercent5d.toFixed(2)),
-    reason: `최근 ${ACCUMULATION_WINDOW_DAYS}거래일 중 ${positiveDays}일 외인·기관 동시 순매수`,
+    reason: `최근 ${ACCUMULATION_WINDOW_DAYS}거래일 중 ${positiveDays}일 외인·기관 수급 우위`,
     rankScore,
   } satisfies AccumulationStockItem;
 }
@@ -354,7 +359,7 @@ export async function loadQuietAccumulation(limit = ACCUMULATION_HOME_LIMIT): Pr
       buildCandidateSeeds(institutionRows, 20),
     ]);
 
-    const evaluated = await Promise.all(
+    const evaluated = await Promise.allSettled(
       candidateSeeds.map(async (seed) => {
         const payload = await requestInvestorTradeByStockDaily(seed.stock.symbol);
         const rows = getInvestorTradeRows(payload);
@@ -363,14 +368,20 @@ export async function loadQuietAccumulation(limit = ACCUMULATION_HOME_LIMIT): Pr
     );
 
     const payload = {
-      label: "조용히 매집중인 종목",
+      label: ACCUMULATION_LABEL,
       source: "kis",
       windowDays: ACCUMULATION_WINDOW_DAYS,
       asOf: new Date().toISOString(),
       notice:
-        "최근 5거래일 동안 외인과 기관 수급이 함께 이어졌지만 주가가 아직 과열로 튀지 않은 종목이에요. 장중 수급은 추정치라 수 분 차이가 날 수 있어요.",
+        "최근 5거래일 누적으로 외인과 기관이 함께 순매수 우위인 종목이에요. 이미 급등한 종목은 최대한 제외했어요.",
       items: sortAccumulationItems(
-        evaluated.filter((item): item is AccumulationStockItem => item !== null),
+        evaluated.flatMap((result) => {
+          if (result.status !== "fulfilled" || result.value === null) {
+            return [];
+          }
+
+          return [result.value];
+        }),
       ).slice(0, limit),
     } satisfies AccumulationResponse;
 
