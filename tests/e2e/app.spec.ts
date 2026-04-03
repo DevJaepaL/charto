@@ -110,12 +110,12 @@ test("mobile home search opens as a fullscreen overlay", async ({ page }) => {
   expect(metrics?.panelBottom).toBeLessThanOrEqual(metrics?.viewportHeight ?? 0);
 });
 
-test("home shows quiet accumulation stocks when the API returns candidates", async ({ page }) => {
+test("home shows investor flow candidates when the API returns them", async ({ page }) => {
   await page.route("**/api/market/accumulation?limit=6", async (route) => {
     await route.fulfill({
       contentType: "application/json",
       body: JSON.stringify({
-        label: "외인 & 기관이 매집중인 종목",
+        label: "외인·기관 매수세가 이어지는 종목",
         source: "kis",
         windowDays: 5,
         asOf: "2026-04-02T09:00:00.000Z",
@@ -132,8 +132,13 @@ test("home shows quiet accumulation stocks when the API returns candidates", asy
             institutionNetBuyAmount5d: 1800000000,
             combinedNetBuyAmount5d: 6000000000,
             positiveDays: 4,
+            foreignPositiveDays: 5,
+            institutionPositiveDays: 2,
+            foreignBuyStreak: 5,
+            institutionBuyStreak: 2,
             priceChangePercent5d: 2.31,
-            reason: "최근 5거래일 중 4일 외인·기관 수급 우위",
+            signalKind: "both",
+            reason: "외인 5일 연속 순매수 · 기관 2일 연속 순매수",
             rankScore: 123,
           },
         ],
@@ -143,7 +148,7 @@ test("home shows quiet accumulation stocks when the API returns candidates", asy
 
   await page.goto("/");
 
-  await expect(page.getByText("외인 & 기관이 매집중인 종목")).toBeVisible();
+  await expect(page.getByText("외인·기관 매수세가 이어지는 종목")).toBeVisible();
   await expect(page.getByRole("link", { name: /삼성전자/i })).toBeVisible();
-  await expect(page.getByText("최근 5거래일 중 4일 외인·기관 수급 우위")).toBeVisible();
+  await expect(page.getByText("외인 5일 연속 순매수 · 기관 2일 연속 순매수")).toBeVisible();
 });

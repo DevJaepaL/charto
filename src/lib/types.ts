@@ -168,7 +168,12 @@ export interface AccumulationStockItem {
   institutionNetBuyAmount5d: number;
   combinedNetBuyAmount5d: number;
   positiveDays: number;
+  foreignPositiveDays: number;
+  institutionPositiveDays: number;
+  foreignBuyStreak: number;
+  institutionBuyStreak: number;
   priceChangePercent5d: number | null;
+  signalKind: "both" | "foreign" | "institution";
   reason: string;
   rankScore: number;
 }

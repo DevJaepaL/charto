@@ -8,6 +8,11 @@ import { StockAvatar } from "@/components/stock-avatar";
 import type { AccumulationResponse } from "@/lib/types";
 import { formatKoreanWon, formatPercent } from "@/lib/utils";
 
+function formatSignedKoreanWon(value: number) {
+  const sign = value > 0 ? "+" : "";
+  return `${sign}${formatKoreanWon(value)}`;
+}
+
 async function getQuietAccumulation(signal: AbortSignal) {
   const response = await fetch("/api/market/accumulation?limit=6", {
     signal,
@@ -15,7 +20,7 @@ async function getQuietAccumulation(signal: AbortSignal) {
   });
 
   if (!response.ok) {
-    throw new Error("외인·기관 매집 종목을 불러오지 못했습니다.");
+    throw new Error("외인·기관 수급 종목을 불러오지 못했습니다.");
   }
 
   return (await response.json()) as AccumulationResponse;
@@ -24,9 +29,10 @@ async function getQuietAccumulation(signal: AbortSignal) {
 export function QuietAccumulationPanel() {
   const [payload, setPayload] = useState<AccumulationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const sectionTitle = payload?.label ?? "외인 & 기관이 매집중인 종목";
+  const sectionTitle = payload?.label ?? "외인·기관 매수세가 이어지는 종목";
   const sectionDescription =
-    payload?.notice ?? "최근 5거래일 누적으로 외인과 기관이 함께 순매수 우위인 종목이에요.";
+    payload?.notice ??
+    "최근 5거래일 기준 외인이나 기관의 순매수 흐름이 이어지는 종목이에요.";
 
   useEffect(() => {
     const controller = new AbortController();
@@ -41,7 +47,7 @@ export function QuietAccumulationPanel() {
           return;
         }
 
-        setError("외인·기관 매집 종목을 불러오지 못했습니다.");
+        setError("외인·기관 수급 종목을 불러오지 못했습니다.");
       });
 
     return () => controller.abort();
@@ -83,7 +89,7 @@ export function QuietAccumulationPanel() {
 
       {payload && !payload.items.length ? (
         <div className="mt-3 rounded-[14px] bg-[var(--surface-card-strong)] px-3 py-3 text-[12px] leading-5 text-slate-500 dark:bg-white/[0.04] dark:text-slate-300 md:text-[13px]">
-          지금은 외인·기관 누적 순매수가 뚜렷한 종목이 많지 않아요. 장중 수급이 들어오면 여기서 바로 보여드릴게요.
+          지금은 외인 5일 연속이나 기관 3일 연속 순매수처럼 눈에 띄는 흐름이 많지 않아요. 장중 수급이 들어오면 여기서 바로 보여드릴게요.
         </div>
       ) : null}
 
@@ -107,7 +113,7 @@ export function QuietAccumulationPanel() {
                         {item.stock.symbol} · {item.stock.market}
                       </div>
                     </div>
-                    <div className="rounded-full bg-white/80 px-2 py-1 text-[10px] font-semibold text-slate-600 dark:bg-white/[0.08] dark:text-slate-200">
+                    <div className="max-w-[12rem] rounded-[12px] bg-white/80 px-2 py-1 text-[10px] font-semibold leading-4 text-slate-600 dark:bg-white/[0.08] dark:text-slate-200">
                       {item.reason}
                     </div>
                   </div>
@@ -119,7 +125,7 @@ export function QuietAccumulationPanel() {
                         외인
                       </div>
                       <div className="mt-1 text-[13px] font-bold text-slate-900 dark:text-slate-50">
-                        +{formatKoreanWon(item.foreignNetBuyAmount5d)}
+                        {formatSignedKoreanWon(item.foreignNetBuyAmount5d)}
                       </div>
                     </div>
                     <div className="rounded-[12px] bg-white/82 px-2.5 py-2 dark:bg-white/[0.04]">
@@ -127,7 +133,7 @@ export function QuietAccumulationPanel() {
                         기관
                       </div>
                       <div className="mt-1 text-[13px] font-bold text-slate-900 dark:text-slate-50">
-                        +{formatKoreanWon(item.institutionNetBuyAmount5d)}
+                        {formatSignedKoreanWon(item.institutionNetBuyAmount5d)}
                       </div>
                     </div>
                     <div className="rounded-[12px] bg-white/82 px-2.5 py-2 dark:bg-white/[0.04]">

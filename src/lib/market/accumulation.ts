@@ -6,12 +6,14 @@ import type { AccumulationResponse, AccumulationStockItem, StockLookupItem } fro
 
 const ACCUMULATION_WINDOW_DAYS = 5;
 const ACCUMULATION_HOME_LIMIT = 6;
-const ACCUMULATION_CANDIDATE_LIMIT = 20;
+const ACCUMULATION_CANDIDATE_LIMIT = 40;
 const ACCUMULATION_CACHE_TTL_MS = 5 * 60_000;
-const ACCUMULATION_LABEL = "외인 & 기관이 매집중인 종목";
-const ACCUMULATION_MIN_POSITIVE_DAYS = 2;
-const ACCUMULATION_MAX_PRICE_CHANGE_PERCENT = 12;
-const ACCUMULATION_MAX_DAILY_ABS_CHANGE = 7;
+const ACCUMULATION_LABEL = "외인·기관 매수세가 이어지는 종목";
+const FOREIGN_BUY_STREAK_MIN = 5;
+const INSTITUTION_BUY_STREAK_MIN = 3;
+const DUAL_FOREIGN_BUY_STREAK_MIN = 5;
+const DUAL_INSTITUTION_BUY_STREAK_MIN = 2;
+const DUAL_POSITIVE_DAYS_MIN = 2;
 const FOREIGN_INSTITUTION_SCREEN_CODE = "16449";
 const FOREIGN_INSTITUTION_MARKET_CODE = "V";
 
@@ -106,7 +108,8 @@ function buildDemoAccumulationResponse(): AccumulationResponse {
     source: "demo",
     windowDays: ACCUMULATION_WINDOW_DAYS,
     asOf: new Date().toISOString(),
-    notice: "최근 5거래일 누적으로 외인과 기관이 함께 순매수 우위인 종목을 추려서 보여줘요.",
+    notice:
+      "최근 5거래일 기준으로 외인이나 기관의 순매수 흐름이 이어지는 종목을 추려서 보여줘요.",
     items: [],
   };
 }
@@ -254,6 +257,24 @@ function getInvestorTradeRows(payload: InvestorTradeByStockDailyPayload) {
   return [...deduped.values()].sort((left, right) => right.date.localeCompare(left.date));
 }
 
+function countPositiveDays(rows: InvestorTradeDay[], key: "foreignNetBuyAmount" | "institutionNetBuyAmount") {
+  return rows.filter((row) => row[key] > 0).length;
+}
+
+function countBuyStreak(rows: InvestorTradeDay[], key: "foreignNetBuyAmount" | "institutionNetBuyAmount") {
+  let streak = 0;
+
+  for (const row of rows) {
+    if (row[key] <= 0) {
+      break;
+    }
+
+    streak += 1;
+  }
+
+  return streak;
+}
+
 export function evaluateAccumulationCandidate(
   stock: StockLookupItem,
   rows: InvestorTradeDay[],
@@ -267,6 +288,10 @@ export function evaluateAccumulationCandidate(
   const positiveDays = recentRows.filter(
     (row) => row.foreignNetBuyAmount + row.institutionNetBuyAmount > 0,
   ).length;
+  const foreignPositiveDays = countPositiveDays(recentRows, "foreignNetBuyAmount");
+  const institutionPositiveDays = countPositiveDays(recentRows, "institutionNetBuyAmount");
+  const foreignBuyStreak = countBuyStreak(recentRows, "foreignNetBuyAmount");
+  const institutionBuyStreak = countBuyStreak(recentRows, "institutionNetBuyAmount");
   const foreignNetBuyAmount5d = recentRows.reduce(
     (total, row) => total + row.foreignNetBuyAmount,
     0,
@@ -282,32 +307,57 @@ export function evaluateAccumulationCandidate(
     latestClose && oldestClose
       ? ((latestClose - oldestClose) / oldestClose) * 100
       : null;
-  const maxDailyAbsChange = recentRows.reduce((maxValue, row) => {
-    if (row.changePercent === null) {
-      return maxValue;
-    }
-
-    return Math.max(maxValue, Math.abs(row.changePercent));
-  }, 0);
-
-  const qualifies =
-    positiveDays >= ACCUMULATION_MIN_POSITIVE_DAYS &&
+  const qualifiesDualStreak =
+    foreignBuyStreak >= DUAL_FOREIGN_BUY_STREAK_MIN &&
+    institutionBuyStreak >= DUAL_INSTITUTION_BUY_STREAK_MIN;
+  const qualifiesForeignStreak = foreignBuyStreak >= FOREIGN_BUY_STREAK_MIN;
+  const qualifiesInstitutionStreak = institutionBuyStreak >= INSTITUTION_BUY_STREAK_MIN;
+  const qualifiesDualNet =
     foreignNetBuyAmount5d > 0 &&
     institutionNetBuyAmount5d > 0 &&
-    combinedNetBuyAmount5d > 0 &&
-    (priceChangePercent5d === null ||
-      Math.abs(priceChangePercent5d) <= ACCUMULATION_MAX_PRICE_CHANGE_PERCENT) &&
-    maxDailyAbsChange <= ACCUMULATION_MAX_DAILY_ABS_CHANGE;
+    positiveDays >= DUAL_POSITIVE_DAYS_MIN;
 
-  if (!qualifies) {
+  if (
+    !qualifiesDualStreak &&
+    !qualifiesForeignStreak &&
+    !qualifiesInstitutionStreak &&
+    !qualifiesDualNet
+  ) {
     return null;
   }
 
+  let signalKind: AccumulationStockItem["signalKind"] = "both";
+  let signalPriority = 1;
+  let reason = `외인·기관 모두 최근 ${ACCUMULATION_WINDOW_DAYS}일 누적 순매수 우위`;
+
+  if (qualifiesDualStreak || (qualifiesForeignStreak && qualifiesInstitutionStreak)) {
+    signalKind = "both";
+    signalPriority = 4;
+    reason = `외인 ${foreignBuyStreak}일 연속 순매수 · 기관 ${institutionBuyStreak}일 연속 순매수`;
+  } else if (qualifiesForeignStreak) {
+    signalKind = "foreign";
+    signalPriority = 3;
+    reason =
+      institutionNetBuyAmount5d < 0
+        ? `외인 ${foreignBuyStreak}일 연속 순매수 · 기관은 누적 순매도`
+        : `외인 ${foreignBuyStreak}일 연속 순매수 · 기관도 누적 순매수`;
+  } else if (qualifiesInstitutionStreak) {
+    signalKind = "institution";
+    signalPriority = 2;
+    reason =
+      foreignNetBuyAmount5d < 0
+        ? `기관 ${institutionBuyStreak}일 연속 순매수 · 외인은 누적 순매도`
+        : `기관 ${institutionBuyStreak}일 연속 순매수 · 외인도 누적 순매수`;
+  }
+
   const rankScore =
-    seedScore * 1_000_000_000 +
-    positiveDays * 100_000_000 +
-    combinedNetBuyAmount5d -
-    Math.round(Math.abs(priceChangePercent5d ?? 0) * 1_000_000);
+    seedScore * 1_000_000_000_000 +
+    signalPriority * 100_000_000_000 +
+    foreignBuyStreak * 10_000_000_000 +
+    institutionBuyStreak * 5_000_000_000 +
+    positiveDays * 1_000_000_000 +
+    Math.max(foreignNetBuyAmount5d, 0) +
+    Math.max(institutionNetBuyAmount5d, 0);
 
   return {
     stock,
@@ -315,25 +365,20 @@ export function evaluateAccumulationCandidate(
     institutionNetBuyAmount5d,
     combinedNetBuyAmount5d,
     positiveDays,
+    foreignPositiveDays,
+    institutionPositiveDays,
+    foreignBuyStreak,
+    institutionBuyStreak,
     priceChangePercent5d:
       priceChangePercent5d === null ? null : Number(priceChangePercent5d.toFixed(2)),
-    reason: `최근 ${ACCUMULATION_WINDOW_DAYS}거래일 중 ${positiveDays}일 외인·기관 수급 우위`,
+    signalKind,
+    reason,
     rankScore,
   } satisfies AccumulationStockItem;
 }
 
 function sortAccumulationItems(items: AccumulationStockItem[]) {
-  return [...items].sort((left, right) => {
-    if (left.positiveDays !== right.positiveDays) {
-      return right.positiveDays - left.positiveDays;
-    }
-
-    if (left.combinedNetBuyAmount5d !== right.combinedNetBuyAmount5d) {
-      return right.combinedNetBuyAmount5d - left.combinedNetBuyAmount5d;
-    }
-
-    return Math.abs(left.priceChangePercent5d ?? 0) - Math.abs(right.priceChangePercent5d ?? 0);
-  });
+  return [...items].sort((left, right) => right.rankScore - left.rankScore);
 }
 
 export async function loadQuietAccumulation(limit = ACCUMULATION_HOME_LIMIT): Promise<AccumulationResponse> {
@@ -373,7 +418,7 @@ export async function loadQuietAccumulation(limit = ACCUMULATION_HOME_LIMIT): Pr
       windowDays: ACCUMULATION_WINDOW_DAYS,
       asOf: new Date().toISOString(),
       notice:
-        "최근 5거래일 누적으로 외인과 기관이 함께 순매수 우위인 종목이에요. 이미 급등한 종목은 최대한 제외했어요.",
+        "최근 5거래일 기준 외인 5일 연속, 기관 3일 연속, 혹은 둘의 매수세가 함께 이어지는 종목을 보여줘요. 이미 많이 오른 종목도 포함될 수 있어요.",
       items: sortAccumulationItems(
         evaluated.flatMap((result) => {
           if (result.status !== "fulfilled" || result.value === null) {
