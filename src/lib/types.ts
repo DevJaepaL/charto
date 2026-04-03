@@ -161,3 +161,23 @@ export interface MarketRankingResponse {
   source: ProviderId;
   items: MarketRankItem[];
 }
+
+export interface AccumulationStockItem {
+  stock: StockLookupItem;
+  foreignNetBuyAmount5d: number;
+  institutionNetBuyAmount5d: number;
+  combinedNetBuyAmount5d: number;
+  positiveDays: number;
+  priceChangePercent5d: number | null;
+  reason: string;
+  rankScore: number;
+}
+
+export interface AccumulationResponse {
+  label: string;
+  source: ProviderId;
+  windowDays: number;
+  asOf: string;
+  notice: string;
+  items: AccumulationStockItem[];
+}

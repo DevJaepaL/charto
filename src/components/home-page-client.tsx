@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 
 import { HeroPreviewCard } from "@/components/hero-preview-card";
 import { HomeFavoritesStrip } from "@/components/home-favorites-strip";
+import { QuietAccumulationPanel } from "@/components/quiet-accumulation-panel";
 import { StockSearch } from "@/components/stock-search";
 import type { StockLookupItem, TechnicalResponse } from "@/lib/types";
 
@@ -140,13 +141,24 @@ export function HomePageClient({
         }
 
         timeline.add(
+          "[data-home-accumulation-shell]",
+          {
+            opacity: [0, 1],
+            translateY: [18, 0],
+            scale: [0.99, 1],
+            duration: 640,
+          },
+          hasPreview ? 390 : 320,
+        );
+
+        timeline.add(
           "[data-home-login-copy]",
           {
             opacity: [0, 1],
             translateY: [12, 0],
             duration: 560,
           },
-          hasPreview ? 400 : 320,
+          hasPreview ? 460 : 390,
         );
 
         const ambient = createTimeline({
@@ -262,7 +274,11 @@ export function HomePageClient({
           </div>
 
           <div className="home-reveal home-search-stage w-full max-w-[21.5rem] [--reveal-delay:200ms]" data-home-search-shell>
-            <StockSearch featured={featured.slice(0, 8)} variant="hero" />
+            <StockSearch
+              featured={featured.slice(0, 8)}
+              mobileSupplement={<HomeFavoritesStrip userKey={userKey} />}
+              variant="hero"
+            />
             <div data-home-favorites-shell>
               <HomeFavoritesStrip userKey={userKey} />
             </div>
@@ -273,6 +289,10 @@ export function HomePageClient({
               <HeroPreviewCard preview={preview} />
             </div>
           ) : null}
+
+          <div className="home-reveal w-full max-w-[20.5rem] [--reveal-delay:360ms]" data-home-accumulation-shell>
+            <QuietAccumulationPanel />
+          </div>
 
           <div
             className="home-reveal w-full max-w-[20.5rem] px-1 text-center text-[12px] leading-5 text-slate-500 dark:text-slate-300 [--reveal-delay:300ms]"
