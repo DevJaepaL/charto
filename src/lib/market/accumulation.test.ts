@@ -104,7 +104,7 @@ describe("evaluateAccumulationCandidate", () => {
     expect(result?.institutionBuyStreak).toBe(0);
     expect(result?.signalKind).toBe("foreign");
     expect(result?.institutionNetBuyAmount5d).toBeLessThan(0);
-    expect(result?.reason).toContain("기관은 누적 순매도");
+    expect(result?.reason).toContain("기관은 최근 5일 순매도");
   });
 
   it("keeps institution-led stocks with a 3-day buy streak", () => {

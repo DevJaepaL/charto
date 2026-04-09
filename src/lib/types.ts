@@ -171,7 +171,9 @@ export interface AccumulationStockItem {
   foreignPositiveDays: number;
   institutionPositiveDays: number;
   foreignBuyStreak: number;
+  foreignSellStreak: number;
   institutionBuyStreak: number;
+  institutionSellStreak: number;
   priceChangePercent5d: number | null;
   signalKind: "both" | "foreign" | "institution";
   reason: string;

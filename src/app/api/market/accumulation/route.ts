@@ -4,7 +4,7 @@ import { z } from "zod";
 import { loadQuietAccumulation } from "@/lib/market/accumulation";
 
 const querySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(12).default(6),
+  limit: z.coerce.number().int().min(1).max(24).default(12),
 });
 
 export const runtime = "nodejs";

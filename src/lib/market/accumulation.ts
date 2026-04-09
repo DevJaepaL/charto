@@ -5,7 +5,7 @@ import { getStockBySymbol } from "@/lib/stock-master";
 import type { AccumulationResponse, AccumulationStockItem, StockLookupItem } from "@/lib/types";
 
 const ACCUMULATION_WINDOW_DAYS = 5;
-const ACCUMULATION_HOME_LIMIT = 6;
+const ACCUMULATION_HOME_LIMIT = 12;
 const ACCUMULATION_CANDIDATE_LIMIT = 40;
 const ACCUMULATION_CACHE_TTL_MS = 5 * 60_000;
 const ACCUMULATION_LABEL = "외인·기관 매수세가 이어지는 종목";
@@ -16,6 +16,7 @@ const DUAL_INSTITUTION_BUY_STREAK_MIN = 2;
 const DUAL_POSITIVE_DAYS_MIN = 2;
 const FOREIGN_INSTITUTION_SCREEN_CODE = "16449";
 const FOREIGN_INSTITUTION_MARKET_CODE = "V";
+const INVESTOR_TRADE_AMOUNT_UNIT_WON = 1_000_000;
 
 type ForeignInstitutionTotalRow = Record<string, string>;
 
@@ -108,8 +109,7 @@ function buildDemoAccumulationResponse(): AccumulationResponse {
     source: "demo",
     windowDays: ACCUMULATION_WINDOW_DAYS,
     asOf: new Date().toISOString(),
-    notice:
-      "최근 5거래일 기준으로 외인이나 기관의 순매수 흐름이 이어지는 종목을 추려서 보여줘요.",
+    notice: "최근 외인과 기관이 꾸준히 매수하고 있는 종목이에요.",
     items: [],
   };
 }
@@ -229,8 +229,8 @@ function getInvestorTradeRows(payload: InvestorTradeByStockDailyPayload) {
       date,
       close: toOptionalNumber(row.stck_clpr ?? row.stck_prpr),
       changePercent: toOptionalNumber(row.prdy_ctrt),
-      foreignNetBuyAmount: toNumber(row.frgn_ntby_tr_pbmn),
-      institutionNetBuyAmount: toNumber(row.orgn_ntby_tr_pbmn),
+      foreignNetBuyAmount: toNumber(row.frgn_ntby_tr_pbmn) * INVESTOR_TRADE_AMOUNT_UNIT_WON,
+      institutionNetBuyAmount: toNumber(row.orgn_ntby_tr_pbmn) * INVESTOR_TRADE_AMOUNT_UNIT_WON,
     } satisfies InvestorTradeDay;
 
     if (candidate.close === null) {
@@ -275,6 +275,20 @@ function countBuyStreak(rows: InvestorTradeDay[], key: "foreignNetBuyAmount" | "
   return streak;
 }
 
+function countSellStreak(rows: InvestorTradeDay[], key: "foreignNetBuyAmount" | "institutionNetBuyAmount") {
+  let streak = 0;
+
+  for (const row of rows) {
+    if (row[key] >= 0) {
+      break;
+    }
+
+    streak += 1;
+  }
+
+  return streak;
+}
+
 export function evaluateAccumulationCandidate(
   stock: StockLookupItem,
   rows: InvestorTradeDay[],
@@ -290,8 +304,12 @@ export function evaluateAccumulationCandidate(
   ).length;
   const foreignPositiveDays = countPositiveDays(recentRows, "foreignNetBuyAmount");
   const institutionPositiveDays = countPositiveDays(recentRows, "institutionNetBuyAmount");
-  const foreignBuyStreak = countBuyStreak(recentRows, "foreignNetBuyAmount");
-  const institutionBuyStreak = countBuyStreak(recentRows, "institutionNetBuyAmount");
+  const foreignRecentBuyStreak = countBuyStreak(recentRows, "foreignNetBuyAmount");
+  const institutionRecentBuyStreak = countBuyStreak(recentRows, "institutionNetBuyAmount");
+  const foreignBuyStreak = countBuyStreak(rows, "foreignNetBuyAmount");
+  const foreignSellStreak = countSellStreak(rows, "foreignNetBuyAmount");
+  const institutionBuyStreak = countBuyStreak(rows, "institutionNetBuyAmount");
+  const institutionSellStreak = countSellStreak(rows, "institutionNetBuyAmount");
   const foreignNetBuyAmount5d = recentRows.reduce(
     (total, row) => total + row.foreignNetBuyAmount,
     0,
@@ -308,10 +326,10 @@ export function evaluateAccumulationCandidate(
       ? ((latestClose - oldestClose) / oldestClose) * 100
       : null;
   const qualifiesDualStreak =
-    foreignBuyStreak >= DUAL_FOREIGN_BUY_STREAK_MIN &&
-    institutionBuyStreak >= DUAL_INSTITUTION_BUY_STREAK_MIN;
-  const qualifiesForeignStreak = foreignBuyStreak >= FOREIGN_BUY_STREAK_MIN;
-  const qualifiesInstitutionStreak = institutionBuyStreak >= INSTITUTION_BUY_STREAK_MIN;
+    foreignRecentBuyStreak >= DUAL_FOREIGN_BUY_STREAK_MIN &&
+    institutionRecentBuyStreak >= DUAL_INSTITUTION_BUY_STREAK_MIN;
+  const qualifiesForeignStreak = foreignRecentBuyStreak >= FOREIGN_BUY_STREAK_MIN;
+  const qualifiesInstitutionStreak = institutionRecentBuyStreak >= INSTITUTION_BUY_STREAK_MIN;
   const qualifiesDualNet =
     foreignNetBuyAmount5d > 0 &&
     institutionNetBuyAmount5d > 0 &&
@@ -328,7 +346,7 @@ export function evaluateAccumulationCandidate(
 
   let signalKind: AccumulationStockItem["signalKind"] = "both";
   let signalPriority = 1;
-  let reason = `외인·기관 모두 최근 ${ACCUMULATION_WINDOW_DAYS}일 누적 순매수 우위`;
+  let reason = `외인 최근 ${ACCUMULATION_WINDOW_DAYS}일 ${foreignPositiveDays}일 순매수 · 기관 최근 ${ACCUMULATION_WINDOW_DAYS}일 ${institutionPositiveDays}일 순매수`;
 
   if (qualifiesDualStreak || (qualifiesForeignStreak && qualifiesInstitutionStreak)) {
     signalKind = "both";
@@ -339,15 +357,25 @@ export function evaluateAccumulationCandidate(
     signalPriority = 3;
     reason =
       institutionNetBuyAmount5d < 0
-        ? `외인 ${foreignBuyStreak}일 연속 순매수 · 기관은 누적 순매도`
-        : `외인 ${foreignBuyStreak}일 연속 순매수 · 기관도 누적 순매수`;
+        ? `외인 ${foreignBuyStreak}일 연속 순매수 · 기관은 최근 ${ACCUMULATION_WINDOW_DAYS}일 순매도`
+        : institutionBuyStreak > 0
+          ? `외인 ${foreignBuyStreak}일 연속 순매수 · 기관 ${institutionBuyStreak}일 연속 순매수`
+          : `외인 ${foreignBuyStreak}일 연속 순매수 · 기관도 최근 ${ACCUMULATION_WINDOW_DAYS}일 누적 순매수`;
   } else if (qualifiesInstitutionStreak) {
     signalKind = "institution";
     signalPriority = 2;
     reason =
       foreignNetBuyAmount5d < 0
-        ? `기관 ${institutionBuyStreak}일 연속 순매수 · 외인은 누적 순매도`
-        : `기관 ${institutionBuyStreak}일 연속 순매수 · 외인도 누적 순매수`;
+        ? `기관 ${institutionBuyStreak}일 연속 순매수 · 외인은 최근 ${ACCUMULATION_WINDOW_DAYS}일 순매도`
+        : foreignBuyStreak > 0
+          ? `기관 ${institutionBuyStreak}일 연속 순매수 · 외인 ${foreignBuyStreak}일 연속 순매수`
+          : `기관 ${institutionBuyStreak}일 연속 순매수 · 외인도 최근 ${ACCUMULATION_WINDOW_DAYS}일 누적 순매수`;
+  } else if (foreignBuyStreak > 0 && institutionBuyStreak > 0) {
+    reason = `외인 ${foreignBuyStreak}일 연속 순매수 · 기관 ${institutionBuyStreak}일 연속 순매수`;
+  } else if (foreignBuyStreak > 0) {
+    reason = `외인 ${foreignBuyStreak}일 연속 순매수 · 기관 최근 ${ACCUMULATION_WINDOW_DAYS}일 ${institutionPositiveDays}일 순매수`;
+  } else if (institutionBuyStreak > 0) {
+    reason = `기관 ${institutionBuyStreak}일 연속 순매수 · 외인 최근 ${ACCUMULATION_WINDOW_DAYS}일 ${foreignPositiveDays}일 순매수`;
   }
 
   const rankScore =
@@ -368,7 +396,9 @@ export function evaluateAccumulationCandidate(
     foreignPositiveDays,
     institutionPositiveDays,
     foreignBuyStreak,
+    foreignSellStreak,
     institutionBuyStreak,
+    institutionSellStreak,
     priceChangePercent5d:
       priceChangePercent5d === null ? null : Number(priceChangePercent5d.toFixed(2)),
     signalKind,
@@ -417,8 +447,7 @@ export async function loadQuietAccumulation(limit = ACCUMULATION_HOME_LIMIT): Pr
       source: "kis",
       windowDays: ACCUMULATION_WINDOW_DAYS,
       asOf: new Date().toISOString(),
-      notice:
-        "최근 5거래일 기준 외인 5일 연속, 기관 3일 연속, 혹은 둘의 매수세가 함께 이어지는 종목을 보여줘요. 이미 많이 오른 종목도 포함될 수 있어요.",
+      notice: "최근 외인과 기관이 꾸준히 매수하고 있는 종목이에요.",
       items: sortAccumulationItems(
         evaluated.flatMap((result) => {
           if (result.status !== "fulfilled" || result.value === null) {

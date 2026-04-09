@@ -285,12 +285,12 @@ export function HomePageClient({
           </div>
 
           {preview ? (
-            <div className="home-reveal w-full max-w-[20.5rem] [--reveal-delay:320ms]" data-home-preview-shell>
+            <div className="home-reveal w-full [--reveal-delay:320ms]" data-home-preview-shell>
               <HeroPreviewCard preview={preview} />
             </div>
           ) : null}
 
-          <div className="home-reveal w-full max-w-[20.5rem] [--reveal-delay:360ms]" data-home-accumulation-shell>
+          <div className="home-reveal w-full [--reveal-delay:360ms]" data-home-accumulation-shell>
             <QuietAccumulationPanel />
           </div>
 
