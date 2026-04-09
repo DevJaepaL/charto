@@ -16,11 +16,11 @@ export const metadata: Metadata = {
     template: "%s | Charto",
   },
   description:
-    "국내 주식 차트를 바탕으로 각종 보조지표 분석과 AI 요약을 한 화면에서 확인하는 기술 분석 웹앱",
+    "국내 주식 차트와 기술지표, AI 브리핑을 한눈에 보는 분석 서비스",
   openGraph: {
     title: "CHARTO | 국내 증시 차트를 추적해보세요.",
     description:
-      "한국 주식 차트와 기술지표, AI 요약을 모바일에서도 보기 좋게 제공하는 분석 도구",
+      "국내 주식 차트와 기술지표, AI 브리핑을 한눈에 보는 분석 서비스",
     siteName: "Charto",
     locale: "ko_KR",
     type: "website",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CHARTO | 국내 증시 차트를 추적해보세요.",
     description:
-      "국내 증시 종목별 기술지표 분석과 AI 요약까지 확인하는 국내 주식 분석 툴",
+      "국내 주식 차트와 기술지표, AI 브리핑을 한눈에 보는 분석 서비스",
   },
 };
 
@@ -41,7 +41,7 @@ const rootStructuredData = [
     url: siteUrl,
     inLanguage: "ko-KR",
     description:
-      "국내 주식 차트를 바탕으로 각종 보조지표 분석과 AI 요약을 한 화면에서 확인하는 기술 분석 웹앱",
+      "국내 주식 차트와 기술지표, AI 브리핑을 한눈에 보는 분석 서비스",
   },
   {
     "@context": "https://schema.org",
