@@ -183,7 +183,7 @@ export function QuietAccumulationPanel() {
           </p>
         </div>
         <div className="rounded-full bg-[var(--surface-pill)] px-2.5 py-1 text-[10px] font-semibold text-slate-600 dark:bg-white/[0.06] dark:text-slate-200">
-          최근 5일
+          최근 {payload?.windowDays ?? 5}일
         </div>
       </div>
 

@@ -1,8 +1,9 @@
 import { inferInstrumentProfile } from "@/lib/analysis/company-context";
 import { callKis } from "@/lib/market/kis-provider";
 import { hasKisCredentials } from "@/lib/market/provider";
+import { loadMarketRanking } from "@/lib/market/rankings";
 import { getStockBySymbol } from "@/lib/stock-master";
-import type { AccumulationResponse, AccumulationStockItem, StockLookupItem } from "@/lib/types";
+import type { AccumulationResponse, AccumulationStockItem, MarketRankItem, StockLookupItem } from "@/lib/types";
 
 const ACCUMULATION_WINDOW_DAYS = 5;
 const ACCUMULATION_HOME_LIMIT = 12;
@@ -173,6 +174,22 @@ function buildCandidateSeeds(rows: ForeignInstitutionTotalRow[], scoreBias: numb
   }, []);
 }
 
+function buildRankingCandidateSeeds(items: MarketRankItem[], scoreBias: number) {
+  return items.reduce<CandidateSeed[]>((accumulator, item, index) => {
+    if (!isEligibleAccumulationStock(item.stock)) {
+      return accumulator;
+    }
+
+    accumulator.push({
+      stock: item.stock,
+      bestRank: index + 1,
+      seedScore: scoreBias + Math.max(0, 18 - index),
+    });
+
+    return accumulator;
+  }, []);
+}
+
 function mergeCandidateSeeds(seedGroups: CandidateSeed[][]) {
   const merged = new Map<string, CandidateSeed>();
 
@@ -199,6 +216,65 @@ function mergeCandidateSeeds(seedGroups: CandidateSeed[][]) {
       return right.seedScore - left.seedScore;
     })
     .slice(0, ACCUMULATION_CANDIDATE_LIMIT);
+}
+
+function buildIntradayFallbackItems(
+  rowGroups: ForeignInstitutionTotalRow[][],
+  limit: number,
+): AccumulationStockItem[] {
+  const items = new Map<string, AccumulationStockItem>();
+
+  rowGroups.flat().forEach((row, index) => {
+    const symbol = (row.mksc_shrn_iscd ?? row.stck_shrn_iscd ?? "").trim();
+    const stock = symbol ? getStockBySymbol(symbol) : null;
+
+    if (!stock || !isEligibleAccumulationStock(stock)) {
+      return;
+    }
+
+    const foreignNetBuyAmount5d = toNumber(row.frgn_ntby_tr_pbmn) * INVESTOR_TRADE_AMOUNT_UNIT_WON;
+    const institutionNetBuyAmount5d = toNumber(row.orgn_ntby_tr_pbmn) * INVESTOR_TRADE_AMOUNT_UNIT_WON;
+    const combinedNetBuyAmount5d = foreignNetBuyAmount5d + institutionNetBuyAmount5d;
+
+    if (foreignNetBuyAmount5d === 0 && institutionNetBuyAmount5d === 0) {
+      return;
+    }
+
+    const signalKind: AccumulationStockItem["signalKind"] =
+      Math.abs(foreignNetBuyAmount5d) > Math.abs(institutionNetBuyAmount5d)
+        ? "foreign"
+        : Math.abs(institutionNetBuyAmount5d) > Math.abs(foreignNetBuyAmount5d)
+          ? "institution"
+          : "both";
+
+    const candidate = {
+      stock,
+      foreignNetBuyAmount5d,
+      institutionNetBuyAmount5d,
+      combinedNetBuyAmount5d,
+      positiveDays: Number(combinedNetBuyAmount5d > 0),
+      foreignPositiveDays: Number(foreignNetBuyAmount5d > 0),
+      institutionPositiveDays: Number(institutionNetBuyAmount5d > 0),
+      foreignBuyStreak: 0,
+      foreignSellStreak: 0,
+      institutionBuyStreak: 0,
+      institutionSellStreak: 0,
+      priceChangePercent5d: toOptionalNumber(row.prdy_ctrt),
+      signalKind,
+      reason: "장중 외인·기관 수급 포착",
+      rankScore:
+        (Math.max(limit - index, 0) + 1) * 1_000_000_000_000 +
+        Math.max(foreignNetBuyAmount5d, 0) +
+        Math.max(institutionNetBuyAmount5d, 0),
+    } satisfies AccumulationStockItem;
+
+    const current = items.get(stock.symbol);
+    if (!current || candidate.rankScore > current.rankScore) {
+      items.set(stock.symbol, candidate);
+    }
+  });
+
+  return sortAccumulationItems([...items.values()]).slice(0, limit);
 }
 
 async function requestInvestorTradeByStockDaily(symbol: string) {
@@ -407,6 +483,99 @@ export function evaluateAccumulationCandidate(
   } satisfies AccumulationStockItem;
 }
 
+function evaluateFallbackAccumulationCandidate(
+  stock: StockLookupItem,
+  rows: InvestorTradeDay[],
+  seedScore = 0,
+) {
+  const recentRows = rows.slice(0, ACCUMULATION_WINDOW_DAYS);
+  if (recentRows.length < ACCUMULATION_WINDOW_DAYS) {
+    return null;
+  }
+
+  const strictCandidate = evaluateAccumulationCandidate(stock, rows, seedScore);
+  if (strictCandidate) {
+    return strictCandidate;
+  }
+
+  const positiveDays = recentRows.filter(
+    (row) => row.foreignNetBuyAmount + row.institutionNetBuyAmount > 0,
+  ).length;
+  const foreignPositiveDays = countPositiveDays(recentRows, "foreignNetBuyAmount");
+  const institutionPositiveDays = countPositiveDays(recentRows, "institutionNetBuyAmount");
+  const foreignBuyStreak = countBuyStreak(rows, "foreignNetBuyAmount");
+  const foreignSellStreak = countSellStreak(rows, "foreignNetBuyAmount");
+  const institutionBuyStreak = countBuyStreak(rows, "institutionNetBuyAmount");
+  const institutionSellStreak = countSellStreak(rows, "institutionNetBuyAmount");
+  const foreignNetBuyAmount5d = recentRows.reduce(
+    (total, row) => total + row.foreignNetBuyAmount,
+    0,
+  );
+  const institutionNetBuyAmount5d = recentRows.reduce(
+    (total, row) => total + row.institutionNetBuyAmount,
+    0,
+  );
+  const combinedNetBuyAmount5d = foreignNetBuyAmount5d + institutionNetBuyAmount5d;
+  const latestClose = recentRows[0]?.close ?? null;
+  const oldestClose = recentRows.at(-1)?.close ?? null;
+  const priceChangePercent5d =
+    latestClose && oldestClose
+      ? ((latestClose - oldestClose) / oldestClose) * 100
+      : null;
+
+  const hasMeaningfulFlow =
+    foreignPositiveDays > 0 ||
+    institutionPositiveDays > 0 ||
+    foreignBuyStreak > 0 ||
+    institutionBuyStreak > 0 ||
+    foreignSellStreak > 0 ||
+    institutionSellStreak > 0 ||
+    foreignNetBuyAmount5d > 0 ||
+    institutionNetBuyAmount5d > 0;
+
+  if (!hasMeaningfulFlow) {
+    return null;
+  }
+
+  let signalKind: AccumulationStockItem["signalKind"] = "both";
+  if (foreignNetBuyAmount5d > institutionNetBuyAmount5d) {
+    signalKind = "foreign";
+  } else if (institutionNetBuyAmount5d > foreignNetBuyAmount5d) {
+    signalKind = "institution";
+  }
+
+  const reason =
+    foreignBuyStreak > 0 || institutionBuyStreak > 0
+      ? `외인 ${foreignBuyStreak}일 연속 순매수 · 기관 ${institutionBuyStreak}일 연속 순매수`
+      : `외인 최근 ${ACCUMULATION_WINDOW_DAYS}일 ${foreignPositiveDays}일 매수 · 기관 최근 ${ACCUMULATION_WINDOW_DAYS}일 ${institutionPositiveDays}일 매수`;
+
+  const rankScore =
+    seedScore * 1_000_000_000_000 +
+    positiveDays * 1_000_000_000 +
+    Math.max(foreignPositiveDays, institutionPositiveDays) * 100_000_000 +
+    Math.max(foreignNetBuyAmount5d, 0) +
+    Math.max(institutionNetBuyAmount5d, 0);
+
+  return {
+    stock,
+    foreignNetBuyAmount5d,
+    institutionNetBuyAmount5d,
+    combinedNetBuyAmount5d,
+    positiveDays,
+    foreignPositiveDays,
+    institutionPositiveDays,
+    foreignBuyStreak,
+    foreignSellStreak,
+    institutionBuyStreak,
+    institutionSellStreak,
+    priceChangePercent5d:
+      priceChangePercent5d === null ? null : Number(priceChangePercent5d.toFixed(2)),
+    signalKind,
+    reason,
+    rankScore,
+  } satisfies AccumulationStockItem;
+}
+
 function sortAccumulationItems(items: AccumulationStockItem[]) {
   return [...items].sort((left, right) => right.rankScore - left.rankScore);
 }
@@ -422,41 +591,78 @@ export async function loadQuietAccumulation(limit = ACCUMULATION_HOME_LIMIT): Pr
   }
 
   try {
-    const [overallRows, foreignRows, institutionRows] = await Promise.all([
+    const [overallRows, foreignRows, institutionRows, valueRanking, volumeRanking] = await Promise.all([
       requestForeignInstitutionRows("0"),
       requestForeignInstitutionRows("1"),
       requestForeignInstitutionRows("2"),
+      loadMarketRanking("value"),
+      loadMarketRanking("volume"),
     ]);
 
     const candidateSeeds = mergeCandidateSeeds([
       buildCandidateSeeds(overallRows, 30),
       buildCandidateSeeds(foreignRows, 20),
       buildCandidateSeeds(institutionRows, 20),
+      buildRankingCandidateSeeds(valueRanking.items, 12),
+      buildRankingCandidateSeeds(volumeRanking.items, 10),
     ]);
 
     const evaluated = await Promise.allSettled(
       candidateSeeds.map(async (seed) => {
         const payload = await requestInvestorTradeByStockDaily(seed.stock.symbol);
         const rows = getInvestorTradeRows(payload);
-        return evaluateAccumulationCandidate(seed.stock, rows, seed.seedScore);
+        return {
+          strict: evaluateAccumulationCandidate(seed.stock, rows, seed.seedScore),
+          fallback: evaluateFallbackAccumulationCandidate(seed.stock, rows, seed.seedScore),
+        };
       }),
     );
+
+    const strictItems = sortAccumulationItems(
+      evaluated.flatMap((result) => {
+        if (result.status !== "fulfilled" || result.value.strict === null) {
+          return [];
+        }
+
+        return [result.value.strict];
+      }),
+    );
+
+    const fallbackItems = sortAccumulationItems(
+      evaluated.flatMap((result) => {
+        if (result.status !== "fulfilled" || result.value.fallback === null) {
+          return [];
+        }
+
+        return [result.value.fallback];
+      }),
+    );
+
+    const intradayFallbackItems = buildIntradayFallbackItems(
+      [overallRows, foreignRows, institutionRows],
+      limit,
+    );
+
+    const selectedItems = strictItems.length
+      ? strictItems.slice(0, limit)
+      : fallbackItems.length
+        ? fallbackItems.slice(0, limit)
+        : intradayFallbackItems;
+
+    const selectedWindowDays = strictItems.length || fallbackItems.length ? ACCUMULATION_WINDOW_DAYS : 1;
+    const selectedNotice = strictItems.length
+      ? "최근 외인과 기관이 꾸준히 매수하고 있는 종목이에요."
+      : fallbackItems.length
+        ? "실시간으로 외인과 기관 수급이 포착된 종목이에요."
+        : "장중 외인과 기관 수급이 들어오는 종목이에요.";
 
     const payload = {
       label: ACCUMULATION_LABEL,
       source: "kis",
-      windowDays: ACCUMULATION_WINDOW_DAYS,
+      windowDays: selectedWindowDays,
       asOf: new Date().toISOString(),
-      notice: "최근 외인과 기관이 꾸준히 매수하고 있는 종목이에요.",
-      items: sortAccumulationItems(
-        evaluated.flatMap((result) => {
-          if (result.status !== "fulfilled" || result.value === null) {
-            return [];
-          }
-
-          return [result.value];
-        }),
-      ).slice(0, limit),
+      notice: selectedNotice,
+      items: selectedItems,
     } satisfies AccumulationResponse;
 
     accumulationCache.set(limit, {
