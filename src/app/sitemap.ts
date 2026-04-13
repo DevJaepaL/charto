@@ -1,13 +1,11 @@
 import type { MetadataRoute } from "next";
 
-import stocks from "@/data/stocks-snapshot.json";
-import type { StockLookupItem } from "@/lib/types";
+import { FEATURED_SYMBOLS } from "@/lib/constants";
 import { getSiteUrl } from "@/lib/site-url";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
   const siteUrl = getSiteUrl();
-  const items = stocks as StockLookupItem[];
 
   return [
     {
@@ -20,16 +18,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${siteUrl}/about`,
       lastModified: now,
       changeFrequency: "monthly",
-      priority: 0.4,
+      priority: 0.7,
     },
     {
-      url: `${siteUrl}/stocks`,
+      url: `${siteUrl}/methodology`,
       lastModified: now,
-      changeFrequency: "weekly",
+      changeFrequency: "monthly",
       priority: 0.8,
     },
-    ...items.map((item) => ({
-      url: `${siteUrl}/analyze/${item.symbol}`,
+    {
+      url: `${siteUrl}/indicators`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${siteUrl}/market-overview`,
+      lastModified: now,
+      changeFrequency: "daily",
+      priority: 0.8,
+    },
+    ...FEATURED_SYMBOLS.map((symbol) => ({
+      url: `${siteUrl}/analyze/${symbol}`,
       lastModified: now,
       changeFrequency: "daily" as const,
       priority: 0.7,

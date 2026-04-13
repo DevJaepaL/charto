@@ -2,12 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Analytics } from "@vercel/analytics/next";
 
+import { AdSenseScript } from "@/components/adsense-script";
 import { JsonLdScript } from "@/components/json-ld";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { getAdSenseClientId } from "@/lib/adsense";
 import { getSiteUrl, getSiteUrlObject } from "@/lib/site-url";
 import "./globals.css";
 
 const siteUrl = getSiteUrl();
+const adSenseClientId = getAdSenseClientId();
 
 export const metadata: Metadata = {
   metadataBase: getSiteUrlObject(),
@@ -76,6 +79,9 @@ export default function RootLayout({
             __html: `(function(){try{var stored=localStorage.getItem('charto-theme');var theme=stored||'dark';if(!stored){localStorage.setItem('charto-theme',theme);}document.documentElement.classList.toggle('dark',theme==='dark');document.documentElement.dataset.theme=theme;}catch(e){document.documentElement.classList.add('dark');document.documentElement.dataset.theme='dark';}})();`,
           }}
         />
+        {adSenseClientId ? (
+          <meta name="google-adsense-account" content={adSenseClientId} />
+        ) : null}
         <JsonLdScript data={rootStructuredData} id="charto-structured-data" />
       </head>
       <body className="bg-[var(--surface-0)] text-[var(--text-main)] antialiased">
@@ -86,6 +92,15 @@ export default function RootLayout({
               <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] font-medium text-slate-500 dark:text-slate-300">
                 <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/about">
                   서비스 소개
+                </Link>
+                <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/methodology">
+                  방법론
+                </Link>
+                <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/indicators">
+                  지표 해설
+                </Link>
+                <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/market-overview">
+                  시장 요약
                 </Link>
                 <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/privacy">
                   개인정보처리방침
@@ -108,6 +123,7 @@ export default function RootLayout({
             </div>
           </footer>
         </div>
+        <AdSenseScript />
         <Analytics />
       </body>
     </html>

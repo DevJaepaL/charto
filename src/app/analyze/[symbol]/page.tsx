@@ -1,15 +1,19 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { AdSenseScript } from "@/components/adsense-script";
+import { AnalysisPageArticle } from "@/components/analysis-page-article";
 import { JsonLdScript } from "@/components/json-ld";
 import { AnalysisPageClient } from "@/components/analysis-page-client";
 import { getGeminiApiKeyCount } from "@/lib/analysis/ai-summary";
+import { loadTechnicalResponse } from "@/lib/analysis/load-analysis-data";
 import { configuredAuthProviders, getServerAuthSession } from "@/lib/auth";
+import { FEATURED_SYMBOLS } from "@/lib/constants";
 import { getSiteUrl } from "@/lib/site-url";
 import { getFeaturedStocks, getStockBySymbol } from "@/lib/stock-master";
 
 export const dynamic = "force-dynamic";
+
+const indexedAnalyzeSymbols = new Set<string>(FEATURED_SYMBOLS);
 
 export async function generateMetadata({
   params,
@@ -30,6 +34,10 @@ export async function generateMetadata({
     description: `${stock.name}(${stock.symbol})의 기술지표와 AI 요약을 확인하는 분석 페이지`,
     alternates: {
       canonical: `/analyze/${stock.symbol}`,
+    },
+    robots: {
+      index: indexedAnalyzeSymbols.has(stock.symbol),
+      follow: true,
     },
     openGraph: {
       url: `/analyze/${stock.symbol}`,
@@ -55,7 +63,10 @@ export default async function AnalyzePage({
     notFound();
   }
 
-  const session = await getServerAuthSession();
+  const [session, technicalPayload] = await Promise.all([
+    getServerAuthSession(),
+    loadTechnicalResponse(stock.symbol, "1d", "max").catch(() => null),
+  ]);
   const isAiUserSignedIn = Boolean(session?.user);
   const shouldAutoFetchAi = isAiUserSignedIn && getGeminiApiKeyCount() > 1;
   const favoriteUserKey = session?.user?.id?.trim() || null;
@@ -82,7 +93,6 @@ export default async function AnalyzePage({
   return (
     <>
       <JsonLdScript data={pageStructuredData} id={`analyze-${stock.symbol}-structured-data`} />
-      <AdSenseScript />
       <AnalysisPageClient
         aiProviders={configuredAuthProviders.map(({ id, name }) => ({ id, name }))}
         aiUserName={session?.user?.name}
@@ -90,11 +100,12 @@ export default async function AnalyzePage({
         featured={getFeaturedStocks()}
         initialError={null}
         initialRecommendationSignal={null}
-        initialTechnicalPayload={null}
+        initialTechnicalPayload={technicalPayload}
         isAiUserSignedIn={isAiUserSignedIn}
         shouldAutoFetchAi={shouldAutoFetchAi}
         stock={stock}
       />
+      <AnalysisPageArticle stock={stock} technicalPayload={technicalPayload} />
     </>
   );
 }

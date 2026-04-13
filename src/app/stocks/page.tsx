@@ -19,6 +19,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/stocks",
   },
+  robots: {
+    index: false,
+    follow: true,
+  },
   openGraph: {
     url: "/stocks",
     title: "전체 종목 | Charto",

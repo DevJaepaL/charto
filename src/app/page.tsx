@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { HomeEditorialSections } from "@/components/home-editorial-sections";
 import { HomePageClient } from "@/components/home-page-client";
 import { loadTechnicalResponse } from "@/lib/analysis/load-analysis-data";
 import { getServerAuthSession } from "@/lib/auth";
@@ -56,12 +57,15 @@ export default async function Home() {
   const userKey = session?.user?.id?.trim() || null;
 
   return (
-    <HomePageClient
-      featured={featured}
-      isSignedIn={Boolean(session?.user)}
-      preview={preview}
-      userKey={userKey}
-      userName={userName}
-    />
+    <>
+      <HomePageClient
+        featured={featured}
+        isSignedIn={Boolean(session?.user)}
+        preview={preview}
+        userKey={userKey}
+        userName={userName}
+      />
+      <HomeEditorialSections featured={featured} />
+    </>
   );
 }
