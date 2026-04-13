@@ -139,9 +139,11 @@ export function AnalysisPageArticle({
               <li>4. 실적, 업종 사이클, 공시 일정까지 붙여서 해석합니다.</li>
             </ol>
             <p className="mt-4 break-keep text-sm leading-7 text-slate-600 dark:text-slate-300">
-              더 자세한 기준은 <Link className="font-semibold text-[var(--brand-strong)] hover:underline" href="/methodology">방법론</Link>과{" "}
-              <Link className="font-semibold text-[var(--brand-strong)] hover:underline" href="/indicators">지표 해설</Link>에서
-              정리했습니다.
+              더 자세한 기준과 지표 읽는 법은{" "}
+              <Link className="font-semibold text-[var(--brand-strong)] hover:underline" href="/guide">
+                가이드
+              </Link>
+              에 정리했습니다.
             </p>
           </article>
         </div>

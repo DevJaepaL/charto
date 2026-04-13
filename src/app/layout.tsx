@@ -93,14 +93,8 @@ export default function RootLayout({
                 <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/about">
                   서비스 소개
                 </Link>
-                <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/methodology">
-                  방법론
-                </Link>
-                <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/indicators">
-                  지표 해설
-                </Link>
-                <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/market-overview">
-                  시장 요약
+                <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/guide">
+                  가이드
                 </Link>
                 <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/privacy">
                   개인정보처리방침

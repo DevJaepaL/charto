@@ -35,10 +35,11 @@ export function HomeEditorialSections({ featured }: { featured: StockLookupItem[
               <li>4. 업종 맥락과 최근 공시를 반영한 해석 보조</li>
             </ul>
             <p className="mt-4 break-keep text-sm leading-7 text-slate-600 dark:text-slate-300">
-              자세한 기준은 <Link className="font-semibold text-[var(--brand-strong)] hover:underline" href="/methodology">방법론</Link>,
-              지표별 읽는 법은 <Link className="font-semibold text-[var(--brand-strong)] hover:underline" href="/indicators">지표 해설</Link>,
-              오늘 시장 흐름은 <Link className="font-semibold text-[var(--brand-strong)] hover:underline" href="/market-overview">시장 요약</Link>에서
-              정리해두었습니다.
+              자세한 기준과 지표 읽는 법, 오늘 시장 흐름은{" "}
+              <Link className="font-semibold text-[var(--brand-strong)] hover:underline" href="/guide">
+                가이드
+              </Link>
+              에서 한 번에 정리해두었습니다.
             </p>
           </article>
 
