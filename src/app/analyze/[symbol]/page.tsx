@@ -5,6 +5,10 @@ import { JsonLdScript } from "@/components/json-ld";
 import { AnalysisPageClient } from "@/components/analysis-page-client";
 import { getGeminiApiKeyCount } from "@/lib/analysis/ai-summary";
 import { loadTechnicalResponse } from "@/lib/analysis/load-analysis-data";
+import {
+  ANALYSIS_DEFAULT_INTERVAL,
+  ANALYSIS_DEFAULT_RANGE,
+} from "@/lib/analysis/technical-request-policy";
 import { configuredAuthProviders, getServerAuthSession } from "@/lib/auth";
 import { FEATURED_SYMBOLS } from "@/lib/constants";
 import { getSiteUrl } from "@/lib/site-url";
@@ -64,7 +68,9 @@ export default async function AnalyzePage({
 
   const [session, technicalPayload] = await Promise.all([
     getServerAuthSession(),
-    loadTechnicalResponse(stock.symbol, "1d", "max").catch(() => null),
+    loadTechnicalResponse(stock.symbol, ANALYSIS_DEFAULT_INTERVAL, ANALYSIS_DEFAULT_RANGE).catch(
+      () => null,
+    ),
   ]);
   const isAiUserSignedIn = Boolean(session?.user);
   const shouldAutoFetchAi = isAiUserSignedIn && getGeminiApiKeyCount() > 1;
@@ -99,7 +105,7 @@ export default async function AnalyzePage({
         featured={getFeaturedStocks()}
         initialError={null}
         initialRecommendationSignal={null}
-        initialTechnicalPayload={technicalPayload}
+        initialTechnicalPayload={technicalPayload?.isDemo ? null : technicalPayload}
         isAiUserSignedIn={isAiUserSignedIn}
         shouldAutoFetchAi={shouldAutoFetchAi}
         stock={stock}

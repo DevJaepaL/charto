@@ -1,6 +1,7 @@
 import { generateAiSummary } from "@/lib/analysis/ai-summary";
 import { resolveCompanyContext } from "@/lib/analysis/company-context.server";
 import { resolveEarningsContext } from "@/lib/analysis/earnings-context.server";
+import { getTechnicalCacheTtl } from "@/lib/analysis/technical-request-policy";
 import { buildTechnicalAnalysis } from "@/lib/analysis/technical";
 import { getCandlesWithFallback } from "@/lib/market/provider";
 import { getStockBySymbol } from "@/lib/stock-master";
@@ -18,18 +19,6 @@ const inflightTechnicalRequests = new Map<string, Promise<TechnicalResponse>>();
 
 function buildTechnicalCacheKey(symbol: string, interval: CandleInterval, range: CandleRange) {
   return `${symbol}:${interval}:${range}`;
-}
-
-function getTechnicalCacheTtl(interval: CandleInterval, range: CandleRange) {
-  if (interval.endsWith("m")) {
-    return 30_000;
-  }
-
-  if (range === "max" || range === "5y" || range === "3y") {
-    return 10 * 60_000;
-  }
-
-  return 2 * 60_000;
 }
 
 function getCachedTechnicalResponse(cacheKey: string) {
@@ -88,7 +77,7 @@ export async function loadTechnicalResponse(
     };
 
     technicalResponseCache.set(cacheKey, {
-      expiresAt: Date.now() + getTechnicalCacheTtl(interval, range),
+      expiresAt: Date.now() + getTechnicalCacheTtl(interval, range, response.isDemo),
       payload: response,
     });
 

@@ -9,6 +9,15 @@ import { AdSlot } from "@/components/ad-slot";
 import { AnimatedLoadingStage } from "@/components/animated-loading-stage";
 import { AuthActions } from "@/components/auth-actions";
 import {
+  ANALYSIS_DEMO_RETRY_DELAY_MS,
+  ANALYSIS_DEMO_RETRY_LIMIT,
+  ANALYSIS_DEFAULT_INTERVAL,
+  ANALYSIS_DEFAULT_RANGE,
+  RECOMMENDATION_INTERVAL,
+  RECOMMENDATION_RANGE,
+  shouldReuseInitialTechnicalPayload,
+} from "@/lib/analysis/technical-request-policy";
+import {
   formatCompanyContextBrief,
   formatCompanyContextHeadline,
   inferCompanyContext,
@@ -36,11 +45,6 @@ import {
   formatPrice,
   formatSignedPrice,
 } from "@/lib/utils";
-
-const DEFAULT_INTERVAL = "1d";
-const DEFAULT_RANGE = "max";
-const RECOMMENDATION_INTERVAL = "1d";
-const RECOMMENDATION_RANGE = "1y";
 
 interface AnalysisPageClientProps {
   aiProviders: Array<{ id: "google" | "kakao"; name: string }>;
@@ -1106,7 +1110,9 @@ export function AnalysisPageClient({
     favoriteUserKey ? isFavoriteStock(favoriteUserKey, stock.symbol) : false,
   );
   const [revealPhase, setRevealPhase] = useState(0);
-  const skipInitialDataFetch = useRef(Boolean(initialTechnicalPayload && !initialError));
+  const skipInitialDataFetch = useRef(
+    shouldReuseInitialTechnicalPayload(initialTechnicalPayload, initialError),
+  );
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -1159,24 +1165,40 @@ export function AnalysisPageClient({
     }
 
     const controller = new AbortController();
+    let retryTimeoutId: number | null = null;
 
-    fetchJson<TechnicalResponse>(
-      `/api/analysis/technical?symbol=${stock.symbol}&interval=${DEFAULT_INTERVAL}&range=${DEFAULT_RANGE}`,
-      { signal: controller.signal },
-    )
-      .then((technical) => {
+    const requestTechnical = async (remainingDemoRetries: number) => {
+      try {
+        const technical = await fetchJson<TechnicalResponse>(
+          `/api/analysis/technical?symbol=${stock.symbol}&interval=${ANALYSIS_DEFAULT_INTERVAL}&range=${ANALYSIS_DEFAULT_RANGE}`,
+          { signal: controller.signal },
+        );
+
         setTechnicalPayload(technical);
         setError(null);
-      })
-      .catch((requestError) => {
+
+        if (technical.isDemo && remainingDemoRetries > 0) {
+          retryTimeoutId = window.setTimeout(() => {
+            void requestTechnical(remainingDemoRetries - 1);
+          }, ANALYSIS_DEMO_RETRY_DELAY_MS);
+        }
+      } catch (requestError) {
         if ((requestError as Error).name === "AbortError") {
           return;
         }
 
         setError((requestError as Error).message);
-      })
+      }
+    };
 
-    return () => controller.abort();
+    void requestTechnical(ANALYSIS_DEMO_RETRY_LIMIT);
+
+    return () => {
+      controller.abort();
+      if (retryTimeoutId !== null) {
+        window.clearTimeout(retryTimeoutId);
+      }
+    };
   }, [stock.symbol]);
 
   useEffect(() => {
@@ -1243,7 +1265,7 @@ export function AnalysisPageClient({
   const chartUnavailable = Boolean(candlesPayload?.chartUnavailable);
   const isInitialLoading = !candlesPayload && !error;
   const minIntroReady = introReadySymbol === stock.symbol;
-  const currentSelectionKey = `${stock.symbol}:${DEFAULT_INTERVAL}:${DEFAULT_RANGE}`;
+  const currentSelectionKey = `${stock.symbol}:${ANALYSIS_DEFAULT_INTERVAL}:${ANALYSIS_DEFAULT_RANGE}`;
   const loadedSelectionKey = technicalPayload
     ? `${stock.symbol}:${technicalPayload.interval}:${technicalPayload.range}`
     : null;
