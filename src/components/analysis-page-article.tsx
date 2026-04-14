@@ -10,7 +10,7 @@ import { formatPercent, formatPrice, getBiasLabel } from "@/lib/utils";
 
 function getSignalLead(stock: StockLookupItem, technicalPayload: TechnicalResponse | null) {
   if (!technicalPayload) {
-    return `${stock.name}의 상세 차트 데이터가 준비되지 않았습니다. 기본 종목 정보와 업종 맥락을 먼저 확인한 뒤, 실시간 차트와 지표가 다시 열리면 가격 흐름과 거래량을 함께 보는 편이 좋습니다.`;
+    return `${stock.name}의 상세 차트 데이터가 준비되지 않았습니다. 데이터가 열리면 가격과 거래량부터 확인하면 됩니다.`;
   }
 
   const { quote, signal, technical } = technicalPayload;
@@ -21,21 +21,21 @@ function getSignalLead(stock: StockLookupItem, technicalPayload: TechnicalRespon
         : "20일 평균 아래에서 움직이고"
       : "중기 평균과의 거리 확인이 필요하고";
 
-  return `${stock.name}는 현재 ${formatPrice(quote.currentPrice)}에 거래되고 있으며 전일 대비 ${formatPercent(quote.changePercent)} 흐름입니다. Charto 기준 추천 점수는 ${signal.score}점, 해석은 ${getBiasLabel(signal.bias)}이며 ${shortTrend} RSI와 MACD, 거래량을 함께 봐야 신호의 힘을 더 정확하게 읽을 수 있습니다.`;
+  return `${stock.name}는 현재 ${formatPrice(quote.currentPrice)}, 전일 대비 ${formatPercent(quote.changePercent)} 흐름입니다. 추천 점수는 ${signal.score}점, 해석은 ${getBiasLabel(signal.bias)}이며 ${shortTrend} 핵심 지표를 함께 확인하는 편이 좋습니다.`;
 }
 
 function getActionGuide(stock: StockLookupItem, technicalPayload: TechnicalResponse | null) {
   if (!technicalPayload) {
-    return `${stock.name} 페이지에서는 실시간 가격, 이동평균선, RSI, MACD, 볼린저 밴드, 지지선과 저항선을 한 화면에서 비교할 수 있습니다. 데이터가 다시 열리면 단기 가격 위치와 거래량부터 확인하는 것이 가장 빠릅니다.`;
+    return `${stock.name} 페이지에서는 가격, 이동평균선, RSI, MACD, 지지선과 저항선을 한 번에 볼 수 있습니다.`;
   }
 
-  const { technical, signal } = technicalPayload;
+  const { technical } = technicalPayload;
   const supportCopy = technical.support ? `지지선 후보는 ${formatPrice(technical.support)}` : "지지선은 아직 보수적으로 해석해야 하고";
   const resistanceCopy = technical.resistance
     ? `저항선 후보는 ${formatPrice(technical.resistance)}`
     : "저항선은 아직 명확하지 않습니다";
 
-  return `${stock.name}를 볼 때는 ${supportCopy}, ${resistanceCopy}. 현재 점수 ${signal.score}점은 단기 기술 신호를 숫자로 압축한 값이므로, 점수 자체보다 어떤 이유가 점수를 끌어올렸는지와 어떤 위험 요인이 남아 있는지를 같이 읽는 편이 좋습니다.`;
+  return `${stock.name}를 볼 때는 ${supportCopy}, ${resistanceCopy}. 점수보다 상승 이유와 위험 요인을 같이 읽는 편이 좋습니다.`;
 }
 
 export function AnalysisPageArticle({
@@ -70,11 +70,6 @@ export function AnalysisPageArticle({
         <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
           <article className="rounded-[8px] border border-slate-200/80 px-4 py-4 dark:border-white/10">
             <h3 className="text-base font-black text-slate-950 dark:text-slate-50">기술적 신호 해석</h3>
-            <p className="mt-3 break-keep text-sm leading-7 text-slate-600 dark:text-slate-300">
-              Charto는 이동평균선, RSI, MACD, 볼린저 밴드, 거래량, 지지선과 저항선을 함께 보고 단기
-              흐름을 요약합니다. 한 가지 지표만으로 결론을 내리지 않고 서로 충돌하는 신호를 같이 보여
-              주는 방식이라, 상승 우위와 위험 요인을 같은 화면에서 비교할 수 있습니다.
-            </p>
             <ul className="mt-4 space-y-2 text-sm leading-6 text-slate-700 dark:text-slate-200">
               {(signal?.reasons.length
                 ? signal.reasons
@@ -121,12 +116,12 @@ export function AnalysisPageArticle({
             <p className="mt-3 break-keep text-sm leading-7 text-slate-600 dark:text-slate-300">
               {earningsContext?.available
                 ? earningsContext.summary
-                : `${stock.name}에 대해 최근 실적 또는 IR 공시 요약이 확보되지 않았습니다. 이 경우에는 차트 신호와 업종 흐름만으로 과하게 해석하지 말고, 다음 공시 일정과 실적 발표 시점을 함께 보는 편이 좋습니다.`}
+                : `${stock.name}의 최근 실적 또는 IR 공시 요약은 아직 확보되지 않았습니다.`}
             </p>
             <p className="mt-3 break-keep text-sm leading-7 text-slate-600 dark:text-slate-300">
               {earningsContext?.available
                 ? earningsContext.outlook
-                : "단기 가격 움직임이 강해도 다음 실적과 가이던스가 확인되기 전에는 기대감만으로 추세를 길게 보는 접근을 피하는 편이 좋습니다."}
+                : "다음 실적과 공시 일정은 같이 확인하는 편이 좋습니다."}
             </p>
           </article>
 

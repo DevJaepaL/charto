@@ -14,14 +14,8 @@ export function HomeEditorialSections({ featured }: { featured: StockLookupItem[
             국내 증시 차트를 읽을 때 먼저 보는 기준
           </h2>
           <p className="mt-4 break-keep text-sm leading-7 text-slate-600 dark:text-slate-300 md:text-[15px]">
-            Charto는 국내 주식의 가격, 거래량, 기술지표, 외인·기관 수급을 한 화면에서 정리하는 분석
-            도구입니다. 단순히 차트 모양만 보여주는 대신, 어떤 지표가 현재 흐름을 밀고 있는지와 어떤
-            위험 신호가 남아 있는지를 문장으로 풀어 보여주는 데 초점을 맞추고 있습니다.
-          </p>
-          <p className="mt-4 break-keep text-sm leading-7 text-slate-600 dark:text-slate-300 md:text-[15px]">
-            이동평균선은 추세 방향을, RSI와 MACD는 모멘텀의 강도와 둔화를, 볼린저 밴드는 가격이 평균
-            대비 어느 정도 확장됐는지를 보여줍니다. 여기에 거래량과 외인·기관 흐름을 붙여서, 가격만
-            오르는 종목인지 실제 수급이 동반되는 종목인지를 함께 확인할 수 있게 구성했습니다.
+            Charto는 가격, 거래량, 기술지표, 외인·기관 수급을 한 화면에서 빠르게 확인할 수 있게 정리한
+            국내 증시 분석 도구입니다.
           </p>
         </div>
 
@@ -46,8 +40,7 @@ export function HomeEditorialSections({ featured }: { featured: StockLookupItem[
           <article className="rounded-[8px] border border-slate-200/80 px-4 py-4 dark:border-white/10">
             <h3 className="text-base font-black text-slate-950 dark:text-slate-50">대표 분석 종목</h3>
             <p className="mt-3 break-keep text-sm leading-7 text-slate-600 dark:text-slate-300">
-              아래 대표 종목 페이지는 서버에서 바로 읽을 수 있는 분석 텍스트와 지표 요약을 함께 제공해,
-              빠르게 종목별 흐름을 확인하기 좋습니다.
+              대표 종목 페이지에서 차트와 핵심 해석을 바로 볼 수 있습니다.
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               {featured.map((item) => (
