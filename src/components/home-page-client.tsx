@@ -268,7 +268,7 @@ export function HomePageClient({
                 국내 증시 종목을
               </span>
               <span className="block">
-                기술적으로 분석해드려요.
+                 기술적으로 분석해드려요.
               </span>
             </h1>
           </div>
