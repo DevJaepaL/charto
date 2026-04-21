@@ -9,7 +9,7 @@ const ACCUMULATION_WINDOW_DAYS = 5;
 const ACCUMULATION_HOME_LIMIT = 12;
 const ACCUMULATION_CANDIDATE_LIMIT = 40;
 const ACCUMULATION_CACHE_TTL_MS = 5 * 60_000;
-const ACCUMULATION_LABEL = "외인·기관 매수세가 이어지는 종목";
+const ACCUMULATION_LABEL = "외인·기관 순매수 종목";
 const FOREIGN_BUY_STREAK_MIN = 5;
 const INSTITUTION_BUY_STREAK_MIN = 3;
 const DUAL_FOREIGN_BUY_STREAK_MIN = 5;
@@ -110,7 +110,7 @@ function buildDemoAccumulationResponse(): AccumulationResponse {
     source: "demo",
     windowDays: ACCUMULATION_WINDOW_DAYS,
     asOf: new Date().toISOString(),
-    notice: "최근 외인과 기관이 꾸준히 매수하고 있는 종목이에요.",
+    notice: "최근 외인·기관 매수세가 유입된 종목 목록",
     items: [],
   };
 }
@@ -651,10 +651,10 @@ export async function loadQuietAccumulation(limit = ACCUMULATION_HOME_LIMIT): Pr
 
     const selectedWindowDays = strictItems.length || fallbackItems.length ? ACCUMULATION_WINDOW_DAYS : 1;
     const selectedNotice = strictItems.length
-      ? "최근 외인과 기관이 꾸준히 매수하고 있는 종목이에요."
+      ? "최근 외인·기관 매수세가 유입된 종목 목록"
       : fallbackItems.length
-        ? "실시간으로 외인과 기관 수급이 포착된 종목이에요."
-        : "장중 외인과 기관 수급이 들어오는 종목이에요.";
+        ? "실시간 외인·기관 수급 포착 종목"
+        : "장중 외인·기관 수급 유입 종목";
 
     const payload = {
       label: ACCUMULATION_LABEL,

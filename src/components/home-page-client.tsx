@@ -264,12 +264,8 @@ export function HomePageClient({
 
           <div className="home-reveal w-full max-w-[18rem] text-center [--reveal-delay:180ms]" data-home-title-block>
             <h1 className="font-korean-display text-[1.18rem] font-bold leading-[1.6] text-slate-950 dark:text-slate-50">
-              <span className="block">
-                국내 증시 종목을
-              </span>
-              <span className="block">
-                 기술적으로 분석해드려요.
-              </span>
+              <span className="block">국내 증시 종목의</span>
+              <span className="block">차트와 수급을 한 번에.</span>
             </h1>
           </div>
 
@@ -301,7 +297,7 @@ export function HomePageClient({
             {isSignedIn ? (
               <p className="break-keep">
                 <span className="font-semibold text-slate-900 dark:text-slate-100">{userName}</span>
-                <span className="ml-1">계정으로 로그인되어 있어요.</span>
+                <span className="ml-1">계정으로 로그인됨</span>
                 <Link className="ml-1 font-semibold text-[var(--brand-strong)] underline underline-offset-4 dark:text-sky-100" href="/login">
                   계정 관리
                 </Link>

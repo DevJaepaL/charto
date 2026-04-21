@@ -770,7 +770,7 @@ function RecommendationCard({
                 </div>
               </div>
               <p className="break-keep">
-                5일선, 20일선, RSI, MACD, 거래량, 지지·저항 신호를 합산한 점수예요. 플러스 100점에 가까울수록 우호적이고 마이너스 100점에 가까울수록 약세 신호가 강해요.
+                5·20일선, RSI, MACD, 거래량, 지지·저항을 합산한 점수. +100에 가까울수록 매수 우위, -100에 가까울수록 매도 우위.
               </p>
               {explanationItems.length ? (
                 <ul className="mt-2 space-y-1.5 break-keep">
@@ -836,7 +836,7 @@ function AiLoadingCard() {
       <div className="ai-gradient-text text-xs font-semibold tracking-[0.12em]">
         AI 브리핑
       </div>
-      <div className="mt-2 font-medium">차트와 기업 흐름을 짧게 정리하고 있습니다.</div>
+      <div className="mt-2 font-medium">AI 브리핑 생성 중</div>
     </div>
   );
 }
@@ -1828,20 +1828,20 @@ export function AnalysisPageClient({
             {!isAiAuthAvailable ? (
               <div className="surface-card rounded-[10px] p-3.5 md:rounded-[12px] md:p-3.5">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                  로그인 기능 준비 중이에요.
+                  로그인 기능 준비 중
                 </div>
                 <p className="mt-1 break-keep text-[13px] leading-5 text-slate-500 dark:text-slate-300">
-                  현재 로그인 기능을 준비하지 않았어요. AI 브리핑은 로그인 기능이 준비되면 함께 사용할 수 있습니다.
+                  AI 브리핑은 로그인 기능 활성화 후 제공됩니다.
                 </p>
               </div>
             ) : null}
             {isAiAuthAvailable && !canUseAi ? (
               <div className="surface-card rounded-[10px] p-3.5 md:rounded-[12px] md:p-3.5">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                  로그인 후 AI 브리핑을 볼 수 있어요
+                  AI 브리핑 — 로그인 필요
                 </div>
                 <p className="mt-1 break-keep text-[13px] leading-5 text-slate-500 dark:text-slate-300">
-                  아래 버튼으로 로그인하면 이 종목의 AI 브리핑을 바로 확인할 수 있어요.
+                  로그인하면 이 종목의 AI 브리핑을 확인할 수 있습니다.
                 </p>
                 <div className="mt-3 flex flex-wrap items-center gap-2">
                   <Link
@@ -1859,10 +1859,10 @@ export function AnalysisPageClient({
             {canUseAi && !aiRequested ? (
               <div className="surface-card rounded-[10px] p-3.5 md:rounded-[12px] md:p-3.5">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                  AI 브리핑을 바로 생성할 수 있어요.
+                  AI 브리핑
                 </div>
                 <p className="mt-1 break-keep text-[13px] leading-5 text-slate-500 dark:text-slate-300">
-                  최신 차트와 기업 흐름을 짧게 정리합니다. 같은 조건은 캐시를 재사용합니다.
+                  최신 차트와 기업 흐름 요약. 동일 조건은 캐시를 재사용합니다.
                 </p>
                 <button
                   className="brand-button mt-3 rounded-full px-3 py-1.5 text-[11px] font-semibold"
@@ -1878,7 +1878,7 @@ export function AnalysisPageClient({
               <>
                 {aiState.loading ? (
                   <div className="ai-glow rounded-[10px] border border-[rgba(73,178,255,0.14)] px-3.5 py-2.5 text-xs font-semibold text-slate-700 dark:border-[rgba(157,196,255,0.14)] dark:text-slate-100">
-                    AI 브리핑을 최신 데이터 기준으로 다시 정리하고 있습니다.
+                    최신 데이터로 브리핑 갱신 중
                   </div>
                 ) : null}
                 <div className="grid gap-2.5 md:gap-3">

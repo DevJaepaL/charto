@@ -46,7 +46,7 @@ export default async function GuidePage() {
   return (
     <SitePageShell
       title="가이드"
-      description="Charto의 차트 해석 기준과 핵심 지표, 오늘 시장 흐름을 한 페이지로 정리한 가이드입니다."
+      description="차트 해석 기준과 지표 설명, 당일 시장 흐름 요약"
     >
       <nav className="rounded-[8px] border border-slate-200/80 px-4 py-4 dark:border-white/10">
         <div className="text-sm font-black text-slate-950 dark:text-slate-50">바로 보기</div>
@@ -69,42 +69,42 @@ export default async function GuidePage() {
       <section id="overview">
         <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">서비스 개요</h2>
         <p className="mt-3 break-keep">
-          Charto는 가격, 거래량, 기술지표, 외인·기관 수급을 한 화면에서 정리하는 국내 증시 분석 도구입니다.
+          가격·거래량·기술지표·외인·기관 수급을 한 화면에 모은 국내 증시 분석 도구.
         </p>
       </section>
 
       <section id="methodology">
         <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">방법론</h2>
         <p className="mt-3 break-keep">
-          한 개의 지표만으로 결론을 내리지 않고, 가격 위치와 추세, 거래량, 수급, 업종 맥락을 함께 봅니다.
+          단일 지표에 의존하지 않고 가격 위치·추세·거래량·수급·업종 맥락을 함께 반영합니다.
         </p>
         <p className="mt-3 break-keep">
-          추천 점수는 가격, RSI, MACD, 거래량, 지지선과 저항선을 합쳐 계산합니다. 점수는 요약이고, 실제 해석은 이유와 위험을 같이 보는 쪽에 가깝습니다.
+          추천 점수는 가격·RSI·MACD·거래량·지지/저항을 합산한 요약치입니다. 최종 판단은 각 항목의 근거와 위험을 함께 확인하는 것을 권장합니다.
         </p>
       </section>
 
       <section id="indicators">
         <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">지표 해설</h2>
         <p className="mt-3 break-keep">
-          5일선과 20일선은 추세 방향을, RSI와 MACD는 모멘텀을, 볼린저 밴드는 가격 확장 구간을 보는 데 씁니다.
+          5·20일선은 추세, RSI·MACD는 모멘텀, 볼린저 밴드는 가격 변동성 구간을 보여줍니다.
         </p>
         <p className="mt-3 break-keep">
-          가격 해석은 지표 하나보다 거래량과 수급까지 같이 보는 편이 더 정확합니다.
+          단일 지표보다 거래량·수급을 함께 참고하는 방식을 권장합니다.
         </p>
       </section>
 
       <section id="market">
         <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">오늘 시장 흐름</h2>
         <p className="mt-3 break-keep">
-          마지막 업데이트: {formatOverviewTime(accumulation.asOf)}
+          업데이트: {formatOverviewTime(accumulation.asOf)}
         </p>
         <p className="mt-3 break-keep">
-          당일 거래대금 상위, 거래량 상위, 외인·기관 수급 포착 종목을 함께 보여주는 요약입니다.
+          거래대금·거래량·수급 상위 종목 요약.
         </p>
 
         <div className="mt-5 grid gap-6">
           <article>
-            <h3 className="text-sm font-black text-slate-950 dark:text-slate-50">거래대금이 몰린 종목</h3>
+            <h3 className="text-sm font-black text-slate-950 dark:text-slate-50">거래대금 상위</h3>
             <ul className="mt-3 space-y-3">
               {valueRanking.items.slice(0, 5).map((item) => (
                 <li key={`value-${item.stock.symbol}`} className="break-keep">
@@ -118,7 +118,7 @@ export default async function GuidePage() {
           </article>
 
           <article>
-            <h3 className="text-sm font-black text-slate-950 dark:text-slate-50">거래량이 크게 붙는 종목</h3>
+            <h3 className="text-sm font-black text-slate-950 dark:text-slate-50">거래량 상위</h3>
             <ul className="mt-3 space-y-3">
               {volumeRanking.items.slice(0, 5).map((item) => (
                 <li key={`volume-${item.stock.symbol}`} className="break-keep">
@@ -132,7 +132,7 @@ export default async function GuidePage() {
           </article>
 
           <article>
-            <h3 className="text-sm font-black text-slate-950 dark:text-slate-50">외인·기관 수급 포착 종목</h3>
+            <h3 className="text-sm font-black text-slate-950 dark:text-slate-50">외인·기관 순매수</h3>
             <p className="mt-3 break-keep">{accumulation.notice}</p>
             <ul className="mt-3 space-y-3">
               {accumulation.items.length ? (

@@ -462,7 +462,7 @@ const OFFICIAL_CONTEXT_RULES: OfficialContextRule[] = [
     sector: "소프트웨어·AI",
     businessSummary: "기업용 소프트웨어와 서비스 계약, AI 기대감이 밸류에이션에 반영되는 업종입니다.",
     industryFlow: "성장 기대가 먼저 움직일 수 있어 업종 심리가 빠르게 달라지는 편입니다.",
-    marketPosition: "실적 확인 전까지는 기대가 앞설 수 있어요.",
+    marketPosition: "실적 확인 전에는 기대가 선행될 수 있는 업종입니다.",
     interpretWithCaution: true,
   },
   {

@@ -93,7 +93,7 @@ export function HeroPreviewCard({ preview }: { preview: TechnicalResponse }) {
             className="surface-pill inline-flex rounded-full px-2.5 py-0.75 text-[10px] font-semibold tracking-[0.08em] text-slate-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-200"
             data-home-preview-pill
           >
-            실시간 미리보기
+            대표 종목 예시
           </div>
           <div
             className="max-w-[132px] truncate text-right text-[9px] font-medium text-slate-500 dark:text-slate-400"
@@ -111,7 +111,7 @@ export function HeroPreviewCard({ preview }: { preview: TechnicalResponse }) {
             <div className="flex items-start justify-between gap-2">
               <div>
                 <div className="text-[10px] font-semibold tracking-[0.1em] text-slate-500 dark:text-slate-400">
-                  최근 흐름
+                  현재가
                 </div>
                 <div className="mt-1 text-[1rem] font-black tracking-tight text-slate-900 dark:text-white">
                   {formatPrice(preview.quote.currentPrice)}
@@ -172,7 +172,7 @@ export function HeroPreviewCard({ preview }: { preview: TechnicalResponse }) {
                 />
               </div>
               <div className="mt-1.5 text-[10px] text-slate-500 dark:text-slate-400">
-                {preview.signal.reasons[0] ?? "핵심 지표를 확인 중입니다."}
+                {preview.signal.reasons[0] ?? "지표 불러오는 중"}
               </div>
             </div>
 
@@ -181,7 +181,7 @@ export function HeroPreviewCard({ preview }: { preview: TechnicalResponse }) {
               data-home-preview-section
             >
               <div className="text-[10px] font-semibold tracking-[0.1em] text-slate-500 dark:text-slate-400">
-                핵심 포인트
+                주요 신호
               </div>
               <ul className="mt-2.5 space-y-1.5 text-[11px] leading-4 text-slate-700 dark:text-slate-200">
                 {points.map((point) => (

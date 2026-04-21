@@ -76,7 +76,7 @@ export function FavoriteStocksPanel({ userKey, userName }: FavoriteStocksPanelPr
             관심종목
           </div>
           <p className="mt-1 break-keep text-[12px] leading-5 text-slate-500 dark:text-slate-300 md:text-[13px]">
-            {userName ? `${userName}님이 저장한 종목` : "저장한 종목"}을 여기서 바로 확인할 수 있어요.
+            {userName ? `${userName}님이 저장한 종목 목록` : "저장한 종목 목록"}
           </p>
         </div>
         <div className="rounded-full bg-[var(--surface-pill)] px-2 py-1 text-[10px] font-semibold text-slate-600 dark:bg-white/[0.06] dark:text-slate-200">

@@ -104,7 +104,7 @@ function SuggestionPanel({
       <div className="flex items-center justify-between px-3 py-2 text-xs font-medium text-slate-500 dark:text-white/56">
         <span className="inline-flex items-center gap-1.5">
           {!hasQuery ? <IconFlameFilled size={12} className="text-orange-500" /> : null}
-          <span>{hasQuery ? "검색 결과" : "많은 사람들이 검색한 종목이에요."}</span>
+          <span>{hasQuery ? "검색 결과" : "거래대금 상위"}</span>
         </span>
         {hasQuery && error ? <span className="text-rose-500">{error}</span> : null}
       </div>
@@ -147,7 +147,7 @@ function SuggestionPanel({
 
         {!activeItems.length ? (
           <div className="rounded-[18px] px-3 py-6 text-center text-sm text-slate-500 dark:text-white/54">
-            일치하는 종목이 없습니다.
+            검색 결과 없음
           </div>
         ) : null}
       </div>

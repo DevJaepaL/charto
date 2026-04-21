@@ -7,9 +7,9 @@ import type { StockLookupItem } from "@/lib/types";
 
 const DOT_FRAMES = ["", ".", "..", "..."];
 const LOADING_MESSAGES = [
-  "가격과 거래량을 함께 보고 있어요.",
-  "핵심 신호와 추천 점수를 계산하고 있어요.",
-  "지금 흐름을 보기 쉽게 정리하고 있어요.",
+  "가격과 거래량 불러오는 중",
+  "기술 지표 계산 중",
+  "차트 구성 중",
 ];
 
 interface AnimatedLoadingStageProps {
@@ -21,7 +21,7 @@ interface AnimatedLoadingStageProps {
 export function AnimatedLoadingStage({
   compact = false,
   stock,
-  title = "종목과 차트를 분석하고 있어요",
+  title = "차트 불러오는 중",
 }: AnimatedLoadingStageProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const [dotFrameIndex, setDotFrameIndex] = useState(0);

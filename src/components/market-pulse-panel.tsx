@@ -51,7 +51,7 @@ export function MarketPulsePanel() {
       })
       .catch(() => {
         if (!cancelled) {
-          setError("실시간 순위 데이터를 불러오지 못했습니다.");
+          setError("순위 데이터를 불러올 수 없습니다.");
         }
       });
 
@@ -111,7 +111,7 @@ export function MarketPulsePanel() {
   return (
     <div className="soft-panel rounded-[8px] p-0.75 md:rounded-[14px] md:p-1.25" data-home-pulse-panel>
       <div className="text-[9px] font-bold text-slate-800 dark:text-slate-100 md:text-[11px]" data-home-pulse-title>
-        <b>오늘 가장 많이 본 흐름</b>
+        <b>오늘의 시장 순위</b>
       </div>
 
       <div className="mt-1.5 md:mt-2" data-home-pulse-tabs>

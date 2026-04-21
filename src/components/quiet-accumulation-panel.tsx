@@ -134,7 +134,7 @@ async function getQuietAccumulation(signal: AbortSignal) {
   });
 
   if (!response.ok) {
-    throw new Error("외인·기관 수급 종목을 불러오지 못했습니다.");
+    throw new Error("수급 데이터를 불러올 수 없습니다.");
   }
 
   return (await response.json()) as AccumulationResponse;
@@ -143,8 +143,8 @@ async function getQuietAccumulation(signal: AbortSignal) {
 export function QuietAccumulationPanel() {
   const [payload, setPayload] = useState<AccumulationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const sectionTitle = payload?.label ?? "💵 외인·기관의 매수세가 이어지는 종목";
-  const sectionDescription = payload?.notice ?? "최근 외인과 기관이 꾸준히 매수하고 있는 종목이에요.";
+  const sectionTitle = payload?.label ?? "외인·기관 순매수 종목";
+  const sectionDescription = payload?.notice ?? "최근 외인·기관 매수세가 유입된 종목 목록";
   const metricTileBase =
     "min-w-0 rounded-[14px] border px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] dark:shadow-none";
   const metricLabelBase = "block text-[10px] font-semibold leading-none";
@@ -164,7 +164,7 @@ export function QuietAccumulationPanel() {
           return;
         }
 
-        setError("외인·기관 수급 종목을 불러오지 못했습니다.");
+        setError("수급 데이터를 불러올 수 없습니다.");
       });
 
     return () => controller.abort();
@@ -206,7 +206,7 @@ export function QuietAccumulationPanel() {
 
       {payload && !payload.items.length ? (
         <div className="mt-3 rounded-[14px] bg-[var(--surface-card-strong)] px-3 py-3 text-[12px] leading-5 text-slate-500 dark:bg-white/[0.04] dark:text-slate-300 md:text-[13px]">
-          지금은 외인과 기관이 함께 꾸준히 들어오는 종목이 많지 않아요. 흐름이 강해지면 여기서 바로 보여드릴게요.
+          현재 기준 외인·기관 동시 매수 종목이 없습니다.
         </div>
       ) : null}
 
@@ -318,7 +318,7 @@ export function QuietAccumulationPanel() {
 
       {payload ? (
         <p className="mt-3 break-keep text-[11px] leading-5 text-slate-500 dark:text-slate-400">
-          장중 수급은 추정치이며 업데이트 시점에 따라 수 분 차이가 날 수 있어요.
+          장중 수급은 추정치로 수 분 차이가 있을 수 있습니다.
         </p>
       ) : null}
     </section>
