@@ -2,11 +2,13 @@
 
 ![Charto 미리보기](./docs/charto-preview.png)
 
-![Version](https://img.shields.io/badge/version-0.1.0-233c7c?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.0-233c7c?style=flat-square)
 ![Release](https://img.shields.io/badge/release-ready-17171c?style=flat-square&logo=github)
 ![Next.js](https://img.shields.io/badge/Next.js-16.1.6-111827?style=flat-square&logo=nextdotjs)
 ![Vercel](https://img.shields.io/badge/Vercel-ready-000000?style=flat-square&logo=vercel)
 ![Gemini](https://img.shields.io/badge/Gemini-2.5%20Flash%20Lite-4285F4?style=flat-square&logo=googlegemini)
+
+<b><a href="https://charto.space">charto.space</a></b>
 
 국내 주식 차트와 기술지표를 빠르게 확인하는 웹앱입니다.  
 종목명이나 종목코드를 검색하면 차트, 핵심 지표, 추천 점수, AI 브리핑을 한 화면에서 볼 수 있습니다.
