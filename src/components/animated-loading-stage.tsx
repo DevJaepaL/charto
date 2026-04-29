@@ -8,7 +8,7 @@ import type { StockLookupItem } from "@/lib/types";
 const DOT_FRAMES = ["", ".", "..", "..."];
 const LOADING_MESSAGES = [
   "가격과 거래량을 함께 보고 있어요.",
-  "핵심 신호와 추천 점수를 계산하고 있어요.",
+  "핵심 신호와 차트 점수를 계산하고 있어요.",
   "지금 흐름을 보기 쉽게 정리하고 있어요.",
 ];
 
@@ -66,25 +66,28 @@ export function AnimatedLoadingStage({
           return;
         }
 
-        const scope = createScope({ root: rootRef.current }).add(() => {
+        const rootElement = rootRef.current;
+        const scope = createScope({ root: rootElement }).add(() => {
+          const hasTarget = (selector: string) => Boolean(rootElement.querySelector(selector));
           const intro = createTimeline({
             defaults: {
               ease: "outExpo",
             },
           });
 
-          intro
-            .add(
-              "[data-loading-shell]",
-              {
-                opacity: [0, 1],
-                translateY: [compact ? 10 : 18, 0],
-                scale: [0.98, 1],
-                duration: compact ? 360 : 520,
-              },
-              0,
-            )
-            .add(
+          intro.add(
+            rootElement,
+            {
+              opacity: [0, 1],
+              translateY: [compact ? 10 : 18, 0],
+              scale: [0.98, 1],
+              duration: compact ? 360 : 520,
+            },
+            0,
+          );
+
+          if (hasTarget("[data-loading-orbit]")) {
+            intro.add(
               "[data-loading-orbit]",
               {
                 opacity: [0, 1],
@@ -92,8 +95,11 @@ export function AnimatedLoadingStage({
                 duration: compact ? 620 : 860,
               },
               0,
-            )
-            .add(
+            );
+          }
+
+          if (hasTarget("[data-loading-title]")) {
+            intro.add(
               "[data-loading-title]",
               {
                 opacity: [0, 1],
@@ -101,8 +107,11 @@ export function AnimatedLoadingStage({
                 duration: compact ? 420 : 560,
               },
               compact ? 140 : 220,
-            )
-            .add(
+            );
+          }
+
+          if (hasTarget("[data-loading-message]")) {
+            intro.add(
               "[data-loading-message]",
               {
                 opacity: [0, 1],
@@ -110,8 +119,11 @@ export function AnimatedLoadingStage({
                 duration: compact ? 400 : 520,
               },
               compact ? 220 : 320,
-            )
-            .add(
+            );
+          }
+
+          if (hasTarget("[data-loading-card]")) {
+            intro.add(
               "[data-loading-card]",
               {
                 opacity: [0, 1],
@@ -121,16 +133,17 @@ export function AnimatedLoadingStage({
               },
               compact ? 0 : 420,
             );
+          }
 
-          const orbitFloat = createTimeline({
-            loop: true,
-            alternate: true,
-            defaults: {
-              duration: compact ? 2400 : 3000,
-              ease: "inOutSine",
-            },
-          })
-            .add(
+          const orbitFloat = hasTarget("[data-loading-orbit]")
+            ? createTimeline({
+                loop: true,
+                alternate: true,
+                defaults: {
+                  duration: compact ? 2400 : 3000,
+                  ease: "inOutSine",
+                },
+              }).add(
               "[data-loading-orbit]",
               {
                 translateY: [0, compact ? 3 : 8],
@@ -138,34 +151,40 @@ export function AnimatedLoadingStage({
               },
               0,
             )
-            .add(
+            : null;
+
+          if (orbitFloat && hasTarget("[data-loading-avatar]")) {
+            orbitFloat.add(
               "[data-loading-avatar]",
               {
                 scale: [1, compact ? 1.03 : 1.05],
               },
               0,
             );
+          }
 
-          const skeletonPulse = createTimeline({
-            loop: true,
-            alternate: true,
-            defaults: {
-              duration: 2200,
-              ease: "inOutSine",
-            },
-          }).add(
-            "[data-loading-skeleton]",
-            {
-              opacity: [0.38, 0.96],
-              scaleX: [0.985, 1],
-              delay: stagger(90),
-            },
-            0,
-          );
+          const skeletonPulse = hasTarget("[data-loading-skeleton]")
+            ? createTimeline({
+                loop: true,
+                alternate: true,
+                defaults: {
+                  duration: 2200,
+                  ease: "inOutSine",
+                },
+              }).add(
+                "[data-loading-skeleton]",
+                {
+                  opacity: [0.38, 0.96],
+                  scaleX: [0.985, 1],
+                  delay: stagger(90),
+                },
+                0,
+              )
+            : null;
 
           return () => {
-            skeletonPulse.revert();
-            orbitFloat.revert();
+            skeletonPulse?.revert();
+            orbitFloat?.revert();
             intro.revert();
           };
         });
@@ -254,7 +273,7 @@ export function AnimatedLoadingStage({
         {message}
       </p>
       <div className="mt-6 grid gap-2.5 md:grid-cols-3">
-        {["현재가", "추천 점수", "핵심 신호"].map((label, index) => (
+        {["현재가", "차트 신호", "핵심 신호"].map((label, index) => (
           <div
             key={label}
             className="surface-card rounded-[16px] px-4 py-3 text-left md:rounded-[18px] md:px-[18px]"

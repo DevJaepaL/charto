@@ -4,7 +4,7 @@ import { SitePageShell } from "@/components/site-page-shell";
 
 export const metadata: Metadata = {
   title: "문의",
-  description: "Charto 문의 및 제보 안내",
+  description: "CHARTO 문의 및 제보 안내",
   robots: {
     index: false,
     follow: true,

@@ -137,7 +137,7 @@ const CONTEXT_RULES: CompanyContextRule[] = [
     sector: "로봇·자동화",
     businessSummary: "산업 자동화 투자와 신사업 기대, 로봇 침투율 확대 스토리가 주가에 강하게 반영되는 업종입니다.",
     industryFlow: "로봇·자동화는 테마 수급이 크게 붙을 때 빠르게 급등할 수 있지만, 기대가 꺾이면 변동성도 큰 편입니다.",
-    marketPosition: "장기 성장 스토리는 유효해도 단기 과열이 잦아 추천 점수는 한 단계 보수적으로 보는 편이 좋습니다.",
+    marketPosition: "장기 성장 스토리는 유효해도 단기 과열이 잦아 차트 신호 점수는 한 단계 보수적으로 보는 편이 좋습니다.",
     interpretWithCaution: true,
   },
   {
@@ -166,7 +166,7 @@ const CONTEXT_RULES: CompanyContextRule[] = [
     sector: "리츠·부동산",
     businessSummary: "리츠는 개별 기업 성장성보다 임대료 흐름, 배당, 금리와 자산 가치 변동이 핵심인 상품형 주식입니다.",
     industryFlow: "리츠는 금리 안정 기대와 배당 선호가 커질 때 상대적으로 주목받는 편입니다.",
-    marketPosition: "배당과 자산 가치 관점이 중요해 일반 성장주와 같은 추천 점수 해석은 피하는 편이 좋습니다.",
+    marketPosition: "배당과 자산 가치 관점이 중요해 일반 성장주와 같은 차트 신호 점수 해석은 피하는 편이 좋습니다.",
     confidence: "high",
     interpretWithCaution: true,
   },
@@ -322,7 +322,7 @@ const OFFICIAL_CONTEXT_RULES: OfficialContextRule[] = [
     sector: "바이오·제약",
     businessSummary: "의약품 판매와 파이프라인 기대, 규제 변화가 함께 반영되는 업종입니다.",
     industryFlow: "실적보다 이벤트와 기대감이 먼저 움직일 수 있어 변동성이 큰 편입니다.",
-    marketPosition: "기대와 실제 성과 간 간격이 클 수 있어 추천 점수는 보수적으로 해석하는 편이 좋습니다.",
+    marketPosition: "기대와 실제 성과 간 간격이 클 수 있어 차트 신호 점수는 보수적으로 해석하는 편이 좋습니다.",
     interpretWithCaution: true,
   },
   {
@@ -484,7 +484,7 @@ const OFFICIAL_CONTEXT_RULES: OfficialContextRule[] = [
     sector: "리츠·부동산",
     businessSummary: "자산 가치와 임대료 흐름, 금리, 배당 안정성이 중요한 자산형 업종입니다.",
     industryFlow: "금리 안정 기대와 배당 선호가 커질 때 상대적으로 주목받는 편입니다.",
-    marketPosition: "일반 성장주와 다른 방식으로 해석해야 해 추천 점수는 보수적으로 보는 편이 좋아요.",
+    marketPosition: "일반 성장주와 다른 방식으로 해석해야 해 차트 신호 점수는 보수적으로 보는 편이 좋아요.",
     interpretWithCaution: true,
   },
   {
@@ -573,7 +573,7 @@ function getEtpContext(stock: StockLookupItem, profile: InstrumentProfile): Comp
     industryFlow:
       "ETF·ETN은 업종 이야기보다 기초자산 방향, 선물 구조, 괴리율 같은 상품 특성이 더 크게 작용하는 편입니다.",
     marketPosition:
-      "특히 인버스·레버리지 상품은 방향이 맞아도 변동성이 커질 수 있어 추천 점수를 보수적으로 보는 편이 좋습니다.",
+      "특히 인버스·레버리지 상품은 방향이 맞아도 변동성이 커질 수 있어 차트 신호 점수를 보수적으로 보는 편이 좋습니다.",
     confidence: "high",
     interpretWithCaution: true,
     cautionNote: "ETF·ETN은 개별 기업 평가보다 기초자산과 상품 구조를 먼저 보는 편이 좋습니다.",

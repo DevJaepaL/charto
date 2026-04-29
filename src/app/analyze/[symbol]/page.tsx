@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { AnalysisPublisherNote } from "@/components/analysis-publisher-note";
 import { JsonLdScript } from "@/components/json-ld";
 import { AnalysisPageClient } from "@/components/analysis-page-client";
 import { getGeminiApiKeyCount } from "@/lib/analysis/ai-summary";
@@ -110,6 +111,7 @@ export default async function AnalyzePage({
         shouldAutoFetchAi={shouldAutoFetchAi}
         stock={stock}
       />
+      <AnalysisPublisherNote stock={stock} payload={technicalPayload} />
     </>
   );
 }

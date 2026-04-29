@@ -479,7 +479,7 @@ function getSignalBiasMeta(bias: SignalSummary["bias"] | undefined) {
 function getRecommendationMeta(score: number) {
   if (score >= 60) {
       return {
-        label: "강력 추천",
+        label: "상승 신호 강함",
         cardClassName:
           "bg-[rgba(5,192,114,0.12)] shadow-[inset_0_1px_0_rgba(255,255,255,0.44)] dark:bg-[rgba(5,192,114,0.16)]",
         badgeClassName:
@@ -490,7 +490,7 @@ function getRecommendationMeta(score: number) {
 
   if (score >= 30) {
       return {
-        label: "추천",
+        label: "상승 신호",
         cardClassName:
           "bg-[rgba(5,192,114,0.08)] shadow-[inset_0_1px_0_rgba(255,255,255,0.44)] dark:bg-[rgba(5,192,114,0.12)]",
         badgeClassName:
@@ -501,7 +501,7 @@ function getRecommendationMeta(score: number) {
 
   if (score <= -60) {
       return {
-        label: "주의",
+        label: "약세 신호 강함",
         cardClassName:
           "bg-[rgba(244,63,94,0.12)] shadow-[inset_0_1px_0_rgba(255,255,255,0.44)] dark:bg-[rgba(190,24,93,0.18)]",
         badgeClassName:
@@ -512,7 +512,7 @@ function getRecommendationMeta(score: number) {
 
   if (score <= -30) {
       return {
-        label: "관망",
+        label: "약세 신호",
         cardClassName:
           "bg-[rgba(251,191,36,0.12)] shadow-[inset_0_1px_0_rgba(255,255,255,0.44)] dark:bg-[rgba(217,119,6,0.18)]",
         badgeClassName:
@@ -533,19 +533,19 @@ function getRecommendationMeta(score: number) {
 
 function getScoreDescriptor(score: number) {
   if (score >= 60) {
-    return "강력 매수권";
+    return "강한 상승 신호권";
   }
 
   if (score >= 30) {
-    return "매수 우위";
+    return "상승 신호 우위";
   }
 
   if (score <= -60) {
-    return "강력 매도권";
+    return "강한 약세 신호권";
   }
 
   if (score <= -30) {
-    return "매도 우위";
+    return "약세 신호 우위";
   }
 
   return "중립권";
@@ -684,7 +684,7 @@ function RecommendationCard({
     >
       <div className="flex items-center justify-between gap-3">
         <div className="text-[9px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-300 md:text-[10px]">
-          추천 점수
+          차트 신호 점수
         </div>
         <div className={`shrink-0 rounded-[9px] px-2 py-0.75 text-right ${recommendation.badgeClassName}`}>
           <div className="text-[10px] font-semibold md:text-[11px]">{recommendation.label}</div>
@@ -714,7 +714,7 @@ function RecommendationCard({
         >
           <button
             aria-expanded={open}
-            aria-label={open ? "추천 점수 설명 닫기" : "추천 점수 설명 보기"}
+            aria-label={open ? "차트 신호 점수 설명 닫기" : "차트 신호 점수 설명 보기"}
             className={`inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/55 bg-[linear-gradient(135deg,#2346a6_0%,#49b2ff_52%,#7b61ff_100%)] text-white shadow-[0_14px_28px_rgba(73,178,255,0.34),0_6px_14px_rgba(35,60,124,0.2),inset_0_1px_0_rgba(255,255,255,0.4)] ring-1 ring-[rgba(73,178,255,0.14)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.04] hover:shadow-[0_18px_34px_rgba(73,178,255,0.4),0_8px_18px_rgba(35,60,124,0.24),inset_0_1px_0_rgba(255,255,255,0.46)] active:translate-y-0 active:scale-[0.98] dark:border-white/20 dark:bg-[linear-gradient(135deg,rgba(35,60,124,0.96)_0%,rgba(73,178,255,0.94)_48%,rgba(123,97,255,0.94)_100%)] dark:text-white dark:shadow-[0_18px_34px_rgba(18,40,72,0.46),0_8px_18px_rgba(2,6,23,0.38),inset_0_1px_0_rgba(255,255,255,0.24)] dark:ring-[rgba(157,196,255,0.18)] dark:hover:shadow-[0_22px_40px_rgba(32,84,167,0.5),0_10px_20px_rgba(2,6,23,0.42),inset_0_1px_0_rgba(255,255,255,0.28)] md:h-9 md:w-9 ${
               open ? "scale-[1.03] shadow-[0_20px_38px_rgba(73,178,255,0.42),0_10px_22px_rgba(35,60,124,0.26),inset_0_1px_0_rgba(255,255,255,0.46)] dark:shadow-[0_24px_42px_rgba(32,84,167,0.54),0_12px_24px_rgba(2,6,23,0.44),inset_0_1px_0_rgba(255,255,255,0.3)]" : ""
             }`}
@@ -740,7 +740,7 @@ function RecommendationCard({
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="text-[11px] font-semibold tracking-[0.08em] text-slate-500 dark:text-slate-400">
-                      추천 위치
+                      신호 위치
                     </div>
                     <div className={`mt-1 text-sm font-bold ${recommendation.scoreClassName}`}>
                       {score}점 · {scoreDescriptor}
@@ -763,14 +763,14 @@ function RecommendationCard({
                     />
                   </div>
                   <div className="mt-2 flex items-center justify-between text-[10px] font-semibold">
-                    <span className="text-[var(--price-up)]">강력 매도</span>
+                    <span className="text-[var(--price-up)]">강한 약세</span>
                     <span className="text-slate-500 dark:text-slate-400">중립</span>
-                    <span className="text-[var(--positive-text)]">강력 매수</span>
+                    <span className="text-[var(--positive-text)]">강한 상승</span>
                   </div>
                 </div>
               </div>
               <p className="break-keep">
-                5일선, 20일선, RSI, MACD, 거래량, 지지·저항 신호를 합산한 점수예요. 플러스 100점에 가까울수록 우호적이고 마이너스 100점에 가까울수록 약세 신호가 강해요.
+                5일선, 20일선, RSI, MACD, 거래량, 지지·저항 신호를 합산한 참고 점수예요. 플러스 100점에 가까울수록 상승 신호가, 마이너스 100점에 가까울수록 약세 신호가 강해요.
               </p>
               {explanationItems.length ? (
                 <ul className="mt-2 space-y-1.5 break-keep">
@@ -1325,6 +1325,7 @@ export function AnalysisPageClient({
   const scoreComparisonLabel = "전일 대비";
   const visibleReasons = signal?.reasons.slice(0, 2) ?? [];
   const visibleRisks = signal?.risks.slice(0, 1) ?? [];
+  const isFeaturedAnalyzePage = featured.some((item) => item.symbol === stock.symbol);
   const hasMeaningfulAnalysisContent = Boolean(
     technicalPayload &&
       !technicalPayload.isDemo &&
@@ -1335,7 +1336,8 @@ export function AnalysisPageClient({
       signal &&
       (visibleReasons.length > 0 || visibleRisks.length > 0),
   );
-  const shouldShowAnalyzeAd = Boolean(analyzeAdSlot) && !error && hasMeaningfulAnalysisContent;
+  const shouldShowAnalyzeAd =
+    Boolean(analyzeAdSlot) && isFeaturedAnalyzePage && !error && hasMeaningfulAnalysisContent;
   const aiChartSummary = aiSummary?.trend ?? aiSummary?.momentum ?? "";
   const aiMomentumSummary =
     aiSummary?.trend && aiSummary?.momentum && aiSummary.trend !== aiSummary.momentum

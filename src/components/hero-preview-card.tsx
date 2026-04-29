@@ -151,7 +151,7 @@ export function HeroPreviewCard({ preview }: { preview: TechnicalResponse }) {
               data-home-preview-section
             >
               <div className="text-[10px] font-semibold tracking-[0.1em] text-slate-500 dark:text-slate-400">
-                추천 점수
+                차트 신호 점수
               </div>
               <div className="mt-1.5 flex flex-wrap items-end gap-1.5">
                 <div className="text-[1.45rem] font-black tracking-tight text-slate-900 dark:text-white">{scoreLabel}</div>

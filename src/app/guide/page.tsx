@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { SitePageShell } from "@/components/site-page-shell";
+import { GUIDE_ARTICLES } from "@/lib/guide-content";
 import { loadQuietAccumulation } from "@/lib/market/accumulation";
 import { loadMarketRanking } from "@/lib/market/rankings";
 import { formatCompactNumber, formatKoreanWon, formatPercent, formatPrice } from "@/lib/utils";
@@ -46,13 +47,16 @@ export default async function GuidePage() {
   return (
     <SitePageShell
       title="가이드"
-      description="Charto의 차트 해석 기준과 핵심 지표, 오늘 시장 흐름을 한 페이지로 정리한 가이드입니다."
+      description="차트 해석 기준과 핵심 지표, 오늘 시장 흐름을 한 페이지로 정리한 가이드입니다."
     >
       <nav className="rounded-[8px] border border-slate-200/80 px-4 py-4 dark:border-white/10">
         <div className="text-sm font-black text-slate-950 dark:text-slate-50">바로 보기</div>
         <div className="mt-3 flex flex-wrap gap-2">
           <a className="rounded-[8px] border border-slate-200/80 px-3 py-2 text-sm font-semibold text-[var(--brand-strong)] dark:border-white/10" href="#overview">
             서비스 개요
+          </a>
+          <a className="rounded-[8px] border border-slate-200/80 px-3 py-2 text-sm font-semibold text-[var(--brand-strong)] dark:border-white/10" href="#articles">
+            차트 가이드
           </a>
           <a className="rounded-[8px] border border-slate-200/80 px-3 py-2 text-sm font-semibold text-[var(--brand-strong)] dark:border-white/10" href="#methodology">
             방법론
@@ -73,13 +77,46 @@ export default async function GuidePage() {
         </p>
       </section>
 
+      <section id="articles">
+        <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">차트 읽기 가이드</h2>
+        <p className="mt-3 break-keep">
+          애드센스와 검색 엔진이 실제 본문을 확인할 수 있도록 주요 지표별 해석 기준을 독립 문서로 정리했습니다.
+          종목 페이지의 점수만 보지 말고 각 기준의 의미와 한계를 함께 확인하는 용도입니다.
+        </p>
+        <div className="mt-5 grid gap-4">
+          {GUIDE_ARTICLES.map((article) => (
+            <Link
+              key={article.slug}
+              className="group border-t border-slate-200/80 pt-4 transition-colors hover:border-[var(--brand-strong)] dark:border-white/10"
+              href={`/guide/${article.slug}`}
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[11px] font-black tracking-[0.12em] text-[var(--brand-strong)]">
+                  {article.category}
+                </span>
+                <span className="text-xs text-slate-400 dark:text-slate-500">
+                  약 {article.readingMinutes}분
+                </span>
+              </div>
+              <h3 className="mt-2 break-keep text-base font-black text-slate-950 group-hover:text-[var(--brand-strong)] dark:text-slate-50">
+                {article.title}
+              </h3>
+              <p className="mt-2 break-keep text-sm leading-6 text-slate-600 dark:text-slate-300">
+                {article.description}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <section id="methodology">
         <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">방법론</h2>
         <p className="mt-3 break-keep">
           한 개의 지표만으로 결론을 내리지 않고, 가격 위치와 추세, 거래량, 수급, 업종 맥락을 함께 봅니다.
         </p>
         <p className="mt-3 break-keep">
-          추천 점수는 가격, RSI, MACD, 거래량, 지지선과 저항선을 합쳐 계산합니다. 점수는 요약이고, 실제 해석은 이유와 위험을 같이 보는 쪽에 가깝습니다.
+          차트 신호 점수는 가격, RSI, MACD, 거래량, 지지선과 저항선을 합쳐 계산합니다. 점수는 요약이고,
+          실제 해석은 이유와 위험을 같이 보는 쪽에 가깝습니다.
         </p>
       </section>
 
@@ -145,7 +182,7 @@ export default async function GuidePage() {
                 </li>
               ))
               ) : (
-                <li>현재 기준으로 별도 수급 포착 종목이 없습니다.</li>
+                <li>현재 기준으로 별도 수급 포착되는 종목이 없습니다.</li>
               )}
             </ul>
           </article>

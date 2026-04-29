@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { GUIDE_ARTICLES } from "@/lib/guide-content";
 import type { StockLookupItem } from "@/lib/types";
 
 export function HomeEditorialSections({ featured }: { featured: StockLookupItem[] }) {
@@ -55,6 +56,30 @@ export function HomeEditorialSections({ featured }: { featured: StockLookupItem[
               ))}
             </div>
           </article>
+        </div>
+
+        <div className="mt-8 border-t border-slate-200/80 pt-6 dark:border-white/10">
+          <h3 className="text-base font-black text-slate-950 dark:text-slate-50">차트 해석 문서</h3>
+          <p className="mt-3 max-w-3xl break-keep text-sm leading-7 text-slate-600 dark:text-slate-300">
+            종목별 숫자를 보기 전에 이동평균선, RSI, MACD, 거래량, 수급, 지지·저항을 어떤 순서로 읽는지
+            먼저 확인할 수 있도록 공개 가이드를 분리했습니다.
+          </p>
+          <div className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {GUIDE_ARTICLES.slice(0, 6).map((article) => (
+              <Link
+                key={article.slug}
+                className="group border-t border-slate-200/80 pt-3 transition-colors hover:border-[var(--brand-strong)] dark:border-white/10"
+                href={`/guide/${article.slug}`}
+              >
+                <div className="text-[10px] font-black tracking-[0.12em] text-[var(--brand-strong)]">
+                  {article.category}
+                </div>
+                <div className="mt-1 break-keep text-sm font-bold text-slate-950 group-hover:text-[var(--brand-strong)] dark:text-slate-50">
+                  {article.title}
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </section>

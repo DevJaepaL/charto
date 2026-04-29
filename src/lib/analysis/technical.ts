@@ -373,8 +373,8 @@ function applySignalGuardrails(
     score = pullScoreTowardNeutral(score, profile.isDirectionalProduct ? 40 : 28);
     risks.unshift(
       profile.kind === "etn"
-        ? "ETN은 개별 기업 실적보다 기초자산과 상품 구조 영향이 커 추천 점수를 보수적으로 반영합니다."
-        : "ETF는 개별 기업 분석보다 기초지수와 상품 구조 영향이 커 추천 점수를 보수적으로 반영합니다.",
+        ? "ETN은 개별 기업 실적보다 기초자산과 상품 구조 영향이 커 차트 신호 점수를 보수적으로 반영합니다."
+        : "ETF는 개별 기업 분석보다 기초지수와 상품 구조 영향이 커 차트 신호 점수를 보수적으로 반영합니다.",
     );
   }
 

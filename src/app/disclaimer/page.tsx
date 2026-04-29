@@ -4,7 +4,7 @@ import { SitePageShell } from "@/components/site-page-shell";
 
 export const metadata: Metadata = {
   title: "면책 고지",
-  description: "Charto 투자 관련 면책 고지",
+  description: "투자 관련 면책 고지",
   robots: {
     index: false,
     follow: true,
@@ -15,7 +15,7 @@ export default function DisclaimerPage() {
   return (
     <SitePageShell
       title="면책 고지"
-      description="Charto가 제공하는 차트, 지표, AI 브리핑은 모두 참고용 정보입니다."
+      description="CHARTO가 제공하는 차트, 지표, AI 브리핑은 모두 참고용 정보입니다."
     >
       <section>
         <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">투자 판단</h2>
