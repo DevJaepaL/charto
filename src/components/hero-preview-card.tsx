@@ -74,19 +74,9 @@ export function HeroPreviewCard({ preview }: { preview: TechnicalResponse }) {
 
   return (
     <div
-      className="relative overflow-hidden rounded-[22px] border border-slate-200/80 bg-[var(--surface-card-strong)] p-3 text-slate-900 shadow-[0_18px_36px_rgba(15,23,42,0.06)] dark:border-white/10 dark:bg-[#10141d] dark:text-white dark:shadow-[0_24px_60px_rgba(2,6,23,0.3)]"
+      className="surface-card relative overflow-hidden rounded-[var(--radius-xl)] p-3 text-slate-900 dark:text-white"
       data-home-preview-card
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-7 -top-7 h-24 w-24 rounded-full bg-[rgba(73,178,255,0.18)] blur-3xl"
-        data-home-preview-orb="primary"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-9 -left-7 h-28 w-28 rounded-full bg-[rgba(5,192,114,0.14)] blur-3xl"
-        data-home-preview-orb="secondary"
-      />
       <div className="relative">
         <div className="flex items-start justify-between gap-2">
           <div
@@ -105,7 +95,7 @@ export function HeroPreviewCard({ preview }: { preview: TechnicalResponse }) {
 
         <div className="mt-2.5 grid gap-2">
           <div
-            className="surface-card rounded-[18px] p-2.5 dark:border-white/8 dark:bg-white/[0.03]"
+            className="surface-card rounded-[var(--radius-lg)] p-2.5 dark:border-white/8 dark:bg-white/[0.03]"
             data-home-preview-section
           >
             <div className="flex items-start justify-between gap-2">
@@ -147,7 +137,7 @@ export function HeroPreviewCard({ preview }: { preview: TechnicalResponse }) {
 
           <div className="grid gap-2">
             <div
-              className="surface-card rounded-[18px] p-2.5 dark:border-white/8 dark:bg-white/[0.03]"
+              className="surface-card rounded-[var(--radius-lg)] p-2.5 dark:border-white/8 dark:bg-white/[0.03]"
               data-home-preview-section
             >
               <div className="text-[10px] font-semibold tracking-[0.1em] text-slate-500 dark:text-slate-400">
@@ -177,7 +167,7 @@ export function HeroPreviewCard({ preview }: { preview: TechnicalResponse }) {
             </div>
 
             <div
-              className="surface-card rounded-[18px] p-2.5 dark:border-white/8 dark:bg-white/[0.03]"
+              className="surface-card rounded-[var(--radius-lg)] p-2.5 dark:border-white/8 dark:bg-white/[0.03]"
               data-home-preview-section
             >
               <div className="text-[10px] font-semibold tracking-[0.1em] text-slate-500 dark:text-slate-400">

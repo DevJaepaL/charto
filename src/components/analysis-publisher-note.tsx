@@ -98,10 +98,7 @@ export function AnalysisPublisherNote({
     return (
       <section className="mx-auto max-w-6xl px-5 pb-16 pt-3 md:px-8 md:pb-24">
         <div className="border-t border-slate-200/80 pt-8 dark:border-white/10">
-          <div className="text-[11px] font-black tracking-[0.16em] text-[var(--brand-strong)]">
-            PUBLIC ANALYSIS NOTE
-          </div>
-          <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-950 dark:text-slate-50">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-950 dark:text-slate-50">
             {stock.name}({stock.symbol}) 공개 분석 노트
           </h2>
           <p className="mt-4 max-w-3xl break-keep text-sm leading-7 text-slate-600 dark:text-slate-300">
@@ -111,7 +108,7 @@ export function AnalysisPublisherNote({
           </p>
           <div className="mt-8 grid gap-6 lg:grid-cols-3">
             <article>
-              <h3 className="text-base font-black text-slate-950 dark:text-slate-50">
+              <h3 className="text-base font-bold text-slate-950 dark:text-slate-50">
                 이 페이지에서 확인하는 항목
               </h3>
               <p className="mt-3 break-keep text-sm leading-7 text-slate-600 dark:text-slate-300">
@@ -122,7 +119,7 @@ export function AnalysisPublisherNote({
               </p>
             </article>
             <article>
-              <h3 className="text-base font-black text-slate-950 dark:text-slate-50">
+              <h3 className="text-base font-bold text-slate-950 dark:text-slate-50">
                 데이터 부족 시 해석 원칙
               </h3>
               <p className="mt-3 break-keep text-sm leading-7 text-slate-600 dark:text-slate-300">
@@ -133,7 +130,7 @@ export function AnalysisPublisherNote({
               </p>
             </article>
             <article>
-              <h3 className="text-base font-black text-slate-950 dark:text-slate-50">
+              <h3 className="text-base font-bold text-slate-950 dark:text-slate-50">
                 함께 읽으면 좋은 가이드
               </h3>
               <p className="mt-3 break-keep text-sm leading-7 text-slate-600 dark:text-slate-300">
@@ -145,19 +142,19 @@ export function AnalysisPublisherNote({
           </div>
           <div className="mt-6 flex flex-wrap gap-2">
             <Link
-              className="inline-flex rounded-full border border-slate-200/80 px-4 py-2 text-sm font-semibold text-[var(--brand-strong)] transition-colors hover:bg-[var(--surface-card)] dark:border-white/10 dark:hover:bg-white/[0.04]"
+              className="inline-flex rounded-[var(--radius-md)] border border-slate-200/80 px-4 py-2 text-sm font-semibold text-[var(--brand-strong)] transition-colors hover:bg-[var(--surface-card)] dark:border-white/10 dark:hover:bg-white/[0.04]"
               href="/guide/signal-score-methodology"
             >
               차트 신호 계산 방식
             </Link>
             <Link
-              className="inline-flex rounded-full border border-slate-200/80 px-4 py-2 text-sm font-semibold text-[var(--brand-strong)] transition-colors hover:bg-[var(--surface-card)] dark:border-white/10 dark:hover:bg-white/[0.04]"
+              className="inline-flex rounded-[var(--radius-md)] border border-slate-200/80 px-4 py-2 text-sm font-semibold text-[var(--brand-strong)] transition-colors hover:bg-[var(--surface-card)] dark:border-white/10 dark:hover:bg-white/[0.04]"
               href="/guide/moving-averages"
             >
               이동평균선 가이드
             </Link>
             <Link
-              className="inline-flex rounded-full border border-slate-200/80 px-4 py-2 text-sm font-semibold text-[var(--brand-strong)] transition-colors hover:bg-[var(--surface-card)] dark:border-white/10 dark:hover:bg-white/[0.04]"
+              className="inline-flex rounded-[var(--radius-md)] border border-slate-200/80 px-4 py-2 text-sm font-semibold text-[var(--brand-strong)] transition-colors hover:bg-[var(--surface-card)] dark:border-white/10 dark:hover:bg-white/[0.04]"
               href="/guide/rsi-macd"
             >
               RSI·MACD 가이드
@@ -178,24 +175,21 @@ export function AnalysisPublisherNote({
       <div className="border-t border-slate-200/80 pt-8 dark:border-white/10">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
           <div>
-            <div className="text-[11px] font-black tracking-[0.16em] text-[var(--brand-strong)]">
-              PUBLIC ANALYSIS NOTE
-            </div>
-            <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-950 dark:text-slate-50 md:text-[2rem]">
+            <h2 className="text-2xl font-bold tracking-tight text-slate-950 dark:text-slate-50 md:text-[2rem]">
               {stock.name}({stock.symbol}) 차트 해석 요약
             </h2>
             <p className="mt-4 break-keep text-sm leading-7 text-slate-600 dark:text-slate-300">
-              이 문단은 검색 엔진과 애드센스 검토 봇이 실제 본문을 확인할 수 있도록 서버에서 렌더링되는 공개
-              분석 노트입니다. 차트 신호 점수는 매수·매도 지시가 아니라 가격, 이동평균선, RSI, MACD,
-              거래량, 지지·저항을 함께 요약한 참고 지표입니다.
+              차트 신호 점수는 매수·매도 권유가 아니라 가격, 이동평균선, RSI, MACD, 거래량, 지지·저항을
+              함께 요약한 참고 지표입니다. 아래에서 {stock.name}의 최근 추세와 근거를 지표별로 확인할 수
+              있습니다.
             </p>
 
             <dl className="mt-6 grid gap-3 sm:grid-cols-2">
               <div className="border-t border-slate-200/80 pt-3 dark:border-white/10">
-                <dt className="text-[11px] font-bold tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                <dt className="text-[11px] font-bold text-slate-500 dark:text-slate-400">
                   현재가
                 </dt>
-                <dd className="mt-1 text-lg font-black text-slate-950 dark:text-slate-50">
+                <dd className="mt-1 text-lg font-bold text-slate-950 dark:text-slate-50">
                   {formatPrice(payload.quote.currentPrice)}
                 </dd>
                 <dd className="text-xs font-semibold text-slate-500 dark:text-slate-400">
@@ -203,10 +197,10 @@ export function AnalysisPublisherNote({
                 </dd>
               </div>
               <div className="border-t border-slate-200/80 pt-3 dark:border-white/10">
-                <dt className="text-[11px] font-bold tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                <dt className="text-[11px] font-bold text-slate-500 dark:text-slate-400">
                   차트 신호 점수
                 </dt>
-                <dd className="mt-1 text-lg font-black text-slate-950 dark:text-slate-50">
+                <dd className="mt-1 text-lg font-bold text-slate-950 dark:text-slate-50">
                   {scoreLabel}
                 </dd>
                 <dd className="text-xs font-semibold text-slate-500 dark:text-slate-400">
@@ -214,10 +208,10 @@ export function AnalysisPublisherNote({
                 </dd>
               </div>
               <div className="border-t border-slate-200/80 pt-3 dark:border-white/10">
-                <dt className="text-[11px] font-bold tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                <dt className="text-[11px] font-bold text-slate-500 dark:text-slate-400">
                   거래량
                 </dt>
-                <dd className="mt-1 text-lg font-black text-slate-950 dark:text-slate-50">
+                <dd className="mt-1 text-lg font-bold text-slate-950 dark:text-slate-50">
                   {formatInteger(payload.quote.volume, "주")}
                 </dd>
                 <dd className="text-xs font-semibold text-slate-500 dark:text-slate-400">
@@ -225,7 +219,7 @@ export function AnalysisPublisherNote({
                 </dd>
               </div>
               <div className="border-t border-slate-200/80 pt-3 dark:border-white/10">
-                <dt className="text-[11px] font-bold tracking-[0.12em] text-slate-500 dark:text-slate-400">
+                <dt className="text-[11px] font-bold text-slate-500 dark:text-slate-400">
                   기준 시각
                 </dt>
                 <dd className="mt-1 text-sm font-bold leading-6 text-slate-950 dark:text-slate-50">
@@ -237,7 +231,7 @@ export function AnalysisPublisherNote({
 
           <div className="grid gap-6">
             <article>
-              <h3 className="text-base font-black text-slate-950 dark:text-slate-50">
+              <h3 className="text-base font-bold text-slate-950 dark:text-slate-50">
                 가격과 평균선
               </h3>
               <p className="mt-3 break-keep text-sm leading-7 text-slate-600 dark:text-slate-300">
@@ -249,7 +243,7 @@ export function AnalysisPublisherNote({
             </article>
 
             <article>
-              <h3 className="text-base font-black text-slate-950 dark:text-slate-50">
+              <h3 className="text-base font-bold text-slate-950 dark:text-slate-50">
                 모멘텀과 변동성
               </h3>
               <p className="mt-3 break-keep text-sm leading-7 text-slate-600 dark:text-slate-300">
@@ -260,7 +254,7 @@ export function AnalysisPublisherNote({
             </article>
 
             <article>
-              <h3 className="text-base font-black text-slate-950 dark:text-slate-50">
+              <h3 className="text-base font-bold text-slate-950 dark:text-slate-50">
                 핵심 근거와 주의 포인트
               </h3>
               <div className="mt-3 grid gap-4 md:grid-cols-2">
@@ -282,7 +276,7 @@ export function AnalysisPublisherNote({
             </article>
 
             <article>
-              <h3 className="text-base font-black text-slate-950 dark:text-slate-50">
+              <h3 className="text-base font-bold text-slate-950 dark:text-slate-50">
                 기업·업종 맥락
               </h3>
               <p className="mt-3 break-keep text-sm leading-7 text-slate-600 dark:text-slate-300">
@@ -291,13 +285,13 @@ export function AnalysisPublisherNote({
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 <Link
-                  className="inline-flex rounded-full border border-slate-200/80 px-3 py-1.5 text-xs font-semibold text-[var(--brand-strong)] transition-colors hover:bg-[var(--surface-card)] dark:border-white/10 dark:hover:bg-white/[0.04]"
+                  className="inline-flex rounded-[var(--radius-md)] border border-slate-200/80 px-3 py-1.5 text-xs font-semibold text-[var(--brand-strong)] transition-colors hover:bg-[var(--surface-card)] dark:border-white/10 dark:hover:bg-white/[0.04]"
                   href="/guide/signal-score-methodology"
                 >
                   점수 계산 방식
                 </Link>
                 <Link
-                  className="inline-flex rounded-full border border-slate-200/80 px-3 py-1.5 text-xs font-semibold text-[var(--brand-strong)] transition-colors hover:bg-[var(--surface-card)] dark:border-white/10 dark:hover:bg-white/[0.04]"
+                  className="inline-flex rounded-[var(--radius-md)] border border-slate-200/80 px-3 py-1.5 text-xs font-semibold text-[var(--brand-strong)] transition-colors hover:bg-[var(--surface-card)] dark:border-white/10 dark:hover:bg-white/[0.04]"
                   href="/guide/volume-and-supply"
                 >
                   수급 해석 기준

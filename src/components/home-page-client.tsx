@@ -55,7 +55,7 @@ export function HomePageClient({
       return;
     }
 
-    void import("animejs").then(({ createScope, createTimeline, stagger }) => {
+    void import("animejs").then(({ createScope, createTimeline }) => {
       if (cancelled || !sectionRef.current) {
         return;
       }
@@ -88,25 +88,6 @@ export function HomePageClient({
               duration: 620,
             },
             40,
-          )
-          .add(
-            "[data-home-brand-orb]",
-            {
-              opacity: [0, 1],
-              scale: [0.82, 1],
-              delay: stagger(140),
-              duration: 840,
-            },
-            80,
-          )
-          .add(
-            "[data-home-brand-underline]",
-            {
-              opacity: [0, 1],
-              scaleX: [0.72, 1],
-              duration: 620,
-            },
-            120,
           )
           .add(
             "[data-home-title-block]",
@@ -161,53 +142,7 @@ export function HomePageClient({
           hasPreview ? 460 : 390,
         );
 
-        const ambient = createTimeline({
-          loop: true,
-          alternate: true,
-          defaults: {
-            duration: 3400,
-            ease: "inOutSine",
-          },
-        })
-          .add(
-            '[data-home-preview-orb="primary"]',
-            {
-              translateX: [0, 14],
-              translateY: [0, 18],
-              scale: [1, 1.08],
-            },
-            0,
-          )
-          .add(
-            '[data-home-preview-orb="secondary"]',
-            {
-              translateX: [0, -18],
-              translateY: [0, -14],
-              scale: [1, 1.12],
-            },
-            0,
-          )
-          .add(
-            "[data-home-brand-orb='primary']",
-            {
-              translateX: [0, 12],
-              translateY: [0, -10],
-              scale: [1, 1.08],
-            },
-            0,
-          )
-          .add(
-            "[data-home-brand-orb='secondary']",
-            {
-              translateX: [0, -14],
-              translateY: [0, 12],
-              scale: [1, 1.14],
-            },
-            0,
-          );
-
         return () => {
-          ambient.revert();
           timeline.revert();
         };
       });
@@ -237,28 +172,13 @@ export function HomePageClient({
       <section key={entryKey} ref={sectionRef} className="relative flex min-h-full flex-col gap-6">
         <div className="flex flex-1 flex-col items-center justify-center gap-6 pb-4 pt-8">
           <div className="home-reveal relative w-full max-w-[22rem] text-center [--reveal-delay:120ms]" data-home-brand-shell>
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute -left-5 -top-4 h-20 w-20 rounded-full bg-[rgba(73,178,255,0.16)] blur-2xl"
-              data-home-brand-orb="primary"
-            />
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute right-4 top-8 h-16 w-16 rounded-full bg-[rgba(123,97,255,0.16)] blur-2xl"
-              data-home-brand-orb="secondary"
-            />
             <div className="relative flex flex-col items-center">
               <div
-                className="font-korean-display text-[3.05rem] font-bold leading-none tracking-[-0.6px] text-[#314a75] dark:text-slate-50"
+                className="font-korean-display text-[3.05rem] font-bold leading-none tracking-[-0.6px] text-[var(--brand)] dark:text-slate-50"
                 data-home-brand-block
-                style={{ textShadow: "0 12px 24px rgba(49,74,117,0.1)" }}
               >
                 CHARTO
               </div>
-              {/* <div
-                className="mt-2 h-[3px] w-24 rounded-full bg-[linear-gradient(90deg,rgba(49,74,117,0.12),rgba(79,120,185,0.5),rgba(79,120,185,0.12))]"
-                data-home-brand-underline
-              /> */}
             </div>
           </div>
 

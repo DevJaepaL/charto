@@ -239,13 +239,13 @@ function SignalTextItem({ text, className = "" }: { text: string; className?: st
 function getMetricToneClass(tone: MetricTone) {
   switch (tone) {
     case "positive":
-      return "bg-[rgba(5,192,114,0.1)] text-[var(--positive-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.42)] dark:bg-[rgba(5,192,114,0.14)] dark:text-[var(--positive-text)]";
+      return "bg-[rgba(5,192,114,0.1)] text-[var(--positive-text)] dark:bg-[rgba(5,192,114,0.14)] dark:text-[var(--positive-text)]";
     case "warning":
-      return "bg-[rgba(251,191,36,0.13)] text-amber-800 shadow-[inset_0_1px_0_rgba(255,255,255,0.42)] dark:bg-[rgba(217,119,6,0.18)] dark:text-amber-100";
+      return "bg-[rgba(251,191,36,0.13)] text-amber-800 dark:bg-[rgba(217,119,6,0.18)] dark:text-amber-100";
     case "negative":
-      return "bg-[rgba(244,63,94,0.1)] text-rose-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.42)] dark:bg-[rgba(190,24,93,0.16)] dark:text-rose-100";
+      return "bg-[rgba(244,63,94,0.1)] text-rose-700 dark:bg-[rgba(190,24,93,0.16)] dark:text-rose-100";
     default:
-      return "bg-[rgba(228,235,245,0.94)] text-[#41546c] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:bg-[rgba(148,163,184,0.12)] dark:text-slate-100";
+      return "bg-[rgba(228,235,245,0.94)] text-[#41546c] dark:bg-[rgba(148,163,184,0.12)] dark:text-slate-100";
   }
 }
 
@@ -459,19 +459,19 @@ function getSignalBiasMeta(bias: SignalSummary["bias"] | undefined) {
       return {
         label: "차트 우호적",
         className:
-          "bg-[rgba(5,192,114,0.12)] text-[var(--positive-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] dark:bg-[rgba(5,192,114,0.14)] dark:text-[var(--positive-text)]",
+          "bg-[rgba(5,192,114,0.12)] text-[var(--positive-text)] dark:bg-[rgba(5,192,114,0.14)] dark:text-[var(--positive-text)]",
       };
     case "bearish":
       return {
         label: "차트 주의",
         className:
-          "bg-[rgba(244,63,94,0.1)] text-rose-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] dark:bg-[rgba(190,24,93,0.16)] dark:text-rose-100",
+          "bg-[rgba(244,63,94,0.1)] text-rose-700 dark:bg-[rgba(190,24,93,0.16)] dark:text-rose-100",
       };
     default:
       return {
         label: "차트 중립",
         className:
-          "bg-[rgba(220,229,241,0.92)] text-[#40546f] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:bg-[rgba(148,163,184,0.14)] dark:text-slate-100",
+          "bg-[rgba(220,229,241,0.92)] text-[#40546f] dark:bg-[rgba(148,163,184,0.14)] dark:text-slate-100",
       };
   }
 }
@@ -481,9 +481,9 @@ function getRecommendationMeta(score: number) {
       return {
         label: "상승 신호 강함",
         cardClassName:
-          "bg-[rgba(5,192,114,0.12)] shadow-[inset_0_1px_0_rgba(255,255,255,0.44)] dark:bg-[rgba(5,192,114,0.16)]",
+          "bg-[rgba(5,192,114,0.12)] dark:bg-[rgba(5,192,114,0.16)]",
         badgeClassName:
-          "border border-[rgba(5,192,114,0.36)] bg-[var(--positive-text)] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.22)] dark:border-[rgba(5,192,114,0.28)] dark:bg-[rgba(5,192,114,0.22)] dark:text-[var(--positive-text)]",
+          "border border-[rgba(5,192,114,0.36)] bg-[var(--positive-text)] text-white dark:border-[rgba(5,192,114,0.28)] dark:bg-[rgba(5,192,114,0.22)] dark:text-[var(--positive-text)]",
       scoreClassName: "text-[var(--positive-text)]",
     };
   }
@@ -492,9 +492,9 @@ function getRecommendationMeta(score: number) {
       return {
         label: "상승 신호",
         cardClassName:
-          "bg-[rgba(5,192,114,0.08)] shadow-[inset_0_1px_0_rgba(255,255,255,0.44)] dark:bg-[rgba(5,192,114,0.12)]",
+          "bg-[rgba(5,192,114,0.08)] dark:bg-[rgba(5,192,114,0.12)]",
         badgeClassName:
-          "border border-[rgba(5,192,114,0.26)] bg-[rgba(5,192,114,0.14)] text-[var(--positive-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] dark:border-[rgba(5,192,114,0.24)] dark:bg-[rgba(5,192,114,0.18)] dark:text-[var(--positive-text)]",
+          "border border-[rgba(5,192,114,0.26)] bg-[rgba(5,192,114,0.14)] text-[var(--positive-text)] dark:border-[rgba(5,192,114,0.24)] dark:bg-[rgba(5,192,114,0.18)] dark:text-[var(--positive-text)]",
       scoreClassName: "text-[var(--positive-text)]",
     };
   }
@@ -503,9 +503,9 @@ function getRecommendationMeta(score: number) {
       return {
         label: "약세 신호 강함",
         cardClassName:
-          "bg-[rgba(244,63,94,0.12)] shadow-[inset_0_1px_0_rgba(255,255,255,0.44)] dark:bg-[rgba(190,24,93,0.18)]",
+          "bg-[rgba(244,63,94,0.12)] dark:bg-[rgba(190,24,93,0.18)]",
         badgeClassName:
-          "border border-rose-200 bg-rose-100 text-rose-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.48)] dark:border-rose-400/30 dark:bg-rose-500/18 dark:text-rose-200",
+          "border border-rose-200 bg-rose-100 text-rose-700 dark:border-rose-400/30 dark:bg-rose-500/18 dark:text-rose-200",
       scoreClassName: "text-rose-700 dark:text-rose-200",
     };
   }
@@ -514,9 +514,9 @@ function getRecommendationMeta(score: number) {
       return {
         label: "약세 신호",
         cardClassName:
-          "bg-[rgba(251,191,36,0.12)] shadow-[inset_0_1px_0_rgba(255,255,255,0.44)] dark:bg-[rgba(217,119,6,0.18)]",
+          "bg-[rgba(251,191,36,0.12)] dark:bg-[rgba(217,119,6,0.18)]",
         badgeClassName:
-          "border border-amber-200 bg-amber-100 text-amber-800 shadow-[inset_0_1px_0_rgba(255,255,255,0.48)] dark:border-amber-400/30 dark:bg-amber-500/16 dark:text-amber-200",
+          "border border-amber-200 bg-amber-100 text-amber-800 dark:border-amber-400/30 dark:bg-amber-500/16 dark:text-amber-200",
       scoreClassName: "text-amber-700 dark:text-amber-200",
     };
   }
@@ -524,9 +524,9 @@ function getRecommendationMeta(score: number) {
   return {
     label: "중립",
     cardClassName:
-      "bg-[rgba(220,229,241,0.94)] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:bg-[rgba(148,163,184,0.14)]",
+      "bg-[rgba(220,229,241,0.94)] dark:bg-[rgba(148,163,184,0.14)]",
     badgeClassName:
-      "border border-[rgba(91,112,141,0.28)] bg-[rgba(205,218,235,0.98)] text-[#31465f] shadow-[inset_0_1px_0_rgba(255,255,255,0.56)] dark:border-[rgba(148,163,184,0.28)] dark:bg-[rgba(148,163,184,0.2)] dark:text-slate-100",
+      "border border-[rgba(91,112,141,0.28)] bg-[rgba(205,218,235,0.98)] text-[#31465f] dark:border-[rgba(148,163,184,0.28)] dark:bg-[rgba(148,163,184,0.2)] dark:text-slate-100",
     scoreClassName: "text-[#304566] dark:text-slate-50",
   };
 }
@@ -715,8 +715,8 @@ function RecommendationCard({
           <button
             aria-expanded={open}
             aria-label={open ? "차트 신호 점수 설명 닫기" : "차트 신호 점수 설명 보기"}
-            className={`inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/55 bg-[linear-gradient(135deg,#2346a6_0%,#49b2ff_52%,#7b61ff_100%)] text-white shadow-[0_14px_28px_rgba(73,178,255,0.34),0_6px_14px_rgba(35,60,124,0.2),inset_0_1px_0_rgba(255,255,255,0.4)] ring-1 ring-[rgba(73,178,255,0.14)] transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.04] hover:shadow-[0_18px_34px_rgba(73,178,255,0.4),0_8px_18px_rgba(35,60,124,0.24),inset_0_1px_0_rgba(255,255,255,0.46)] active:translate-y-0 active:scale-[0.98] dark:border-white/20 dark:bg-[linear-gradient(135deg,rgba(35,60,124,0.96)_0%,rgba(73,178,255,0.94)_48%,rgba(123,97,255,0.94)_100%)] dark:text-white dark:shadow-[0_18px_34px_rgba(18,40,72,0.46),0_8px_18px_rgba(2,6,23,0.38),inset_0_1px_0_rgba(255,255,255,0.24)] dark:ring-[rgba(157,196,255,0.18)] dark:hover:shadow-[0_22px_40px_rgba(32,84,167,0.5),0_10px_20px_rgba(2,6,23,0.42),inset_0_1px_0_rgba(255,255,255,0.28)] md:h-9 md:w-9 ${
-              open ? "scale-[1.03] shadow-[0_20px_38px_rgba(73,178,255,0.42),0_10px_22px_rgba(35,60,124,0.26),inset_0_1px_0_rgba(255,255,255,0.46)] dark:shadow-[0_24px_42px_rgba(32,84,167,0.54),0_12px_24px_rgba(2,6,23,0.44),inset_0_1px_0_rgba(255,255,255,0.3)]" : ""
+            className={`inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--brand)] text-white transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 md:h-9 md:w-9 ${
+              open ? "-translate-y-0.5" : ""
             }`}
             type="button"
             onClick={() => {
@@ -733,7 +733,7 @@ function RecommendationCard({
           {open && tooltipStyle && typeof document !== "undefined"
             ? createPortal(
                 <div
-                  className="rounded-[12px] border border-[var(--brand-soft-strong)] bg-[var(--surface-card)] px-3 py-3 text-[11px] leading-5 text-slate-600 shadow-[0_22px_60px_rgba(15,23,42,0.16)] dark:border-white/10 dark:bg-[var(--surface-1)] dark:text-slate-300 dark:shadow-[0_24px_64px_rgba(2,6,23,0.42)]"
+                  className="rounded-[12px] border border-[var(--line-soft)] bg-[var(--surface-card)] px-3 py-3 text-[11px] leading-5 text-slate-600 shadow-[var(--shadow-overlay)] dark:border-white/10 dark:bg-[var(--surface-1)] dark:text-slate-300"
                   style={tooltipStyle}
                 >
               <div className="mb-3 rounded-[10px] bg-[var(--surface-card-strong)] p-3 dark:bg-white/[0.04]">
@@ -801,10 +801,10 @@ function AiInsightCard({
 }) {
   const toneClass =
     tone === "brand"
-      ? "bg-[var(--surface-card)] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:bg-white/[0.05]"
+      ? "bg-[var(--surface-card)] dark:bg-white/[0.05]"
       : tone === "risk"
-        ? "bg-[var(--surface-card)] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:bg-white/[0.05]"
-        : "bg-[var(--surface-card)] shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:bg-white/[0.05]";
+        ? "bg-[var(--surface-card)] dark:bg-white/[0.05]"
+        : "bg-[var(--surface-card)] dark:bg-white/[0.05]";
 
   const labelClass =
     tone === "brand"
@@ -832,7 +832,7 @@ function AiInsightCard({
 
 function AiLoadingCard() {
   return (
-    <div className="ai-glow rounded-[12px] px-4 py-4 text-sm text-slate-600 shadow-[0_18px_42px_rgba(35,60,124,0.12)] dark:text-slate-200">
+    <div className="ai-glow rounded-[12px] border border-[var(--line-soft)] px-4 py-4 text-sm text-slate-600 dark:text-slate-200">
       <div className="ai-gradient-text text-xs font-semibold tracking-[0.12em]">
         AI 브리핑
       </div>
@@ -878,7 +878,7 @@ function AnalyzeInitialLoading({ stock }: { stock: StockLookupItem }) {
 function RefreshingBadge({ compact = false }: { compact?: boolean }) {
   return (
     <div
-      className={`inline-flex items-center gap-1.5 rounded-full bg-[rgba(var(--brand-rgb),0.14)] font-bold text-[var(--brand-strong)] shadow-[0_10px_24px_rgba(36,87,135,0.12)] dark:bg-[rgba(73,178,255,0.14)] dark:text-slate-50 ${
+      className={`inline-flex items-center gap-1.5 rounded-full bg-[rgba(var(--brand-rgb),0.14)] font-bold text-[var(--brand-strong)] dark:bg-[rgba(73,178,255,0.14)] dark:text-slate-50 ${
         compact ? "px-2 py-0.75 text-[10px]" : "px-2.5 py-1.25 text-[11px]"
       }`}
     >
@@ -1499,10 +1499,10 @@ export function AnalysisPageClient({
                 {favoriteUserKey ? (
                   <button
                     aria-pressed={isFavorite}
-                    className={`inline-flex items-center gap-1.5 rounded-full border px-2.75 py-1.1 text-[10px] font-extrabold shadow-[0_12px_28px_rgba(15,23,42,0.08)] transition-all md:px-3.25 md:py-1.35 md:text-[11px] ${
+                    className={`inline-flex items-center gap-1.5 rounded-full border px-2.75 py-1.1 text-[10px] font-extrabold transition-colors md:px-3.25 md:py-1.35 md:text-[11px] ${
                       isFavorite
-                        ? "border-rose-200 bg-rose-50 text-rose-700 shadow-[0_14px_32px_rgba(240,66,81,0.16)] dark:border-rose-400/24 dark:bg-rose-500/16 dark:text-rose-100"
-                        : "border-[rgba(var(--brand-rgb),0.32)] bg-[rgba(var(--brand-rgb),0.14)] text-[var(--brand-strong)] shadow-[0_14px_30px_rgba(35,60,124,0.12)] ring-1 ring-[rgba(var(--brand-rgb),0.08)] dark:border-sky-400/28 dark:bg-sky-500/14 dark:text-sky-50"
+                        ? "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-400/24 dark:bg-rose-500/16 dark:text-rose-100"
+                        : "border-[rgba(var(--brand-rgb),0.32)] bg-[rgba(var(--brand-rgb),0.14)] text-[var(--brand-strong)] dark:border-sky-400/28 dark:bg-sky-500/14 dark:text-sky-50"
                     }`}
                     type="button"
                     onClick={async () => {
@@ -1514,7 +1514,7 @@ export function AnalysisPageClient({
                       className={`inline-flex h-5 w-5 items-center justify-center rounded-full md:h-5.5 md:w-5.5 ${
                         isFavorite
                           ? "bg-rose-100 text-rose-600 dark:bg-rose-500/20 dark:text-rose-100"
-                          : "bg-white text-[var(--brand-strong)] shadow-[0_4px_14px_rgba(35,60,124,0.12)] dark:bg-white/14 dark:text-sky-100"
+                          : "bg-white text-[var(--brand-strong)] dark:bg-white/14 dark:text-sky-100"
                       }`}
                     >
                       {isFavorite ? <IconHeartFilled size={13} /> : <IconHeart size={13} />}
@@ -1560,13 +1560,13 @@ export function AnalysisPageClient({
                   </div>
                   <div className="mt-2 flex flex-wrap items-center gap-1.5">
                     <div
-                      className="inline-flex items-center gap-1 rounded-full px-1.75 py-0.5 text-[9px] font-semibold [background-color:var(--chip-bg)] [color:var(--chip-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] dark:[background-color:var(--chip-bg-dark)] dark:[color:var(--chip-text-dark)]"
+                      className="inline-flex items-center gap-1 rounded-full px-1.75 py-0.5 text-[9px] font-semibold [background-color:var(--chip-bg)] [color:var(--chip-text)] dark:[background-color:var(--chip-bg-dark)] dark:[color:var(--chip-text-dark)]"
                       style={companyContextVisuals.groupChipStyle as CSSProperties}
                     >
                       {companyContextVisuals.brandLabel}
                     </div>
                     <div
-                      className="inline-flex items-center gap-1 rounded-full px-1.75 py-0.5 text-[9px] font-semibold [background-color:var(--chip-bg)] [color:var(--chip-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] dark:[background-color:var(--chip-bg-dark)] dark:[color:var(--chip-text-dark)]"
+                      className="inline-flex items-center gap-1 rounded-full px-1.75 py-0.5 text-[9px] font-semibold [background-color:var(--chip-bg)] [color:var(--chip-text)] dark:[background-color:var(--chip-bg-dark)] dark:[color:var(--chip-text-dark)]"
                       style={companyContextVisuals.sectorChipStyle as CSSProperties}
                     >
                       <span
@@ -1622,7 +1622,7 @@ export function AnalysisPageClient({
                 {companyContext.marketPosition}
               </p>
               {shouldShowContextCaution ? (
-                <div className="mt-2 rounded-[12px] bg-[rgba(251,191,36,0.12)] px-2.5 py-2 text-[9px] font-medium leading-4 text-amber-800 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] dark:bg-[rgba(217,119,6,0.16)] dark:text-amber-100 md:px-3 md:text-[10px] md:leading-5">
+                <div className="mt-2 rounded-[12px] bg-[rgba(251,191,36,0.12)] px-2.5 py-2 text-[9px] font-medium leading-4 text-amber-800 dark:bg-[rgba(217,119,6,0.16)] dark:text-amber-100 md:px-3 md:text-[10px] md:leading-5">
                   {companyContext.cautionNote}
                 </div>
               ) : null}
@@ -1885,7 +1885,7 @@ export function AnalysisPageClient({
                 ) : null}
                 <div className="grid gap-2.5 md:gap-3">
                   <div className="space-y-3">
-                    <div className="rounded-[10px] border border-[rgba(73,178,255,0.22)] bg-[linear-gradient(135deg,rgba(35,60,124,0.14),rgba(73,178,255,0.1),rgba(255,255,255,0.98))] px-3.5 py-3 dark:border-[rgba(157,196,255,0.2)] dark:bg-[linear-gradient(135deg,rgba(35,60,124,0.22),rgba(73,178,255,0.12),rgba(10,18,30,0.98))] md:rounded-[12px] md:p-3.5">
+                    <div className="surface-card-strong rounded-[10px] px-3.5 py-3 md:rounded-[12px] md:p-3.5">
                       <div className="inline-flex rounded-full bg-white/82 px-2.5 py-1 text-[11px] font-bold tracking-[0.04em] text-[var(--brand-strong)] dark:bg-white/[0.08] dark:text-sky-100">
                         한줄 결론
                       </div>
