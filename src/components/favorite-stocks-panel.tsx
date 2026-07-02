@@ -68,10 +68,10 @@ export function FavoriteStocksPanel({ userKey, userName }: FavoriteStocksPanelPr
   }
 
   return (
-    <section className="surface-card mt-4 rounded-[16px] p-3 md:rounded-[20px] md:p-4">
+    <section className="surface-card mt-4 rounded-[12px] p-3 md:rounded-[12px] md:p-4">
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <div className="flex items-center gap-2 text-[11px] font-bold tracking-[0.06em] text-[var(--brand-strong)] md:text-[12px]">
+          <div className="flex items-center gap-2 text-[11px] font-bold text-[var(--brand-strong)] md:text-[12px]">
             <IconStarFilled size={14} className="text-amber-500" />
             관심종목
           </div>
@@ -89,7 +89,7 @@ export function FavoriteStocksPanel({ userKey, userName }: FavoriteStocksPanelPr
           {items.map((item) => (
             <div
               key={item.symbol}
-              className="flex items-center justify-between gap-3 rounded-[14px] bg-[var(--surface-card-strong)] px-3 py-2.5 dark:bg-white/[0.04]"
+              className="flex items-center justify-between gap-3 rounded-[12px] bg-[var(--surface-card-strong)] px-3 py-2.5 dark:bg-white/[0.04]"
             >
               <Link className="flex min-w-0 flex-1 items-center gap-3" href={`/analyze/${item.symbol}`}>
                 <StockAvatar stock={item} size="sm" />
@@ -116,7 +116,7 @@ export function FavoriteStocksPanel({ userKey, userName }: FavoriteStocksPanelPr
           ))}
         </div>
       ) : (
-        <div className="mt-3 rounded-[14px] bg-[var(--surface-card-strong)] px-3 py-3 text-[12px] leading-5 text-slate-500 dark:bg-white/[0.04] dark:text-slate-300 md:text-[13px]">
+        <div className="mt-3 rounded-[12px] bg-[var(--surface-card-strong)] px-3 py-3 text-[12px] leading-5 text-slate-500 dark:bg-white/[0.04] dark:text-slate-300 md:text-[13px]">
           아직 관심종목이 없어요. 종목 상세에서 별표를 눌러 저장해 보세요.
         </div>
       )}

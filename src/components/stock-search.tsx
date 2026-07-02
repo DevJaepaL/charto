@@ -12,7 +12,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
-import { IconFlameFilled } from "@tabler/icons-react";
+import { IconChevronRight, IconFlameFilled } from "@tabler/icons-react";
 
 import { AnimatedLoadingStage } from "@/components/animated-loading-stage";
 import { StockAvatar } from "@/components/stock-avatar";
@@ -97,7 +97,7 @@ function SuggestionPanel({
 
   return (
     <div
-      className={`relative rounded-[18px] border border-black/8 bg-[rgba(255,255,255,0.98)] p-2.5 text-slate-900 shadow-[0_18px_42px_rgba(13,20,33,0.1)] md:rounded-[20px] dark:border-white/8 dark:bg-[#080d14] dark:text-white dark:shadow-[0_18px_42px_rgba(3,7,14,0.24)] ${
+      className={`relative rounded-[12px] border border-[var(--line-soft)] bg-[var(--surface-card)] p-2.5 text-slate-900 shadow-[var(--shadow-overlay)] dark:text-white ${
         isOverlay ? "flex h-full min-h-0 flex-col" : ""
       }`}
     >
@@ -121,7 +121,7 @@ function SuggestionPanel({
         {activeItems.map((item) => (
           <button
             key={`${item.market}-${item.symbol}`}
-            className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[14px] border border-black/5 bg-[rgba(248,249,251,0.96)] px-3.5 py-3 text-left transition-colors hover:bg-slate-50 md:rounded-[16px] dark:border-white/6 dark:bg-white/[0.02] dark:hover:bg-white/[0.05]"
+            className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[12px] border border-black/5 bg-[rgba(248,249,251,0.96)] px-3.5 py-3 text-left transition-colors hover:bg-slate-50 md:rounded-[12px] dark:border-white/6 dark:bg-white/[0.02] dark:hover:bg-white/[0.05]"
             type="button"
             onMouseDown={(event) => event.preventDefault()}
             onClick={() => onSelect(item)}
@@ -139,21 +139,24 @@ function SuggestionPanel({
                 </div>
               </div>
             </div>
-            <div className="hidden text-xs font-semibold text-slate-400 sm:inline-flex dark:text-white/28">
-              →
-            </div>
+            <IconChevronRight
+              aria-hidden
+              className="hidden text-slate-400 sm:inline-flex dark:text-white/28"
+              size={16}
+              stroke={1.5}
+            />
           </button>
         ))}
 
         {!activeItems.length ? (
-          <div className="rounded-[18px] px-3 py-6 text-center text-sm text-slate-500 dark:text-white/54">
+          <div className="rounded-[12px] px-3 py-6 text-center text-sm text-slate-500 dark:text-white/54">
             일치하는 종목이 없습니다.
           </div>
         ) : null}
       </div>
 
       {isPending && pendingTarget ? (
-        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-[rgba(247,244,238,0.92)] backdrop-blur-sm dark:bg-[rgba(8,13,20,0.92)]">
+        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-white/90 dark:bg-black/70">
           <AnimatedLoadingStage compact stock={pendingTarget} />
         </div>
       ) : null}
@@ -322,8 +325,8 @@ export function StockSearch({
               onClick={() => setIsOverlayOpen(false)}
             />
             <div className="relative flex h-full flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+16px)] pt-[calc(env(safe-area-inset-top)+14px)]">
-              <div className="search-dock rounded-[22px] p-1">
-                <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-[18px] border border-black/6 bg-white p-2 text-slate-900 dark:border-white/8 dark:bg-[var(--surface-0)] dark:text-white">
+              <div className="search-dock rounded-[12px] p-1">
+                <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-[12px] border border-black/6 bg-white p-2 text-slate-900 dark:border-white/8 dark:bg-[var(--surface-0)] dark:text-white">
                   <div className="flex min-w-0 items-center gap-3 px-3 py-3">
                     <svg
                       aria-hidden
@@ -389,15 +392,15 @@ export function StockSearch({
         <div
           className={`search-dock relative ${
             inline
-              ? "rounded-[10px] p-0.5 md:rounded-[12px]"
+              ? "rounded-[8px] p-0.5 md:rounded-[12px]"
               : compact
-                ? "rounded-[14px] p-1 md:rounded-[16px]"
-                : "rounded-[18px] p-1"
+                ? "rounded-[12px] p-1 md:rounded-[12px]"
+                : "rounded-[12px] p-1"
           }`}
         >
           <div
             className={`grid ${hero ? "grid-cols-1" : "grid-cols-[minmax(0,1fr)_auto]"} items-center border border-black/6 bg-white text-slate-900 dark:border-white/8 dark:bg-[var(--surface-0)] dark:text-white ${
-              inline ? "rounded-[10px] md:rounded-[12px]" : compact ? "rounded-[12px] md:rounded-[14px]" : "rounded-[16px]"
+              inline ? "rounded-[8px] md:rounded-[12px]" : compact ? "rounded-[12px] md:rounded-[12px]" : "rounded-[12px]"
             } ${
               inline ? "gap-1 p-1" : compact ? "gap-2 p-2" : "gap-1.5 p-2"
             }`}
@@ -455,7 +458,7 @@ export function StockSearch({
             </div>
             {!hero && !inline ? (
               <button
-                className={`brand-button shrink-0 whitespace-nowrap rounded-[10px] font-semibold ${
+                className={`brand-button shrink-0 whitespace-nowrap rounded-[8px] font-semibold ${
                   inline
                     ? "min-w-[52px] px-2 py-1 text-[10px]"
                     : compact
@@ -471,7 +474,7 @@ export function StockSearch({
           </div>
 
           {isPending && pendingTarget && !shouldShowOverlay ? (
-            <div className="absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-[rgba(247,244,238,0.92)] backdrop-blur-sm dark:bg-[rgba(8,13,20,0.92)]">
+            <div className="absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-white/90 dark:bg-black/70">
               <AnimatedLoadingStage compact stock={pendingTarget} />
             </div>
           ) : null}

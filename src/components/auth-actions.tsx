@@ -78,17 +78,17 @@ function AuthProviderButton({
   if (variant === "page") {
     return (
       <button
-        className={`group flex w-full items-center gap-3 rounded-[22px] border px-4 py-4 text-left transition-all hover:-translate-y-0.5 ${meta.cardClass}`}
+        className={`group flex w-full items-center gap-3 rounded-[12px] border px-4 py-4 text-left transition-all hover:-translate-y-0.5 ${meta.cardClass}`}
         type="button"
         onClick={() => signIn(provider.id, { callbackUrl: window.location.href })}
       >
         <span
-          className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] ${meta.iconShellClass}`}
+          className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[12px] ${meta.iconShellClass}`}
         >
           <ProviderIcon id={provider.id} />
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block text-sm font-black">{provider.name}</span>
+          <span className="block text-sm font-bold">{provider.name}</span>
           <span className="mt-0.5 block text-[12px] opacity-75">{meta.subcopy}</span>
         </span>
         {/* <span className="text-sm font-bold opacity-80 transition-transform group-hover:translate-x-0.5">
@@ -100,7 +100,7 @@ function AuthProviderButton({
 
   return (
     <button
-      className={`flex items-center justify-center gap-2 rounded-[14px] border px-3 py-2 text-[13px] font-semibold transition-colors ${meta.compactClass}`}
+      className={`flex items-center justify-center gap-2 rounded-[12px] border px-3 py-2 text-[13px] font-semibold transition-colors ${meta.compactClass}`}
       type="button"
       onClick={() => signIn(provider.id, { callbackUrl: window.location.href })}
     >
@@ -125,7 +125,7 @@ export function AuthActions({
 }) {
   if (!providers.length) {
     return (
-      <div className="rounded-[18px] border border-slate-200/80 bg-[var(--surface-card)] px-4 py-3 text-[13px] leading-5 text-slate-500 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300">
+      <div className="rounded-[12px] border border-slate-200/80 bg-[var(--surface-card)] px-4 py-3 text-[13px] leading-5 text-slate-500 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300">
         로그인 기능 준비 중이에요. 현재 배포에서는 Google / Kakao 로그인을 아직 열어두지 않았습니다.
       </div>
     );
@@ -134,7 +134,7 @@ export function AuthActions({
   return (
     <div className="space-y-3">
       {isSignedIn ? (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-[18px] border border-slate-200/80 bg-[var(--surface-card)] px-4 py-3 dark:border-white/10 dark:bg-white/[0.04]">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-[12px] border border-slate-200/80 bg-[var(--surface-card)] px-4 py-3 dark:border-white/10 dark:bg-white/[0.04]">
           <div className="text-[13px] text-slate-600 dark:text-slate-200">
             <span className="font-semibold text-slate-900 dark:text-slate-50">{userName ?? "로그인 사용자"}</span>
             <span className="ml-1">계정으로 로그인되어 있습니다.</span>

@@ -41,7 +41,7 @@ export default function StocksPage() {
 
   return (
     <main className="mx-auto max-w-6xl px-5 pb-16 pt-8 md:px-8 md:pb-24 md:pt-12">
-      <div className="glass-card rounded-[28px] p-5 md:p-8">
+      <div className="glass-card rounded-[12px] p-5 md:p-8">
         <Link
           className="text-sm font-semibold text-[var(--brand-strong)] transition-opacity hover:opacity-80"
           href="/"
@@ -51,7 +51,7 @@ export default function StocksPage() {
 
         <div className="mt-5 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="text-2xl font-black tracking-tight text-slate-950 dark:text-slate-50 md:text-[2rem]">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-950 dark:text-slate-50 md:text-[2rem]">
               전체 종목
             </h1>
             <p className="mt-3 max-w-2xl break-keep text-sm leading-6 text-slate-600 dark:text-slate-300">
@@ -59,13 +59,13 @@ export default function StocksPage() {
               상세 분석 페이지로 이동할 수 있습니다.
             </p>
           </div>
-          <div className="rounded-[18px] border border-slate-200/80 bg-white/80 px-4 py-3 text-sm text-slate-600 shadow-[0_12px_30px_rgba(15,23,42,0.08)] dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300">
+          <div className="rounded-[12px] border border-slate-200/80 bg-white/80 px-4 py-3 text-sm text-slate-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300">
             총 <span className="font-bold text-slate-950 dark:text-slate-50">{allStocks.length.toLocaleString("ko-KR")}</span>개 종목
           </div>
         </div>
 
         <section className="mt-8">
-          <div className="text-[11px] font-semibold tracking-[0.12em] text-slate-500 dark:text-slate-400">
+          <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
             대표 종목
           </div>
           <div className="mt-3 flex flex-wrap gap-2">
@@ -99,7 +99,7 @@ export default function StocksPage() {
                 {section.items.map((item) => (
                   <Link
                     key={item.symbol}
-                    className="rounded-[18px] border border-slate-200/80 bg-white/88 px-4 py-3 transition-colors hover:border-slate-300 hover:bg-slate-50 dark:border-white/10 dark:bg-white/[0.04] dark:hover:bg-white/[0.07]"
+                    className="rounded-[12px] border border-slate-200/80 bg-white/88 px-4 py-3 transition-colors hover:border-slate-300 hover:bg-slate-50 dark:border-white/10 dark:bg-white/[0.04] dark:hover:bg-white/[0.07]"
                     href={`/analyze/${item.symbol}`}
                   >
                     <div className="text-sm font-semibold text-slate-950 dark:text-slate-50">

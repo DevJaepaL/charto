@@ -55,12 +55,12 @@ export function AdSlot({
   }
 
   return (
-    <div className={`surface-card rounded-[16px] p-2.5 md:rounded-[20px] md:p-3 ${className}`.trim()}>
-      <div className="mb-2 text-[9px] font-semibold tracking-[0.12em] text-slate-400 dark:text-slate-500 md:text-[10px]">
+    <div className={`surface-card rounded-[12px] p-2.5 md:rounded-[12px] md:p-3 ${className}`.trim()}>
+      <div className="mb-2 text-[10px] font-semibold text-slate-400 dark:text-slate-500 md:text-[10px]">
         {label}
       </div>
       <ins
-        className="adsbygoogle block min-h-[120px] overflow-hidden rounded-[14px] bg-[var(--surface-card-strong)] dark:bg-white/[0.04]"
+        className="adsbygoogle block min-h-[120px] overflow-hidden rounded-[12px] bg-[var(--surface-card-strong)] dark:bg-white/[0.04]"
         data-ad-client={adSenseClientId}
         data-ad-format="auto"
         data-ad-slot={normalizedSlot}

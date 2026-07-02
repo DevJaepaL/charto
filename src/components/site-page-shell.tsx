@@ -12,14 +12,14 @@ export function SitePageShell({
 }) {
   return (
     <main className="mx-auto max-w-3xl px-5 pb-14 pt-8 md:px-8 md:pb-20 md:pt-12">
-      <div className="glass-card rounded-[28px] p-5 md:p-8">
+      <div className="glass-card rounded-[12px] p-5 md:p-8">
         <Link
           className="text-sm font-semibold text-[var(--brand-strong)] transition-opacity hover:opacity-80"
           href="/"
         >
           ← 홈으로 돌아가기
         </Link>
-        <h1 className="mt-5 text-2xl font-black tracking-tight text-slate-950 dark:text-slate-50 md:text-[2rem]">
+        <h1 className="mt-5 text-2xl font-bold tracking-tight text-slate-950 dark:text-slate-50 md:text-[2rem]">
           {title}
         </h1>
         <p className="mt-3 break-keep text-sm leading-6 text-slate-600 dark:text-slate-300">

@@ -21,7 +21,7 @@ export function BrandLogo({
     >
       {withBadge ? (
         <span
-          className={`brand-badge inline-flex items-center justify-center rounded-full font-black uppercase tracking-[0.24em] ${
+          className={`brand-badge inline-flex items-center justify-center rounded-full font-bold uppercase ${
             isSmall ? "px-2.5 py-1 text-[10px]" : "px-3 py-1.5 text-xs"
           }`}
         >
@@ -29,7 +29,7 @@ export function BrandLogo({
         </span>
       ) : null}
       <span
-        className={`font-black uppercase tracking-[-0.08em] leading-none text-[var(--brand-strong)] transition-transform group-hover:-translate-y-0.5 ${
+        className={`font-bold uppercase tracking-[-0.08em] leading-none text-[var(--brand-strong)] transition-transform group-hover:-translate-y-0.5 ${
           isSmall ? "text-xl" : "text-2xl md:text-[1.75rem]"
         }`}
       >

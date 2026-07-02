@@ -80,13 +80,13 @@ export function HeroPreviewCard({ preview }: { preview: TechnicalResponse }) {
       <div className="relative">
         <div className="flex items-start justify-between gap-2">
           <div
-            className="surface-pill inline-flex rounded-full px-2.5 py-0.75 text-[10px] font-semibold tracking-[0.08em] text-slate-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-200"
+            className="surface-pill inline-flex rounded-full px-2.5 py-0.75 text-[10px] font-semibold text-slate-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-200"
             data-home-preview-pill
           >
             실시간 미리보기
           </div>
           <div
-            className="max-w-[132px] truncate text-right text-[9px] font-medium text-slate-500 dark:text-slate-400"
+            className="max-w-[132px] truncate text-right text-[10px] font-medium text-slate-500 dark:text-slate-400"
             data-home-preview-pill
           >
             {preview.stock.symbol} · {preview.stock.name}
@@ -100,10 +100,10 @@ export function HeroPreviewCard({ preview }: { preview: TechnicalResponse }) {
           >
             <div className="flex items-start justify-between gap-2">
               <div>
-                <div className="text-[10px] font-semibold tracking-[0.1em] text-slate-500 dark:text-slate-400">
+                <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">
                   최근 흐름
                 </div>
-                <div className="mt-1 text-[1rem] font-black tracking-tight text-slate-900 dark:text-white">
+                <div className="mt-1 text-[1rem] font-bold tracking-tight text-slate-900 dark:text-white">
                   {formatPrice(preview.quote.currentPrice)}
                 </div>
               </div>
@@ -128,7 +128,7 @@ export function HeroPreviewCard({ preview }: { preview: TechnicalResponse }) {
               ))}
             </div>
 
-            <div className="mt-2.5 flex items-center justify-between text-[9px] font-medium text-slate-500 dark:text-slate-500">
+            <div className="mt-2.5 flex items-center justify-between text-[10px] font-medium text-slate-500 dark:text-slate-500">
               <span>{chartLabels[0]}</span>
               <span>{chartLabels[1]}</span>
               <span>{chartLabels[2]}</span>
@@ -140,11 +140,11 @@ export function HeroPreviewCard({ preview }: { preview: TechnicalResponse }) {
               className="surface-card rounded-[var(--radius-lg)] p-2.5 dark:border-white/8 dark:bg-white/[0.03]"
               data-home-preview-section
             >
-              <div className="text-[10px] font-semibold tracking-[0.1em] text-slate-500 dark:text-slate-400">
+              <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">
                 차트 신호 점수
               </div>
               <div className="mt-1.5 flex flex-wrap items-end gap-1.5">
-                <div className="text-[1.45rem] font-black tracking-tight text-slate-900 dark:text-white">{scoreLabel}</div>
+                <div className="text-[1.45rem] font-bold tracking-tight text-slate-900 dark:text-white">{scoreLabel}</div>
                 <div
                   className={`mb-0.5 rounded-full px-2 py-0.75 text-[10px] font-bold ${getBiasChipClassName(
                     preview.signal.bias,
@@ -170,7 +170,7 @@ export function HeroPreviewCard({ preview }: { preview: TechnicalResponse }) {
               className="surface-card rounded-[var(--radius-lg)] p-2.5 dark:border-white/8 dark:bg-white/[0.03]"
               data-home-preview-section
             >
-              <div className="text-[10px] font-semibold tracking-[0.1em] text-slate-500 dark:text-slate-400">
+              <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">
                 핵심 포인트
               </div>
               <ul className="mt-2.5 space-y-1.5 text-[11px] leading-4 text-slate-700 dark:text-slate-200">

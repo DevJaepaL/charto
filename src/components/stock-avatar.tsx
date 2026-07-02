@@ -13,10 +13,10 @@ interface StockAvatarProps {
 
 const sizeClassName = {
   xs: "h-8 w-8 rounded-[8px]",
-  sm: "h-10 w-10 rounded-[10px]",
+  sm: "h-10 w-10 rounded-[8px]",
   md: "h-12 w-12 rounded-[12px]",
-  lg: "h-14 w-14 rounded-[14px]",
-  xl: "h-20 w-20 rounded-[18px]",
+  lg: "h-14 w-14 rounded-[12px]",
+  xl: "h-20 w-20 rounded-[12px]",
 } as const;
 
 const logoPaddingClassName = {
@@ -38,7 +38,7 @@ export function StockAvatar({ stock, size = "md" }: StockAvatarProps) {
   return (
     <div
       aria-hidden
-      className={`${sizeClassName[size]} ${profile.logoType === "asset" ? "asset-logo-tile" : ""} relative flex shrink-0 items-center justify-center overflow-hidden border bg-white font-black tracking-[0.08em]`}
+      className={`${sizeClassName[size]} ${profile.logoType === "asset" ? "asset-logo-tile" : ""} relative flex shrink-0 items-center justify-center overflow-hidden border bg-white font-bold`}
       style={style}
     >
       <Image

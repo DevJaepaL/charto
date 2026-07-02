@@ -23,7 +23,7 @@ export default async function LoginPage() {
       description="Google 또는 Kakao 계정으로 로그인할 수 있습니다."
     >
       <section className="space-y-3">
-        <h2 className="text-base font-black text-slate-950 dark:text-slate-50">로그인 선택</h2>
+        <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">로그인 선택</h2>
         <div className="mt-3">
           <AuthActions
             isSignedIn={Boolean(session?.user)}

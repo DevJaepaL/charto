@@ -146,7 +146,7 @@ export function QuietAccumulationPanel() {
   const sectionTitle = payload?.label ?? "💵 외인·기관의 매수세가 이어지는 종목";
   const sectionDescription = payload?.notice ?? "최근 외인과 기관이 꾸준히 매수하고 있는 종목이에요.";
   const metricTileBase =
-    "min-w-0 rounded-[14px] border px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] dark:shadow-none";
+    "min-w-0 rounded-[12px] border px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] dark:shadow-none";
   const metricLabelBase = "block text-[10px] font-semibold leading-none";
   const metricValueBase =
     "mt-1.5 truncate text-[12px] font-bold leading-none tracking-[-0.02em] text-slate-950 tabular-nums dark:text-slate-50 md:text-[13px]";
@@ -171,10 +171,10 @@ export function QuietAccumulationPanel() {
   }, []);
 
   return (
-    <section className="surface-card rounded-[20px] p-3.5 md:rounded-[22px] md:p-4.5">
+    <section className="surface-card rounded-[12px] p-3.5 md:rounded-[12px] md:p-4.5">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <div className="inline-flex items-center gap-2 text-[11px] font-black tracking-[0.08em] text-[var(--brand-strong)] md:text-[12px]">
+          <div className="inline-flex items-center gap-2 text-[11px] font-bold text-[var(--brand-strong)] md:text-[12px]">
             <IconBuildingBank size={14} />
             <span>{sectionTitle}</span>
           </div>
@@ -188,7 +188,7 @@ export function QuietAccumulationPanel() {
       </div>
 
       {error ? (
-        <div className="mt-3 rounded-[14px] bg-[var(--surface-card-strong)] px-3 py-3 text-[12px] leading-5 text-slate-500 dark:bg-white/[0.04] dark:text-slate-300 md:text-[13px]">
+        <div className="mt-3 rounded-[12px] bg-[var(--surface-card-strong)] px-3 py-3 text-[12px] leading-5 text-slate-500 dark:bg-white/[0.04] dark:text-slate-300 md:text-[13px]">
           {error}
         </div>
       ) : null}
@@ -198,14 +198,14 @@ export function QuietAccumulationPanel() {
           {Array.from({ length: 4 }, (_, index) => (
             <div
               key={index}
-              className="h-[90px] animate-pulse rounded-[16px] bg-[var(--surface-card-strong)] dark:bg-white/[0.04]"
+              className="h-[90px] animate-pulse rounded-[12px] bg-[var(--surface-card-strong)] dark:bg-white/[0.04]"
             />
           ))}
         </div>
       ) : null}
 
       {payload && !payload.items.length ? (
-        <div className="mt-3 rounded-[14px] bg-[var(--surface-card-strong)] px-3 py-3 text-[12px] leading-5 text-slate-500 dark:bg-white/[0.04] dark:text-slate-300 md:text-[13px]">
+        <div className="mt-3 rounded-[12px] bg-[var(--surface-card-strong)] px-3 py-3 text-[12px] leading-5 text-slate-500 dark:bg-white/[0.04] dark:text-slate-300 md:text-[13px]">
           지금은 외인과 기관이 함께 꾸준히 들어오는 종목이 많지 않아요. 흐름이 강해지면 여기서 바로 보여드릴게요.
         </div>
       ) : null}
@@ -233,7 +233,7 @@ export function QuietAccumulationPanel() {
               return (
                 <Link
                   key={item.stock.symbol}
-                  className="group rounded-[18px] border border-[rgba(var(--brand-rgb),0.12)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(247,249,252,0.98))] px-3.5 py-3.5 shadow-[0_14px_30px_rgba(15,23,42,0.06)] transition-all hover:border-[var(--interactive-border)] hover:bg-[var(--interactive-hover)] hover:shadow-[0_18px_34px_rgba(15,23,42,0.08)] dark:border-white/[0.08] dark:bg-[linear-gradient(180deg,rgba(15,18,24,0.98),rgba(10,13,19,0.98))] dark:hover:bg-white/[0.05]"
+                  className="group rounded-[12px] border border-[var(--line-soft)] bg-[var(--surface-card)] px-3.5 py-3.5 transition-colors hover:bg-[var(--interactive-hover)] dark:hover:bg-white/[0.05]"
                   href={`/analyze/${item.stock.symbol}`}
                 >
                   <div className="flex items-start gap-3.5">
@@ -253,7 +253,7 @@ export function QuietAccumulationPanel() {
                       </div>
 
                       <div className="mt-3 grid grid-cols-2 gap-2.5">
-                        <div className={`rounded-[14px] border px-3 py-2.5 ${foreignFlow.tone}`}>
+                        <div className={`rounded-[12px] border px-3 py-2.5 ${foreignFlow.tone}`}>
                           <div className="inline-flex items-center gap-1.5 text-[10px] font-semibold leading-none">
                             <IconGlobe size={12} stroke={1.8} />
                             <span>외인</span>
@@ -261,7 +261,7 @@ export function QuietAccumulationPanel() {
                           <div className="mt-1.5 text-[13px] font-bold leading-none">{foreignFlow.headline}</div>
                           <div className="mt-1 text-[10px] font-semibold leading-none opacity-90">{foreignFlow.detail}</div>
                         </div>
-                        <div className={`rounded-[14px] border px-3 py-2.5 ${institutionFlow.tone}`}>
+                        <div className={`rounded-[12px] border px-3 py-2.5 ${institutionFlow.tone}`}>
                           <div className="inline-flex items-center gap-1.5 text-[10px] font-semibold leading-none">
                             <IconBuilding size={12} stroke={1.8} />
                             <span>기관</span>

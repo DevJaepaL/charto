@@ -109,20 +109,20 @@ export function MarketPulsePanel() {
   }, [activeMode, activePayload]);
 
   return (
-    <div className="soft-panel rounded-[8px] p-0.75 md:rounded-[14px] md:p-1.25" data-home-pulse-panel>
-      <div className="text-[9px] font-bold text-slate-800 dark:text-slate-100 md:text-[11px]" data-home-pulse-title>
+    <div className="soft-panel rounded-[8px] p-0.75 md:rounded-[12px] md:p-1.25" data-home-pulse-panel>
+      <div className="text-[10px] font-bold text-slate-800 dark:text-slate-100 md:text-[11px]" data-home-pulse-title>
         <b>오늘 가장 많이 본 흐름</b>
       </div>
 
       <div className="mt-1.5 md:mt-2" data-home-pulse-tabs>
-        <div className="grid grid-cols-3 gap-0.5 rounded-[7px] bg-[var(--surface-card-strong)] p-0.5 md:rounded-[9px]">
+        <div className="grid grid-cols-3 gap-0.5 rounded-[7px] bg-[var(--surface-card-strong)] p-0.5 md:rounded-[8px]">
           {MODES.map((mode) => {
             const active = mode.value === activeMode;
 
             return (
               <button
                 key={mode.value}
-                className={`brand-soft-hover min-w-0 rounded-[6px] px-0.75 py-0.75 text-center text-[6.5px] font-bold leading-[1.05] md:px-1.5 md:py-1.5 md:text-[9px] ${
+                className={`brand-soft-hover min-w-0 rounded-[6px] px-0.75 py-0.75 text-center text-[6.5px] font-bold leading-[1.05] md:px-1.5 md:py-1.5 md:text-[10px] ${
                   active ? "brand-tab-active" : "text-slate-500 dark:text-slate-300"
                 }`}
                 type="button"
@@ -137,7 +137,7 @@ export function MarketPulsePanel() {
       </div>
 
       {error ? (
-        <div className="mt-4 rounded-[18px] surface-card px-4 py-5 text-sm text-slate-500 dark:text-slate-300">
+        <div className="mt-4 rounded-[12px] surface-card px-4 py-5 text-sm text-slate-500 dark:text-slate-300">
           {error}
         </div>
       ) : null}
@@ -147,7 +147,7 @@ export function MarketPulsePanel() {
           {Array.from({ length: 6 }, (_, index) => (
             <div
               key={index}
-              className="h-[58px] animate-pulse rounded-[12px] surface-card md:h-[64px] md:rounded-[14px]"
+              className="h-[58px] animate-pulse rounded-[12px] surface-card md:h-[64px] md:rounded-[12px]"
             />
           ))}
         </div>
@@ -178,7 +178,7 @@ export function MarketPulsePanel() {
               href={`/analyze/${item.stock.symbol}`}
             >
               <div className="flex items-start gap-2">
-                <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[rgba(var(--brand-rgb),0.1)] text-[7px] font-black text-[var(--brand-strong)] dark:bg-white/10 dark:text-slate-100 md:h-6 md:w-6 md:text-[9px]">
+                <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[rgba(var(--brand-rgb),0.1)] text-[7px] font-bold text-[var(--brand-strong)] dark:bg-white/10 dark:text-slate-100 md:h-6 md:w-6 md:text-[10px]">
                   {item.rank}
                 </div>
                 <StockAvatar size="sm" stock={item.stock} />
@@ -188,7 +188,7 @@ export function MarketPulsePanel() {
                       <div className="surface-hover-text overflow-hidden text-[11px] font-semibold leading-[1.22] text-slate-900 dark:text-slate-50 md:text-[13px] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
                         {item.stock.name}
                       </div>
-                      <div className="mt-0.5 truncate text-[8px] text-slate-500 dark:text-slate-400 md:text-[10px]">
+                      <div className="mt-0.5 truncate text-[10px] text-slate-500 dark:text-slate-400 md:text-[10px]">
                         {item.stock.market} · {item.stock.symbol}
                       </div>
                     </div>
@@ -197,7 +197,7 @@ export function MarketPulsePanel() {
                         {formatPrice(item.price)}
                       </div>
                       <div
-                        className={`mt-0.5 text-[8px] font-semibold tabular-nums md:text-[10px] ${
+                        className={`mt-0.5 text-[10px] font-semibold tabular-nums md:text-[10px] ${
                           item.changePercent > 0
                             ? "text-[var(--price-up)]"
                             : item.changePercent < 0
@@ -210,7 +210,7 @@ export function MarketPulsePanel() {
                     </div>
                   </div>
 
-                  <div className="mt-0.75 flex items-center justify-between gap-2 text-[8px] text-slate-500 dark:text-slate-300 md:text-[10px]">
+                  <div className="mt-0.75 flex items-center justify-between gap-2 text-[10px] text-slate-500 dark:text-slate-300 md:text-[10px]">
                     <span className="truncate">{itemLabel}</span>
                     <span className="truncate font-medium text-slate-600 dark:text-slate-200">
                       {activeMode === "volume"

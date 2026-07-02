@@ -50,7 +50,7 @@ export default async function GuidePage() {
       description="차트 해석 기준과 핵심 지표, 오늘 시장 흐름을 한 페이지로 정리한 가이드입니다."
     >
       <nav className="rounded-[8px] border border-slate-200/80 px-4 py-4 dark:border-white/10">
-        <div className="text-sm font-black text-slate-950 dark:text-slate-50">바로 보기</div>
+        <div className="text-sm font-bold text-slate-950 dark:text-slate-50">바로 보기</div>
         <div className="mt-3 flex flex-wrap gap-2">
           <a className="rounded-[8px] border border-slate-200/80 px-3 py-2 text-sm font-semibold text-[var(--brand-strong)] dark:border-white/10" href="#overview">
             서비스 개요
@@ -80,8 +80,8 @@ export default async function GuidePage() {
       <section id="articles">
         <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">차트 읽기 가이드</h2>
         <p className="mt-3 break-keep">
-          애드센스와 검색 엔진이 실제 본문을 확인할 수 있도록 주요 지표별 해석 기준을 독립 문서로 정리했습니다.
-          종목 페이지의 점수만 보지 말고 각 기준의 의미와 한계를 함께 확인하는 용도입니다.
+          주요 지표별 해석 기준을 독립 문서로 정리했습니다. 종목 페이지의 점수만 보지 말고 각 기준의
+          의미와 한계를 함께 확인하는 용도입니다.
         </p>
         <div className="mt-5 grid gap-4">
           {GUIDE_ARTICLES.map((article) => (
@@ -91,14 +91,14 @@ export default async function GuidePage() {
               href={`/guide/${article.slug}`}
             >
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[11px] font-black tracking-[0.12em] text-[var(--brand-strong)]">
+                <span className="text-[11px] font-bold text-[var(--brand-strong)]">
                   {article.category}
                 </span>
                 <span className="text-xs text-slate-400 dark:text-slate-500">
                   약 {article.readingMinutes}분
                 </span>
               </div>
-              <h3 className="mt-2 break-keep text-base font-black text-slate-950 group-hover:text-[var(--brand-strong)] dark:text-slate-50">
+              <h3 className="mt-2 break-keep text-base font-bold text-slate-950 group-hover:text-[var(--brand-strong)] dark:text-slate-50">
                 {article.title}
               </h3>
               <p className="mt-2 break-keep text-sm leading-6 text-slate-600 dark:text-slate-300">
@@ -141,7 +141,7 @@ export default async function GuidePage() {
 
         <div className="mt-5 grid gap-6">
           <article>
-            <h3 className="text-sm font-black text-slate-950 dark:text-slate-50">거래대금이 몰린 종목</h3>
+            <h3 className="text-sm font-bold text-slate-950 dark:text-slate-50">거래대금이 몰린 종목</h3>
             <ul className="mt-3 space-y-3">
               {valueRanking.items.slice(0, 5).map((item) => (
                 <li key={`value-${item.stock.symbol}`} className="break-keep">
@@ -155,7 +155,7 @@ export default async function GuidePage() {
           </article>
 
           <article>
-            <h3 className="text-sm font-black text-slate-950 dark:text-slate-50">거래량이 크게 붙는 종목</h3>
+            <h3 className="text-sm font-bold text-slate-950 dark:text-slate-50">거래량이 크게 붙는 종목</h3>
             <ul className="mt-3 space-y-3">
               {volumeRanking.items.slice(0, 5).map((item) => (
                 <li key={`volume-${item.stock.symbol}`} className="break-keep">
@@ -169,7 +169,7 @@ export default async function GuidePage() {
           </article>
 
           <article>
-            <h3 className="text-sm font-black text-slate-950 dark:text-slate-50">외인·기관 수급 포착 종목</h3>
+            <h3 className="text-sm font-bold text-slate-950 dark:text-slate-50">외인·기관 수급 포착 종목</h3>
             <p className="mt-3 break-keep">{accumulation.notice}</p>
             <ul className="mt-3 space-y-3">
               {accumulation.items.length ? (

@@ -155,8 +155,7 @@ export function getCompanyContextVisuals(stock: StockLookupItem, context: Compan
     headlineIconStyle: {
       backgroundColor: iconSurface,
       color: iconForeground,
-      border: `1px solid ${withAlpha(sector.accent, 0.12)}`,
-      boxShadow: `0 10px 22px ${withAlpha(sector.accent, 0.12)}`,
+      border: `1px solid ${withAlpha(sector.accent, 0.2)}`,
     } satisfies CSSProperties,
     groupChipStyle: {
       "--chip-border": withAlpha(brand.accent, 0.24),
