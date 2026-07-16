@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { AdSenseScript } from "@/components/adsense-script";
 import { JsonLdScript } from "@/components/json-ld";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { SiteHeader } from "@/components/v2/site-header";
 import { getAdSenseClientId } from "@/lib/adsense";
 import { getSiteUrl, getSiteUrlObject } from "@/lib/site-url";
 import "./globals.css";
@@ -12,27 +13,28 @@ import "./globals.css";
 const siteUrl = getSiteUrl();
 const adSenseClientId = getAdSenseClientId();
 
+const SITE_TITLE = "CHARTO | 시장의 큰 흐름을 한 화면에서";
+const SITE_DESCRIPTION =
+  "국내·미국 증시의 섹터 히트맵, 대표 ETF 구성 종목, 자금 동향을 한눈에 보는 마켓 대시보드";
+
 export const metadata: Metadata = {
   metadataBase: getSiteUrlObject(),
   title: {
-    default: "CHARTO | 국내 증시 차트를 추적해보세요.",
+    default: SITE_TITLE,
     template: "%s | Charto",
   },
-  description:
-    "국내 주식 차트와 기술지표, AI 브리핑을 한눈에 보는 분석 서비스",
+  description: SITE_DESCRIPTION,
   openGraph: {
-    title: "CHARTO | 국내 증시 차트를 추적해보세요.",
-    description:
-      "국내 주식 차트와 기술지표, AI 브리핑을 한눈에 보는 분석 서비스",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     siteName: "Charto",
     locale: "ko_KR",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "CHARTO | 국내 증시 차트를 추적해보세요.",
-    description:
-      "국내 주식 차트와 기술지표, AI 브리핑을 한눈에 보는 분석 서비스",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
   },
 };
 
@@ -43,8 +45,7 @@ const rootStructuredData = [
     name: "Charto",
     url: siteUrl,
     inLanguage: "ko-KR",
-    description:
-      "국내 주식 차트와 기술지표, AI 브리핑을 한눈에 보는 분석 서비스",
+    description: SITE_DESCRIPTION,
   },
   {
     "@context": "https://schema.org",
@@ -68,7 +69,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-gov-dynamic-subset.min.css"
         />
         <link
           rel="stylesheet"
@@ -86,15 +87,13 @@ export default function RootLayout({
       </head>
       <body className="bg-[var(--surface-0)] text-[var(--text-main)] antialiased">
         <div className="app-shell flex min-h-screen flex-col">
+          <SiteHeader />
           <div className="flex-1">{children}</div>
           <footer className="px-4 pb-8 pt-4 text-xs text-slate-500 dark:text-slate-400 md:px-5">
-            <div className="mx-auto flex max-w-[30rem] flex-col items-center justify-center gap-2.5 border-t border-slate-200/70 pt-4 text-center dark:border-white/10">
+            <div className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-2.5 border-t border-slate-200/70 pt-4 text-center dark:border-white/10">
               <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] font-medium text-slate-500 dark:text-slate-300">
                 <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/about">
                   서비스 소개
-                </Link>
-                <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/guide">
-                  가이드
                 </Link>
                 <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/privacy">
                   개인정보처리방침
@@ -105,13 +104,10 @@ export default function RootLayout({
                 <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/contact">
                   문의
                 </Link>
-                <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/stocks">
-                  전체 종목
-                </Link>
-                <Link className="hover:text-slate-900 dark:hover:text-slate-50" href="/login">
-                  로그인
-                </Link>
               </div>
+              <p className="max-w-xl text-[11px] leading-4 text-slate-400 dark:text-slate-500">
+                시세 제공: 토스증권 Open API. 본 서비스의 모든 정보는 투자 참고용이며 투자 권유가 아닙니다.
+              </p>
               <ThemeToggle />
               <span>© 2026 이재찬 All Rights Reserved.</span>
             </div>

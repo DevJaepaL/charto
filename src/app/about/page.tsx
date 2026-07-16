@@ -14,45 +14,39 @@ export default function AboutPage() {
   return (
     <SitePageShell
       title="서비스 소개"
-      description="CHARTO는 국내 주식 차트와 기술지표, 수급 흐름, 업종 맥락을 한 번에 확인할 수 있도록 정리하는 국내 증시 분석 서비스입니다."
+      description="CHARTO는 국내·미국 증시의 섹터 흐름을 한 화면에서 보는 마켓 대시보드입니다. 개별 종목을 파기 전에, 지금 시장의 돈이 어느 섹터로 움직이는지 먼저 확인할 수 있게 만들었습니다."
     >
       <section>
         <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">무엇을 제공하나요?</h2>
         <ul className="mt-3 space-y-2">
-          <li>국내 주식 검색과 차트 확인</li>
-          <li>5일선, 20일선, RSI, MACD, 볼린저 밴드 기반 요약</li>
-          <li>거래대금, 거래량, 시가총액 기준 상위 종목 흐름</li>
-          <li>로그인 사용자 대상 AI 브리핑</li>
+          <li>국내·미국 섹터 히트맵 — 가장 강한 섹터와 가장 약한 섹터를 기간별(1일~3개월)로 비교</li>
+          <li>섹터별 대표 ETF의 수익률과 주요 구성 종목의 시가총액·등락률</li>
+          <li>급상승·급하락·거래대금 상위 종목 랭킹 (국내·미국)</li>
+          <li>코스피·코스닥 투자자별 순매수(개인·외국인·기관) 동향</li>
+          <li>환율, 국채 금리, 장 운영 상태 요약</li>
         </ul>
       </section>
       <section>
-        <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">왜 만들었나요?</h2>
+        <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">왜 섹터인가요?</h2>
         <p className="mt-3 break-keep">
-          국내 주식 차트를 볼 때는 가격만 보는 것보다 이동평균선, RSI, MACD, 거래량, 외인·기관 수급을 함께
-          보는 편이 훨씬 실전적입니다. CHARTO는 이런 판단 재료를 한 화면에 모아, 당일 흐름과 중기 추세를
-          빠르게 비교할 수 있도록 구성했습니다.
-        </p>
-      </section>
-      <section>
-        <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">어떤 기준으로 해석하나요?</h2>
-        <p className="mt-3 break-keep">
-          차트 신호 점수는 이동평균선 위치, RSI 구간, MACD 방향, 볼린저 밴드 위치, 거래량 상태, 지지선과 저항선
-          정보를 함께 반영해 계산합니다. 한 지표가 과열 신호를 보여도 다른 지표가 추세 유지를 지지하면 그
-          충돌을 그대로 드러내는 방식이라, 단일 숫자보다 이유와 위험을 같이 읽는 데 초점을 둡니다.
+          개별 종목의 등락은 시장 전체 흐름과 섹터 순환의 영향을 크게 받습니다. 어느 섹터로 자금이 몰리고
+          어느 섹터에서 빠져나가는지를 먼저 보면, 종목 단위 뉴스에 휘둘리지 않고 시장의 큰 그림을 읽을 수
+          있습니다. CHARTO는 각 섹터를 대표 ETF로 요약해 이 흐름을 히트맵 한 장으로 보여줍니다.
         </p>
       </section>
       <section>
         <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">데이터와 업데이트</h2>
         <p className="mt-3 break-keep">
-          시세와 순위 데이터는 한국투자 Open API를 기반으로 가져오며, 기업 맥락과 공시 해석은 공개 데이터와
-          내부 정리 규칙을 함께 사용합니다. 장중 수급은 추정치가 섞일 수 있어 수 분 단위로 차이가 날 수
-          있고, 종목별 공시 요약은 최신 제출 시점에 따라 반영 간격이 달라질 수 있습니다.
+          시세·랭킹·투자자 동향 데이터는 토스증권 Open API를 기반으로 가져오며, 수 분 단위로 갱신됩니다.
+          섹터 분류와 대표 ETF, 주요 구성 종목 목록은 자체 큐레이션으로, ETF의 실제 편입 비중과 다를 수
+          있습니다. 시가총액은 현재가와 발행주식수로 계산한 참고치입니다.
         </p>
       </section>
       <section>
         <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">주의 사항</h2>
         <p className="mt-3 break-keep">
-          이 서비스는 투자 참고용 정보를 제공하며, 매수·매도 권유를 하지 않습니다. 실제 투자 판단과 책임은 사용자에게 있습니다.
+          이 서비스는 투자 참고용 정보를 제공하며, 매수·매도 권유를 하지 않습니다. 실제 투자 판단과 책임은
+          사용자에게 있습니다.
         </p>
       </section>
     </SitePageShell>

@@ -19,8 +19,7 @@ export default function PrivacyPage() {
       <section>
         <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">수집하는 정보</h2>
         <p className="mt-3 break-keep">
-          로그인 기능을 사용할 경우 Google 또는 Kakao OAuth를 통해 이름, 이메일, 프로필 이미지 등 기본 계정 정보가 전달될 수 있습니다.
-          서비스는 별도 회원 DB 없이 세션 중심으로 로그인 상태를 유지합니다.
+          CHARTO는 회원가입·로그인 기능이 없으며, 이름·이메일 등 개인 식별 정보를 직접 수집하지 않습니다.
         </p>
       </section>
       <section>
@@ -54,7 +53,7 @@ export default function PrivacyPage() {
       <section>
         <h2 className="text-base font-bold text-slate-950 dark:text-slate-50">제3자 서비스</h2>
         <p className="mt-3 break-keep">
-          시세 데이터는 한국투자 Open API, 기업 메타데이터는 Open DART, AI 브리핑은 Google Gemini API를 사용할 수 있습니다.
+          시세·랭킹·시장 지표 데이터는 토스증권 Open API를 사용합니다. 데이터 조회 과정에서 사용자의 개인정보가 외부로 전달되지 않습니다.
         </p>
       </section>
       <section>
