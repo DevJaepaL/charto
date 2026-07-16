@@ -92,7 +92,7 @@ export function resetTossClientStateForTest() {
  */
 const GROUP_MIN_INTERVAL_MS: Record<string, number> = {
   MARKET_DATA: 120,
-  MARKET_DATA_CHART: 220,
+  MARKET_DATA_CHART: 260,
   RANKING: 220,
   MARKET_INDICATOR: 120,
   MARKET_INFO: 350,

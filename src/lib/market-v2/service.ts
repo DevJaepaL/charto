@@ -94,12 +94,27 @@ async function settle<T>(promise: Promise<T>): Promise<T | null> {
   }
 }
 
+/**
+ * 실패 시 잠시 대기 후 1회 재시도.
+ * 히트맵처럼 수십 개를 연달아 부르는 경로는 순간적으로 레이트리밋(429)에
+ * 걸릴 수 있어, 개별 항목이 조용히 비는 것을 줄인다.
+ */
+async function settleWithRetry<T>(load: () => Promise<T>, retryDelayMs = 1_500): Promise<T | null> {
+  const first = await settle(load());
+  if (first !== null) {
+    return first;
+  }
+
+  await new Promise((resolve) => setTimeout(resolve, retryDelayMs));
+  return settle(load());
+}
+
 // ---------------------------------------------------------------------------
 // 섹터 히트맵
 // ---------------------------------------------------------------------------
 
 async function loadSectorTile(sector: SectorDefinition): Promise<SectorHeatmapTile> {
-  const page = await settle(getDailyCandles(sector.etf.symbol, HEATMAP_CANDLE_COUNT));
+  const page = await settleWithRetry(() => getDailyCandles(sector.etf.symbol, HEATMAP_CANDLE_COUNT));
 
   return {
     market: sector.market,
@@ -302,9 +317,9 @@ export async function getSectorDetail(market: MarketId, slug: string): Promise<S
     const constituentSymbols = sector.constituents.map((stock) => stock.symbol);
 
     const [etfCandles, stockMaster, ...constituentCandles] = await Promise.all([
-      settle(getDailyCandles(sector.etf.symbol, HEATMAP_CANDLE_COUNT)),
+      settleWithRetry(() => getDailyCandles(sector.etf.symbol, HEATMAP_CANDLE_COUNT)),
       settle(loadStockNames(constituentSymbols)),
-      ...sector.constituents.map((stock) => settle(getDailyCandles(stock.symbol, 2))),
+      ...sector.constituents.map((stock) => settleWithRetry(() => getDailyCandles(stock.symbol, 2))),
     ]);
 
     const etfQuote = latestQuoteFromCandles(etfCandles?.candles ?? []);
