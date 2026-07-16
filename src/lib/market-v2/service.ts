@@ -248,10 +248,9 @@ export async function getMarketOverview(): Promise<MarketOverviewPayload> {
 // ---------------------------------------------------------------------------
 
 const RANKING_TYPE_BY_KIND: Record<RankingKind, TossRankingType> = {
-  amount: "MARKET_TRADING_AMOUNT",
-  volume: "MARKET_TRADING_VOLUME",
   gainers: "TOP_GAINERS",
   losers: "TOP_LOSERS",
+  amount: "MARKET_TRADING_AMOUNT",
 };
 
 async function loadStockNames(symbols: string[]): Promise<Map<string, TossStockInfo>> {
@@ -293,7 +292,6 @@ export async function getMarketRankings(market: MarketId, kind: RankingKind): Pr
         lastPrice: parseDecimal(item.price.lastPrice),
         changeRate: parseDecimal(item.price.changeRate),
         tradingAmount: parseDecimal(item.tradingAmount),
-        tradingVolume: parseDecimal(item.tradingVolume),
         currency: item.currency,
       })),
     } satisfies RankingsPayload;
