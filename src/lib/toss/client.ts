@@ -1,7 +1,7 @@
 import type { TossOAuth2TokenResponse } from "@/lib/toss/types";
 
 const TOSS_BASE_URL = process.env.TOSS_BASE_URL ?? "https://openapi.tossinvest.com";
-const DEFAULT_CLIENT_ID = "tsck_live_y1tsa38TAxnqE8toA1nAOD";
+const DEFAULT_CLIENT_ID = "tsck_live_qkGDnlLUEZNn57jKyOYQFA";
 
 /** 토큰 만료 60초 전에 미리 재발급한다. */
 const TOKEN_EXPIRY_MARGIN_MS = 60_000;
