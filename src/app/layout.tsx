@@ -13,7 +13,7 @@ import "./globals.css";
 const siteUrl = getSiteUrl();
 const adSenseClientId = getAdSenseClientId();
 
-const SITE_TITLE = "CHARTO | 시장의 큰 흐름을 한 화면에서";
+const SITE_TITLE = "CHARTO";
 const SITE_DESCRIPTION =
   "국내·미국 증시의 섹터 히트맵, 대표 ETF 구성 종목, 자금 동향을 한눈에 보는 마켓 대시보드";
 

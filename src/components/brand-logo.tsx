@@ -19,7 +19,7 @@ export function BrandLogo({
       className="group inline-flex items-center gap-3"
       href={href}
     >
-      {withBadge ? (
+      {/* {withBadge ? (
         <span
           className={`brand-badge inline-flex items-center justify-center rounded-full font-bold uppercase ${
             isSmall ? "px-2.5 py-1 text-[10px]" : "px-3 py-1.5 text-xs"
@@ -27,7 +27,7 @@ export function BrandLogo({
         >
           CH
         </span>
-      ) : null}
+      ) : null} */}
       <span
         className={`font-bold uppercase tracking-[-0.08em] leading-none text-[var(--brand-strong)] transition-transform group-hover:-translate-y-0.5 ${
           isSmall ? "text-xl" : "text-2xl md:text-[1.75rem]"
