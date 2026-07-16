@@ -50,7 +50,7 @@ export interface MarketOverviewPayload {
   investorFlows: InvestorFlowSummary[];
 }
 
-export type RankingKind = "gainers" | "losers" | "amount";
+export type RankingKind = "amount" | "volume" | "gainers" | "losers";
 
 export interface RankingRow {
   rank: number;
@@ -59,6 +59,7 @@ export interface RankingRow {
   lastPrice: number | null;
   changeRate: number | null;
   tradingAmount: number | null;
+  tradingVolume: number | null;
   currency: "KRW" | "USD" | (string & {});
 }
 
