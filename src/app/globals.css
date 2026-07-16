@@ -64,11 +64,10 @@
 }
 
 @theme inline {
-  /* font.family.stack — Toss Product Sans는 로컬 설치 시에만 적용되는 선두 폴백 */
-  --font-sans: "Toss Product Sans", "Tossface", -apple-system, BlinkMacSystemFont, "Bazier Square",
-    "Noto Sans KR", "Pretendard Variable", "Pretendard", "Segoe UI", "Apple SD Gothic Neo", Roboto,
-    "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-    "Noto Color Emoji";
+  /* font.family.stack — 기본 폰트는 Pretendard GOV (웹폰트 로드), 이하 시스템 폴백 */
+  --font-sans: "Pretendard GOV Variable", "Pretendard GOV", -apple-system, BlinkMacSystemFont,
+    "Noto Sans KR", "Segoe UI", "Apple SD Gothic Neo", Roboto, "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
 }
 

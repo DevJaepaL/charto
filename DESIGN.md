@@ -18,7 +18,7 @@
 
 | 토큰 | 값 |
 |---|---|
-| `font.family.stack` | `Toss Product Sans, Tossface, -apple-system, BlinkMacSystemFont, Bazier Square, Noto Sans KR, Pretendard Variable, Segoe UI, Apple SD Gothic Neo, Roboto, Helvetica Neue, Arial, sans-serif` |
+| `font.family.stack` | `Pretendard GOV Variable, Pretendard GOV, -apple-system, BlinkMacSystemFont, Noto Sans KR, Segoe UI, Apple SD Gothic Neo, Roboto, Helvetica Neue, Arial, sans-serif` |
 | `font.family.mono` | `JetBrains Mono, SF Mono, monospace` — 가격·등락률·순위 등 숫자 전용 |
 | `font.size.xs / sm / md / lg / xl / 2xl` | `12px / 13px / 14px / 16px / 18.72px / 24px` |
 | `font.size.base` | `13px` (본문 기본) |
@@ -27,7 +27,7 @@
 
 - UI 레이블·값은 `600` 이상을 기본으로 사용해야 한다(must). 긴 설명 문단만 `400~500`을 쓸 수 있다(should).
 - 숫자(가격·수익률·시총)는 mono 스택 + tabular 정렬로 표기해야 한다(must).
-- Toss Product Sans는 로컬 설치 시에만 적용되는 선두 폴백이다. 웹폰트 무단 호스팅은 금지한다(must not).
+- 기본 폰트는 **Pretendard GOV**(jsDelivr 웹폰트, dynamic subset)다. 토큰 체계·색·radius는 토스증권 참조를 유지하되 서체만 Pretendard GOV를 쓴다. 임의의 다른 서체를 추가하면 안 된다(must not).
 
 ### 2.2 Color (시맨틱)
 
