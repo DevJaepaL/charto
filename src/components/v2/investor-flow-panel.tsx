@@ -31,7 +31,7 @@ function FlowCard({ flow }: { flow: InvestorFlowSummary }) {
   );
 
   return (
-    <div className="surface-card-strong flex-1 rounded-[8px] p-3.5">
+    <div className="surface-card-strong flex-1 rounded-[var(--radius-sm)] p-3.5">
       <div className="flex items-baseline justify-between">
         <h3 className="text-xs font-bold text-[var(--text-soft)]">{flow.market}</h3>
         {flow.date ? <span className="text-[10px] text-[var(--text-softest)]">{flow.date}</span> : null}
@@ -60,7 +60,7 @@ export function InvestorFlowPanel({ overview }: { overview: MarketOverviewPayloa
   }
 
   return (
-    <section aria-label="투자자 동향" className="surface-card rounded-[12px] p-4 md:p-5">
+    <section aria-label="투자자 동향" className="surface-card rounded-[var(--radius-lg)] p-4 md:p-5">
       <div className="flex items-center gap-2">
         <h2 className="text-base font-bold text-[var(--text-main)]">투자자 순매수</h2>
         <DemoNotice show={overview.isDemo} />

@@ -74,18 +74,18 @@ export function RankingsPanel({ initialRankings }: { initialRankings: RankingsPa
   const rows = useMemo(() => payload?.rows.slice(0, 10) ?? [], [payload]);
 
   return (
-    <section aria-label="종목 랭킹" className="surface-card rounded-[12px] p-4 md:p-5">
+    <section aria-label="종목 랭킹" className="surface-card rounded-[var(--radius-lg)] p-4 md:p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <h2 className="text-base font-bold text-[var(--text-main)]">오늘의 랭킹</h2>
           <DemoNotice show={payload?.isDemo ?? false} />
         </div>
-        <div className="surface-pill flex rounded-[6px] p-0.5" role="tablist" aria-label="시장 선택">
+        <div className="surface-pill flex rounded-[var(--radius-sm)] p-0.5" role="tablist" aria-label="시장 선택">
           {MARKET_TABS.map((tab) => (
             <button
               key={tab.value}
               aria-selected={market === tab.value}
-              className={`rounded-[5px] px-3 py-1 text-xs font-semibold transition-colors ${
+              className={`rounded-[var(--radius-xs)] px-3 py-1 text-xs font-semibold transition-colors ${
                 market === tab.value ? "brand-tab-active" : "text-[var(--text-soft)] brand-soft-hover"
               }`}
               onClick={() => setMarket(tab.value)}
@@ -103,7 +103,7 @@ export function RankingsPanel({ initialRankings }: { initialRankings: RankingsPa
           <button
             key={tab.value}
             aria-selected={kind === tab.value}
-            className={`rounded-[6px] border px-3 py-1.5 text-xs font-semibold transition-colors ${
+            className={`rounded-[var(--radius-sm)] border px-3 py-1.5 text-xs font-semibold transition-colors ${
               kind === tab.value
                 ? "border-transparent brand-tab-active"
                 : "border-[var(--line-soft)] text-[var(--text-soft)] brand-outline-hover"
@@ -146,7 +146,7 @@ export function RankingsPanel({ initialRankings }: { initialRankings: RankingsPa
         {rows.length === 0 && isLoading
           ? Array.from({ length: 5 }, (_, index) => (
               <li key={index} className="px-1 py-3">
-                <div className="loading-skeleton h-8 rounded-[6px] bg-[var(--surface-card-strong)]" />
+                <div className="loading-skeleton h-8 rounded-[var(--radius-sm)] bg-[var(--surface-card-strong)]" />
               </li>
             ))
           : null}

@@ -30,7 +30,7 @@ function HeatmapTile({ tile, period }: { tile: SectorHeatmapTile; period: Heatma
 
   return (
     <Link
-      className="group flex min-h-[5.5rem] flex-col justify-between rounded-[8px] border border-[var(--line-soft)] p-3 transition-transform hover:-translate-y-0.5"
+      className="group flex min-h-[5.5rem] flex-col justify-between rounded-[var(--radius-sm)] border border-[var(--line-soft)] p-3 transition-transform hover:-translate-y-0.5"
       href={`/sector/${tile.market}/${tile.slug}`}
       style={{ background: heatmapTileBackground(rate) }}
     >
@@ -57,13 +57,13 @@ function HighlightList({
   period: HeatmapPeriod;
 }) {
   return (
-    <div className="surface-card-strong flex-1 rounded-[8px] p-3.5">
+    <div className="surface-card-strong flex-1 rounded-[var(--radius-sm)] p-3.5">
       <h3 className="text-xs font-bold text-[var(--text-soft)]">{title}</h3>
       <ol className="mt-2.5 space-y-2">
         {tiles.map((tile) => (
           <li key={tile.slug}>
             <Link
-              className="flex items-center justify-between gap-2 rounded-[6px] px-1.5 py-1 brand-soft-hover"
+              className="flex items-center justify-between gap-2 rounded-[var(--radius-sm)] px-1.5 py-1 brand-soft-hover"
               href={`/sector/${tile.market}/${tile.slug}`}
             >
               <span className="truncate text-[13px] font-semibold text-[var(--text-main)]">{tile.name}</span>
@@ -122,7 +122,7 @@ export function SectorHeatmapBoard({ initialHeatmap }: { initialHeatmap: Heatmap
   const weakest = ranked.slice(-3).reverse().filter((tile) => !strongest.includes(tile));
 
   return (
-    <section aria-label="섹터 히트맵" className="surface-card rounded-[12px] p-4 md:p-5">
+    <section aria-label="섹터 히트맵" className="surface-card rounded-[var(--radius-lg)] p-4 md:p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <h2 className="text-base font-bold text-[var(--text-main)]">섹터 흐름</h2>
@@ -130,12 +130,12 @@ export function SectorHeatmapBoard({ initialHeatmap }: { initialHeatmap: Heatmap
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="surface-pill flex rounded-[6px] p-0.5" role="tablist" aria-label="시장 선택">
+          <div className="surface-pill flex rounded-[var(--radius-sm)] p-0.5" role="tablist" aria-label="시장 선택">
             {MARKET_TABS.map((tab) => (
               <button
                 key={tab.value}
                 aria-selected={market === tab.value}
-                className={`rounded-[5px] px-3 py-1 text-xs font-semibold transition-colors ${
+                className={`rounded-[var(--radius-xs)] px-3 py-1 text-xs font-semibold transition-colors ${
                   market === tab.value ? "brand-tab-active" : "text-[var(--text-soft)] brand-soft-hover"
                 }`}
                 onClick={() => setMarket(tab.value)}
@@ -147,12 +147,12 @@ export function SectorHeatmapBoard({ initialHeatmap }: { initialHeatmap: Heatmap
             ))}
           </div>
 
-          <div className="surface-pill flex rounded-[6px] p-0.5" role="tablist" aria-label="기간 선택">
+          <div className="surface-pill flex rounded-[var(--radius-sm)] p-0.5" role="tablist" aria-label="기간 선택">
             {HEATMAP_PERIODS.map((option) => (
               <button
                 key={option.value}
                 aria-selected={period === option.value}
-                className={`rounded-[5px] px-2.5 py-1 text-xs font-semibold transition-colors ${
+                className={`rounded-[var(--radius-xs)] px-2.5 py-1 text-xs font-semibold transition-colors ${
                   period === option.value ? "brand-tab-active" : "text-[var(--text-soft)] brand-soft-hover"
                 }`}
                 onClick={() => setPeriod(option.value)}
@@ -182,7 +182,7 @@ export function SectorHeatmapBoard({ initialHeatmap }: { initialHeatmap: Heatmap
           {Array.from({ length: 12 }, (_, index) => (
             <div
               key={index}
-              className="loading-skeleton min-h-[5.5rem] rounded-[8px] bg-[var(--surface-card-strong)]"
+              className="loading-skeleton min-h-[5.5rem] rounded-[var(--radius-sm)] bg-[var(--surface-card-strong)]"
             />
           ))}
         </div>

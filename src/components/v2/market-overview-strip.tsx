@@ -14,7 +14,7 @@ function OverviewChip({
   subClassName?: string;
 }) {
   return (
-    <div className="surface-card flex min-w-[8.5rem] shrink-0 flex-col gap-1 rounded-[8px] px-3.5 py-2.5">
+    <div className="surface-card flex min-w-[8.5rem] shrink-0 flex-col gap-1 rounded-[var(--radius-sm)] px-3.5 py-2.5">
       <span className="text-[11px] font-semibold text-[var(--text-softest)]">{label}</span>
       <div className="flex items-baseline gap-1.5">
         <span className="font-mono text-[15px] font-bold tracking-tight text-[var(--text-main)]">{value}</span>
@@ -34,7 +34,7 @@ function marketStatusChip(label: string, isBusinessDay: boolean | null) {
         : "text-[var(--text-soft)]";
 
   return (
-    <div className="surface-card flex min-w-[7rem] shrink-0 flex-col gap-1 rounded-[8px] px-3.5 py-2.5">
+    <div className="surface-card flex min-w-[7rem] shrink-0 flex-col gap-1 rounded-[var(--radius-sm)] px-3.5 py-2.5">
       <span className="text-[11px] font-semibold text-[var(--text-softest)]">{label}</span>
       <span className={`text-[13px] font-bold ${tone}`}>{text}</span>
     </div>

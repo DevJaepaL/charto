@@ -77,7 +77,7 @@ export default async function SectorPage({ params }: { params: Promise<SectorPag
 
       <header className="mt-4">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="brand-badge rounded-[4px] px-2 py-0.5 text-[11px] font-bold">{marketLabel}</span>
+          <span className="brand-badge rounded-[var(--radius-xs)] px-2 py-0.5 text-[11px] font-bold">{marketLabel}</span>
           <h1 className="text-xl font-bold tracking-tight text-[var(--text-main)] md:text-2xl">
             {detail.name} 섹터
           </h1>
@@ -90,7 +90,7 @@ export default async function SectorPage({ params }: { params: Promise<SectorPag
         </p>
       </header>
 
-      <section aria-label="대표 ETF 수익률" className="surface-card mt-5 rounded-[12px] p-4 md:p-5">
+      <section aria-label="대표 ETF 수익률" className="surface-card mt-5 rounded-[var(--radius-lg)] p-4 md:p-5">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="text-[11px] font-semibold text-[var(--text-softest)]">ETF 현재가</p>
@@ -102,7 +102,7 @@ export default async function SectorPage({ params }: { params: Promise<SectorPag
             {HEATMAP_PERIODS.map((option) => {
               const rate = detail.etf.returns[option.value];
               return (
-                <div key={option.value} className="surface-card-strong min-w-[4.5rem] rounded-[8px] px-3 py-2 text-center">
+                <div key={option.value} className="surface-card-strong min-w-[4.5rem] rounded-[var(--radius-sm)] px-3 py-2 text-center">
                   <p className="text-[10px] font-semibold text-[var(--text-softest)]">{option.label}</p>
                   <p className={`mt-0.5 font-mono text-[13px] font-bold ${changeColorClass(rate)}`}>
                     {formatChangeRate(rate)}
@@ -114,7 +114,7 @@ export default async function SectorPage({ params }: { params: Promise<SectorPag
         </div>
       </section>
 
-      <section aria-label="주요 구성 종목" className="surface-card mt-4 rounded-[12px] p-4 md:p-5">
+      <section aria-label="주요 구성 종목" className="surface-card mt-4 rounded-[var(--radius-lg)] p-4 md:p-5">
         <h2 className="text-base font-bold text-[var(--text-main)]">주요 구성 종목</h2>
         <p className="mt-1.5 text-xs text-[var(--text-softest)]">
           {detail.etf.name}의 주요 편입 종목을 시가총액 순으로 정렬했습니다. 시가총액은 현재가 × 발행주식수로
@@ -168,7 +168,7 @@ export default async function SectorPage({ params }: { params: Promise<SectorPag
                     {ANALYST_LINKS.map((link) => (
                       <a
                         key={link.key}
-                        className="rounded-[4px] border border-[var(--line-soft)] px-1.5 py-0.5 text-[10px] font-semibold text-[var(--text-soft)] brand-outline-hover"
+                        className="rounded-[var(--radius-xs)] border border-[var(--line-soft)] px-1.5 py-0.5 text-[10px] font-semibold text-[var(--text-soft)] brand-outline-hover"
                         href={link.url(row.symbol)}
                         rel="noopener noreferrer nofollow"
                         target="_blank"

@@ -9,13 +9,13 @@ export function SiteHeader() {
         <BrandLogo size="sm" />
         <nav aria-label="주요 메뉴" className="flex items-center gap-1">
           <Link
-            className="rounded-[6px] px-2.5 py-1.5 text-[13px] font-semibold text-[var(--text-soft)] brand-soft-hover"
+            className="rounded-[var(--radius-sm)] px-2.5 py-1.5 text-[13px] font-semibold text-[var(--text-soft)] brand-soft-hover"
             href="/"
           >
             마켓
           </Link>
           <Link
-            className="rounded-[6px] px-2.5 py-1.5 text-[13px] font-semibold text-[var(--text-soft)] brand-soft-hover"
+            className="rounded-[var(--radius-sm)] px-2.5 py-1.5 text-[13px] font-semibold text-[var(--text-soft)] brand-soft-hover"
             href="/about"
           >
             소개

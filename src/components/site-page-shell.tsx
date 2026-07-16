@@ -12,7 +12,7 @@ export function SitePageShell({
 }) {
   return (
     <main className="mx-auto max-w-3xl px-5 pb-14 pt-8 md:px-8 md:pb-20 md:pt-12">
-      <div className="glass-card rounded-[12px] p-5 md:p-8">
+      <div className="glass-card rounded-[var(--radius-lg)] p-5 md:p-8">
         <Link
           className="text-sm font-semibold text-[var(--brand-strong)] transition-opacity hover:opacity-80"
           href="/"
